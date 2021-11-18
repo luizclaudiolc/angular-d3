@@ -1,6 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 
+
+const mouseEvents = (event: any): void => {
+  d3.selectAll('rect')
+    .on('mousemove', function() {
+      d3.select(this)
+        .style('opacity', 0.5)
+        .style('cursor', 'pointer')
+        .style('fill', '#f00')
+        .call(EventInText);
+    })
+    .on('mouseout', function() {
+      d3.select(this)
+        .style('opacity', 1)
+        .style('cursor', 'default')
+        .style('fill', '#69b3a2')
+        .call(EventInText);
+    }
+  );
+}
+
+const EventInText = (): void => {
+  d3.selectAll('text')
+    .on('mousemove', function() {
+      d3.select(this)
+        .style('opacity', 0.5)
+        .style('cursor', 'pointer')
+        .style('fill', '#f00')
+        .style('font-weight', 'bold');
+    })
+    .on('mouseout', function() {
+      d3.select(this)
+        .style('opacity', 1)
+        .style('cursor', 'default')
+        .style('fill', '#000')
+        .style('font-weight', 'normal');
+    }
+  );
+}
 @Component({
   selector: 'app-bar',
   templateUrl: './bar.component.html',
@@ -65,6 +103,7 @@ export class BarComponent implements OnInit {
   ngOnInit(): void {
     this.createSvg();
     this.drawBars(this.data);
+    mouseEvents(this.data);
+    EventInText();
   }
-
 }
