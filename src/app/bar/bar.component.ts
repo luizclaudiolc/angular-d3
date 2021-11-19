@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 
 
-const mouseEvents = (event: any): void => {
+const mouseEvents = (_event: any): void => {
   d3.selectAll('rect')
     .on('mousemove', function() {
       d3.select(this)
@@ -57,6 +57,8 @@ export class BarComponent implements OnInit {
   private margin = 50;
   private width = 750 - (this.margin * 2);
   private height = 400 - (this.margin * 2);
+  public test1: any;
+  public test2: any;
 
   private createSvg(): void {
     this.svg = d3.select('#bar')
@@ -98,12 +100,14 @@ export class BarComponent implements OnInit {
       .attr('fill', '#69b3a2');
   }
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.createSvg();
     this.drawBars(this.data);
-    mouseEvents(this.data);
-    EventInText();
+    this.test1 = mouseEvents;
+    this.test2 = EventInText;
+
+    this.test1(this.data);
   }
 }
