@@ -57,8 +57,8 @@ export class BarComponent implements OnInit {
   private margin = 50;
   private width = 750 - (this.margin * 2);
   private height = 400 - (this.margin * 2);
-  public test1: any;
-  public test2: any;
+  public mouseEvents: any;
+  public EventInText: any;
 
   private createSvg(): void {
     this.svg = d3.select('#bar')
@@ -105,9 +105,9 @@ export class BarComponent implements OnInit {
   ngOnInit(): void {
     this.createSvg();
     this.drawBars(this.data);
-    this.test1 = mouseEvents;
-    this.test2 = EventInText;
+    this.mouseEvents = mouseEvents;
+    this.EventInText = EventInText;
 
-    this.test1(this.data);
+    this.mouseEvents(this.data);
   }
 }
