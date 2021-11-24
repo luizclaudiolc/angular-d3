@@ -7,6 +7,7 @@ import { BarComponent } from './bar/bar.component';
 import { PieComponent } from './pie/pie.component';
 import { ScatterComponent } from './scatter/scatter.component';
 import { ShapesComponent } from './shapes/shapes.component';
+import { PathsComponent } from './paths/paths.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { ShapesComponent } from './shapes/shapes.component';
     BarComponent,
     PieComponent,
     ScatterComponent,
-    ShapesComponent
+    ShapesComponent,
+    PathsComponent
   ],
   imports: [
     BrowserModule,
