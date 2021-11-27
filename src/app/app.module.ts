@@ -9,6 +9,7 @@ import { ScatterComponent } from './scatter/scatter.component';
 import { ShapesComponent } from './shapes/shapes.component';
 import { PathsComponent } from './paths/paths.component';
 import { ApparencesAtrrinutesComponent } from './apparences-atrrinutes/apparences-atrrinutes.component';
+import { TextElementsComponent } from './text-elements/text-elements.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ApparencesAtrrinutesComponent } from './apparences-atrrinutes/apparence
     ScatterComponent,
     ShapesComponent,
     PathsComponent,
-    ApparencesAtrrinutesComponent
+    ApparencesAtrrinutesComponent,
+    TextElementsComponent
   ],
   imports: [
     BrowserModule,
