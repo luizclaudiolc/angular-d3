@@ -8,36 +8,16 @@ const mouseEvents = (_event: any): void => {
       d3.select(this)
         .style('opacity', 0.5)
         .style('cursor', 'pointer')
-        .style('fill', '#f00')
-        .call(EventInText);
+        .style('stroke', 'black')
     })
     .on('mouseout', function() {
       d3.select(this)
         .style('opacity', 1)
         .style('cursor', 'default')
-        .style('fill', '#69b3a2')
-        .call(EventInText);
+        .style('stroke', 'none')
     }
   );
-}
-
-const EventInText = (): void => {
-  d3.selectAll('text')
-    .on('mousemove', function() {
-      d3.select(this)
-        .style('opacity', 0.5)
-        .style('cursor', 'pointer')
-        .style('fill', '#f00')
-        .style('font-weight', 'bold');
-    })
-    .on('mouseout', function() {
-      d3.select(this)
-        .style('opacity', 1)
-        .style('cursor', 'default')
-        .style('fill', '#000')
-        .style('font-weight', 'normal');
-    }
-  );
+  
 }
 @Component({
   selector: 'app-bar',
@@ -60,13 +40,23 @@ export class BarComponent implements OnInit {
   public mouseEvents: any;
   public EventInText: any;
 
+  private colors = [
+    '#e6194b',
+    '#3cb44b',
+    '#ffe119',
+    '#4363d8',
+    '#f58231',
+    '#911eb4',
+    '#46f0f0',
+  ];
+
   private createSvg(): void {
     this.svg = d3.select('#bar')
       .append('svg')
       .attr('width', this.width + (this.margin * 2))
       .attr('height', this.height + (this.margin * 2))
       .append('g')
-      .attr('transform', 'translate(' + this.margin + ',' + this.margin + ')');
+      .attr('transform', `translate(${this.margin}, ${this.margin})`);
   }
 
   private drawBars(data: any[]): void {
@@ -97,7 +87,7 @@ export class BarComponent implements OnInit {
       .attr('y', (d: any) => y(d.Stars))
       .attr('width', x.bandwidth())
       .attr('height', (d: any) => this.height - y(d.Stars))
-      .attr('fill', '#69b3a2');
+      .attr('fill', (d: any, i: number) => this.colors[i])
   }
 
   constructor() {}
@@ -106,7 +96,6 @@ export class BarComponent implements OnInit {
     this.createSvg();
     this.drawBars(this.data);
     this.mouseEvents = mouseEvents;
-    this.EventInText = EventInText;
 
     this.mouseEvents(this.data);
   }
