@@ -45,33 +45,72 @@ export class SmileComponent implements OnInit {
       this.svg
       .append('g')
       .append('circle')
-      .attr('id', 'eye-rigth')
       .attr('class', 'eye')
       .attr('cx', 405)
       .attr('cy', 120)
       .attr('r', 30);
+
+      this.svg
+      .append('g')
+      .append('circle')
+      .attr('class', 'piscar')
+      .attr('cx', 405)
+      .attr('cy', 55)
+      .attr('r', 29)
+      .style('fill', "#ffff00");
+
+      this.svg
+      .append('g')
+      .append('circle')
+      .attr('class', 'piscar')
+      .attr('cx', 245)
+      .attr('cy', 55)
+      .attr('r', 29)
+      .style('fill', "#ffff00");
   }
 
   constructor() { }
 
   ngOnInit(): void {
     this.drawSmile();
+    // this.createEye();
+    this.moveEye();
+  }
 
+  public createEye(): void {
     d3.selectAll('circle')
       .on('mousemove', function (event: any) {
         const { x, y } = event;
         console.log(`X: ${x} | Y: ${y}`);
         d3.selectAll('.eye')
           .transition()
-          .duration(400)
-          .attr('r', x > 400 ? 50 : 15)
+          .duration(100)
+          .attr('r', x > 400 ? 50 : 25)
       })
       .on('mouseout', function () {
         d3.selectAll('.eye')
           .transition()
           .duration(400)
-          .attr('r', 30)
+          .attr('r', 35)
       })
   }
 
+  public moveEye(): void {
+    d3.selectAll('circle')
+      .attr('cursor', 'pointer')
+      .on('mousedown', function(event: any) {
+        const { offsetX, offsetY } = event;
+        console.log(`offsetX: ${offsetX}  |  offsetY: ${offsetY}`);
+          d3.selectAll('.piscar')
+            .transition()
+            .duration(150)
+            .attr('cy', 115)
+      })
+      .on('mouseup', function() {
+        d3.selectAll('.piscar')
+          .transition()
+          .duration(150)
+          .attr('cy', 55)
+      })
+  }
 }
