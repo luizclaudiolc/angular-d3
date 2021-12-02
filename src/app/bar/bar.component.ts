@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 
 const mouseEvents = (_event: any): void => {
   d3.selectAll('rect')
-    .on('mousemove', function() {
+    .on('mousemove', function(event: any) {
       d3.select(this)
         .style('opacity', 0.5)
         .style('cursor', 'pointer')

@@ -9,18 +9,18 @@ import * as d3 from 'd3';
 export class ShapesComponent implements OnInit {
   private svg: any;
   private margin = 50;
-  private width = 750 - (this.margin * 2);
-  private height = 400 - (this.margin * 2);
+  private width = 750;
+  private height = 400;
   private points = '20,150 70,250 110,200 110,250';
   private pointsPolyLine = '170,150 220,250 260,200 260,250';
   
   private createSvg(): void {
     this.svg = d3.select('#shapes')
       .append('svg')
-      .attr('width', this.width + (this.margin * 2))
-      .attr('height', this.height + (this.margin * 2))
+      .attr('width', this.width)
+      .attr('height', this.height)
       .append('g')
-      .attr('transform', 'translate(' + this.margin + ',' + this.margin + ')');
+      .attr('transform', `translate(${this.margin}, ${this.margin})`);
   }
 
   private createCircle(): void {
