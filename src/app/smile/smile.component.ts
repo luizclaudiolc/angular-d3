@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { arc } from 'd3';
 
 @Component({
   selector: 'app-smile',
@@ -11,7 +12,9 @@ export class SmileComponent implements OnInit {
   private margins = {
     margin: 50,
     width: 750,
-    height: 400
+    height: 400,
+    raio: 30,
+    eyeOffsetY: 80
   };
 
   private drawSmile(): void {
@@ -26,8 +29,8 @@ export class SmileComponent implements OnInit {
     this.svg
       .append('g')
       .append('circle')
-      .attr('cx', 325)
-      .attr('cy', 157)
+      .attr('cx', (this.margins.width / 2) - this.margins.margin)
+      .attr('cy', (this.margins.height / 2) - this.margins.margin)
       .attr('r', 170)
       .style('fill', '#ffff00')
       .attr('stroke', '#000')
@@ -35,38 +38,53 @@ export class SmileComponent implements OnInit {
 
       this.svg
       .append('g')
-      .append('circle')
+      .append('ellipse')
       .attr('id', 'eye-left')
       .attr('class', 'eye')
-      .attr('cx', 245)
-      .attr('cy', 120)
-      .attr('r', 30);
+      .attr('cx', this.margins.width / 2 - 130)
+      .attr('cy', this.margins.height / 2 - this.margins.eyeOffsetY)
+      .attr('rx', 20)
+      .attr('ry', 30)
 
       this.svg
       .append('g')
-      .append('circle')
+      .append('ellipse')
+      .attr('id', 'eye-rigth')
       .attr('class', 'eye')
-      .attr('cx', 405)
-      .attr('cy', 120)
-      .attr('r', 30);
+      .attr('cx', this.margins.width / 2 + 30)
+      .attr('cy', this.margins.height / 2 - this.margins.eyeOffsetY)
+      .attr('rx', 20)
+      .attr('ry', 30)
 
       this.svg
       .append('g')
       .append('circle')
       .attr('class', 'piscar')
-      .attr('cx', 405)
-      .attr('cy', 55)
-      .attr('r', 29)
+      .attr('cx', (this.margins.width / 2) + 30)
+      .attr('cy', (this.margins.height / 2) - 140)
+      .attr('r', this.margins.raio - 1)
       .style('fill', "#ffff00");
 
       this.svg
       .append('g')
       .append('circle')
       .attr('class', 'piscar')
-      .attr('cx', 245)
-      .attr('cy', 55)
-      .attr('r', 29)
+      .attr('cx', (this.margins.width / 2) - 130)
+      .attr('cy', (this.margins.height / 2) - 140)
+      .attr('r', this.margins.raio - 1)
       .style('fill', "#ffff00");
+
+      const g = this.svg
+        .attr('id', 'sorriso')
+        .append('g')
+        .attr('transform', `translate(${this.margins.width / 2 - 50},${190})`)
+
+      g.append('path')
+        .attr('d', arc()
+        .innerRadius(80)
+        .outerRadius(100)
+        .startAngle(Math.PI / 2)
+        .endAngle(Math.PI / 2 + Math.PI))
   }
 
   constructor() { }
