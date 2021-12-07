@@ -17,8 +17,17 @@ export class ScatterComponent implements OnInit {
 
   private svg: any;
   private margin = 50;
-  private width = 750 - (this.margin * 2);
-  private height = 400 - (this.margin * 2);
+  private width = 750;
+  private height = 400;
+  public colors = [
+    '#f00',
+    '#0f0',
+    '#00f',
+    '#ff0',
+    '#0ff',
+    '#f0f',
+    '#000',
+  ];
 
   private createSvg(): void {
     this.svg = d3.select('#scatter')
@@ -26,7 +35,7 @@ export class ScatterComponent implements OnInit {
       .attr('width', this.width + (this.margin * 2))
       .attr('height', this.height + (this.margin * 2))
       .append('g')
-      .attr('transform', 'translate(' + this.margin + ',' + this.margin + ')')
+      .attr('transform', `translate(${this.margin}, ${this.margin})`);
   }
 
   private drawChart(): void {
@@ -36,7 +45,7 @@ export class ScatterComponent implements OnInit {
     .range([0, this.width]);
 
     this.svg.append('g')
-      .attr("transform", "translate(0," + this.height + ")")
+      .attr('transform', `translate(0, ${this.height})`)
       .call(d3.axisBottom(x).tickFormat(d3.format('d')));
 
     // add eixo Y
@@ -56,8 +65,7 @@ export class ScatterComponent implements OnInit {
       .attr('cx', (d: any) => x(d.Released))
       .attr('cy', (d: any) => y(d.Stars))
       .attr('r', 30)
-      .style('opacity', .5)
-      .style('fill', '#0f0');
+      .style('fill', (d: any, i: number) => this.colors[i]);
 
     // add labels
     dots.selectAll('text')
@@ -82,14 +90,18 @@ export class ScatterComponent implements OnInit {
     d3.selectAll('circle')
       .on('mouseenter', function() {
         d3.select(this)
-        .style('opacity', 0.2)
-        .style('fill', '#f0f')
+        .transition()
+        .duration(150)
+        .attr('r', 40)
+        .style('opacity', 0.4)
         .style('cursor', 'pointer');
       })
       .on('mouseout', function() {
         d3.select(this)
+        .transition()
+        .duration(150)
+        .attr('r', 30)
         .style('opacity', 1)
-        .style('fill', '#0f0')
         .style('cursor', 'default');
       });
   }
@@ -107,5 +119,4 @@ export class ScatterComponent implements OnInit {
         .style('cursor', 'default');
       })
   }
-
 }

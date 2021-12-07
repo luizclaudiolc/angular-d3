@@ -12,6 +12,7 @@ import { ApparencesAtrrinutesComponent } from './apparences-atrrinutes/apparence
 import { TextElementsComponent } from './text-elements/text-elements.component';
 import { SmileComponent } from './smile/smile.component';
 import { TextOnPathComponent } from './text-on-path/text-on-path.component';
+import { StatisticalFunctionsComponent } from './statistical-functions/statistical-functions.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { TextOnPathComponent } from './text-on-path/text-on-path.component';
     ApparencesAtrrinutesComponent,
     TextElementsComponent,
     SmileComponent,
-    TextOnPathComponent
+    TextOnPathComponent,
+    StatisticalFunctionsComponent
   ],
   imports: [
     BrowserModule,
