@@ -11,6 +11,7 @@ import { PathsComponent } from './paths/paths.component';
 import { ApparencesAtrrinutesComponent } from './apparences-atrrinutes/apparences-atrrinutes.component';
 import { TextElementsComponent } from './text-elements/text-elements.component';
 import { SmileComponent } from './smile/smile.component';
+import { TextOnPathComponent } from './text-on-path/text-on-path.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { SmileComponent } from './smile/smile.component';
     PathsComponent,
     ApparencesAtrrinutesComponent,
     TextElementsComponent,
-    SmileComponent
+    SmileComponent,
+    TextOnPathComponent
   ],
   imports: [
     BrowserModule,

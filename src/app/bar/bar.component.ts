@@ -17,8 +17,24 @@ const mouseEvents = (_event: any): void => {
         .style('stroke', 'none')
     }
   );
-  
-}
+};
+
+const animacoes = (event: any): void => {
+  d3.selectAll('rect')
+    .on('click', function(event: any) {
+      console.log(event);
+      const bar = d3.select(this);
+      const yPos = bar.attr('y');
+
+      bar
+        .attr('stroke-width', 6)
+        .attr('y', (d, i) => Number(yPos) -2)
+        .transition()
+        .duration(1000)
+        .attr('y', (d, i) => Number(yPos))
+        .attr('stroke-width', 0)
+    })
+};
 @Component({
   selector: 'app-bar',
   templateUrl: './bar.component.html',
@@ -38,6 +54,7 @@ export class BarComponent implements OnInit {
   private width = 750 - (this.margin * 2);
   private height = 400 - (this.margin * 2);
   public mouseEvents: any;
+  public animate: any;
   public EventInText: any;
 
   private colors = [
@@ -96,6 +113,7 @@ export class BarComponent implements OnInit {
     this.createSvg();
     this.drawBars(this.data);
     this.mouseEvents = mouseEvents;
+    this.animate = animacoes;
 
     this.mouseEvents(this.data);
   }
