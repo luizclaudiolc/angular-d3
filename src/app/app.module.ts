@@ -16,6 +16,7 @@ import { StatisticalFunctionsComponent } from './statistical-functions/statistic
 import { HistogranComponent } from './histogran/histogran.component';
 import { DataVsDatumComponent } from './data-vs-datum/data-vs-datum.component';
 import { DraggingComponent } from './dragging/dragging.component';
+import { EventHandlingComponent } from './event-handling/event-handling.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { DraggingComponent } from './dragging/dragging.component';
     StatisticalFunctionsComponent,
     HistogranComponent,
     DataVsDatumComponent,
-    DraggingComponent
+    DraggingComponent,
+    EventHandlingComponent
   ],
   imports: [
     BrowserModule,

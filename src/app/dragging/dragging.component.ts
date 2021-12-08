@@ -32,13 +32,14 @@ export class DraggingComponent implements OnInit {
       .attr('r', 50)
       .attr('fill', '#f00');
 
-      const drag = d3.drag();
+    const drag = d3.drag();
 
     drag.on('start', function () {
       console.log('start');
       d3.select(this)
         .attr('stroke', '#000')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('opacity', 0.5);
     });
     drag.on('drag', function (event: any) {
       const el = d3.select(this);
@@ -49,6 +50,7 @@ export class DraggingComponent implements OnInit {
       console.log('end');
       d3.select(this)
         .attr('stroke', 'none')
+        .attr('opacity', 1);
     });
 
     circle.call(drag);
