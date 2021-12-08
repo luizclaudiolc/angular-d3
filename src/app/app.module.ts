@@ -14,6 +14,7 @@ import { SmileComponent } from './smile/smile.component';
 import { TextOnPathComponent } from './text-on-path/text-on-path.component';
 import { StatisticalFunctionsComponent } from './statistical-functions/statistical-functions.component';
 import { HistogranComponent } from './histogran/histogran.component';
+import { DataVsDatumComponent } from './data-vs-datum/data-vs-datum.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { HistogranComponent } from './histogran/histogran.component';
     SmileComponent,
     TextOnPathComponent,
     StatisticalFunctionsComponent,
-    HistogranComponent
+    HistogranComponent,
+    DataVsDatumComponent
   ],
   imports: [
     BrowserModule,
