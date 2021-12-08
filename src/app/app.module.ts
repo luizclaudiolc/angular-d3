@@ -13,6 +13,7 @@ import { TextElementsComponent } from './text-elements/text-elements.component';
 import { SmileComponent } from './smile/smile.component';
 import { TextOnPathComponent } from './text-on-path/text-on-path.component';
 import { StatisticalFunctionsComponent } from './statistical-functions/statistical-functions.component';
+import { HistogranComponent } from './histogran/histogran.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { StatisticalFunctionsComponent } from './statistical-functions/statistic
     TextElementsComponent,
     SmileComponent,
     TextOnPathComponent,
-    StatisticalFunctionsComponent
+    StatisticalFunctionsComponent,
+    HistogranComponent
   ],
   imports: [
     BrowserModule,

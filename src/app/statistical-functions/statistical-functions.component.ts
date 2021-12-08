@@ -74,7 +74,7 @@ export class StatisticalFunctionsComponent implements OnInit {
       .attr('y', 160)
       .style('font-size', '20px')
       .style('font-weight', 'bold')
-      .text(`Median: ${data}`);
+      .text(`Median: ${data} metodo para pegar o valor medio de um array`);
 
     data = d3.extent(this.data); // retorna um array com o menor e o maior valor
 
@@ -84,7 +84,7 @@ export class StatisticalFunctionsComponent implements OnInit {
       .attr('y', 200)
       .style('font-size', '20px')
       .style('font-weight', 'bold')
-      .text(`Extent: ${data}`);
+      .text(`Extent: ${data} retorna um array com o menor e o maior valor`);
 
     data = d3.sum(this.data); // soma todos os valores de um array
 
@@ -94,7 +94,7 @@ export class StatisticalFunctionsComponent implements OnInit {
       .attr('y', 240)
       .style('font-size', '20px')
       .style('font-weight', 'bold')
-      .text(`Sum: ${data}`);
+      .text(`Sum: ${data} soma todos os valores de um array`);
 
     data = d3.quantile(this.data, 0.5); // retorna o valor do quartil
 
@@ -104,7 +104,7 @@ export class StatisticalFunctionsComponent implements OnInit {
       .attr('y', 280)
       .style('font-size', '20px')
       .style('font-weight', 'bold')
-      .text(`Quantile: ${data}`);
+      .text(`Quantile: ${data} - retorna o valor do quartil`);
 
     data = d3.variance(this.data); // retorna a variancia
 
@@ -114,7 +114,7 @@ export class StatisticalFunctionsComponent implements OnInit {
       .attr('y', 320)
       .style('font-size', '20px')
       .style('font-weight', 'bold')
-      .text(`Variance: ${data}`);
+      .text(`Variance: ${Number(data).toFixed(2)} - retorna a variancia`);
 
     data = d3.deviation(this.data); // retorna a desvio padrao
 
@@ -124,7 +124,7 @@ export class StatisticalFunctionsComponent implements OnInit {
       .attr('y', 360)
       .style('font-size', '20px')
       .style('font-weight', 'bold')
-      .text(`Deviation: ${data}`);
+      .text(`Deviation: ${Number(data).toFixed(2)} - retorna a desvio padrao`);
 
     data = d3.shuffle(this.data); // embaralha os valores de um array
 
