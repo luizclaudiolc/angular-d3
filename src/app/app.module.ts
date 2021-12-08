@@ -15,6 +15,7 @@ import { TextOnPathComponent } from './text-on-path/text-on-path.component';
 import { StatisticalFunctionsComponent } from './statistical-functions/statistical-functions.component';
 import { HistogranComponent } from './histogran/histogran.component';
 import { DataVsDatumComponent } from './data-vs-datum/data-vs-datum.component';
+import { DraggingComponent } from './dragging/dragging.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { DataVsDatumComponent } from './data-vs-datum/data-vs-datum.component';
     TextOnPathComponent,
     StatisticalFunctionsComponent,
     HistogranComponent,
-    DataVsDatumComponent
+    DataVsDatumComponent,
+    DraggingComponent
   ],
   imports: [
     BrowserModule,
