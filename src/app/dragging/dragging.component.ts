@@ -39,18 +39,23 @@ export class DraggingComponent implements OnInit {
       d3.select(this)
         .attr('stroke', '#000')
         .attr('stroke-width', 2)
-        .attr('opacity', 0.5);
+        .attr('opacity', 0.5)
+        .style('cursor', 'drag');
     });
     drag.on('drag', function (event: any) {
+      const {x, y} = event;
+      console.log({x, y})
       const el = d3.select(this);
       el.attr('cx', parseInt(el.attr('cx')) + event.dx) // soma a posição atual com a posição do movimento
-        .attr('cy', parseInt(el.attr('cy')) + event.dy); // soma a posição atual com a posição do movimento
-    });
+        .attr('cy', parseInt(el.attr('cy')) + event.dy) // soma a posição atual com a posição do movimento
+        .attr('fill', x > 350 ? 'blue' : y < 200 ? 'pink' : 'purple')
+      });
     drag.on('end', function () {
       console.log('end');
       d3.select(this)
         .attr('stroke', 'none')
-        .attr('opacity', 1);
+        .attr('opacity', 1)
+        .style('cursor', 'default');
     });
 
     circle.call(drag);

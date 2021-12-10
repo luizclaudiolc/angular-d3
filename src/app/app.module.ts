@@ -17,6 +17,7 @@ import { HistogranComponent } from './histogran/histogran.component';
 import { DataVsDatumComponent } from './data-vs-datum/data-vs-datum.component';
 import { DraggingComponent } from './dragging/dragging.component';
 import { EventHandlingComponent } from './event-handling/event-handling.component';
+import { SliderProjectComponent } from './slider-project/slider-project.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { EventHandlingComponent } from './event-handling/event-handling.componen
     HistogranComponent,
     DataVsDatumComponent,
     DraggingComponent,
-    EventHandlingComponent
+    EventHandlingComponent,
+    SliderProjectComponent
   ],
   imports: [
     BrowserModule,
