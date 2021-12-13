@@ -18,6 +18,7 @@ import { DataVsDatumComponent } from './data-vs-datum/data-vs-datum.component';
 import { DraggingComponent } from './dragging/dragging.component';
 import { EventHandlingComponent } from './event-handling/event-handling.component';
 import { SliderProjectComponent } from './slider-project/slider-project.component';
+import { ScalesComponent } from './scales/scales.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { SliderProjectComponent } from './slider-project/slider-project.componen
     DataVsDatumComponent,
     DraggingComponent,
     EventHandlingComponent,
-    SliderProjectComponent
+    SliderProjectComponent,
+    ScalesComponent
   ],
   imports: [
     BrowserModule,

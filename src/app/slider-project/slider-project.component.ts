@@ -17,11 +17,12 @@ export class SliderProjectComponent implements OnInit {
   private drawSlider(): void {
     this.svg = d3.select('#slider')
       .append('svg')
+      .attr('id', 'svg')
       .style('background-color', '#cece')
       .attr('width', this.width)
       .attr('height', this.height)
       .append('g')
-      .attr('transform', `translate(${this.margins.top}, ${this.margins.right})`);
+      .attr('transform', `translate(${this.margins.top}, ${this.margins.bottom})`);
 
     const lines = this.svg
       .selectAll('line')
@@ -44,8 +45,40 @@ export class SliderProjectComponent implements OnInit {
           .attr('stroke-width', 1.2)
           .style('cursor', 'none')
       })
-      .on('drag', function (event: any) {
+      .on('drag', function (event: any, d: any) {
         const {x, y} = event;
+        
+        if (x > 50 && x < 150) {
+          d3.select('#svg')
+            .transition()
+            .duration(1500)
+            .style('background-color', '#f0e000');
+        } else if (x > 150 && x < 250) {
+          d3.select('#svg')
+            .transition()
+            .duration(1500)
+            .style('background-color', '#0f0f');
+        } else if (x > 250 && x < 350) {
+          d3.select('#svg')
+            .transition()
+            .duration(1500)
+            .style('background-color', '#fefe');
+        } else if (x > 350 && x < 450) {
+          d3.select('#svg')
+            .transition()
+            .duration(1500)
+            .style('background-color', '#f0f');
+        } else if (x > 450 && x < 550) {
+          d3.select('#svg')
+            .transition()
+            .duration(1500)
+            .style('background-color', '#00f');
+        } else {
+          d3.select('#svg')
+            .transition()
+            .duration(1500)
+            .style('background-color', '#cece');
+        }
 
         const el = d3.select(this);
         const xPos = parseInt(el.attr('cx'));
@@ -81,7 +114,7 @@ export class SliderProjectComponent implements OnInit {
       .attr('y', 200)
       .attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'middle')
-      .text(50)
+      .text('')
       .style('pointer-events', 'none')
 
     const pushLines = () => {
@@ -100,10 +133,10 @@ export class SliderProjectComponent implements OnInit {
           } else {
             el.attr('y1', 200);
             el.attr('y2', i % 10 === 0 ? 220 : 210)
-          }
+          };
 
-          label.text(slider.attr('cx'))
-          label.attr('x', slider.attr('cx'))
+          label.text(slider.attr('cx'));
+          label.attr('x', slider.attr('cx'));
         })
       }
     
