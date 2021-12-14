@@ -20,6 +20,7 @@ import { EventHandlingComponent } from './event-handling/event-handling.componen
 import { SliderProjectComponent } from './slider-project/slider-project.component';
 import { ScalesComponent } from './scales/scales.component';
 import { ScaleOrdinalComponent } from './scale-ordinal/scale-ordinal.component';
+import { DivergingScalesComponent } from './diverging-scales/diverging-scales.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ScaleOrdinalComponent } from './scale-ordinal/scale-ordinal.component';
     EventHandlingComponent,
     SliderProjectComponent,
     ScalesComponent,
-    ScaleOrdinalComponent
+    ScaleOrdinalComponent,
+    DivergingScalesComponent
   ],
   imports: [
     BrowserModule,
