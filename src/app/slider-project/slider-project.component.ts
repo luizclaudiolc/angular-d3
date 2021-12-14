@@ -47,7 +47,8 @@ export class SliderProjectComponent implements OnInit {
       })
       .on('drag', function (event: any, d: any) {
         const {x, y} = event;
-        
+        console.log({x, y});
+
         if (x > 50 && x < 150) {
           d3.select('#svg')
             .transition()
@@ -106,7 +107,8 @@ export class SliderProjectComponent implements OnInit {
       .attr('fill', '#fff')
       .attr('stroke', '#000')
       .style('cursor', 'grab')
-      .attr('class', 'slider');
+      .attr('class', 'slider')
+      .call(drag);
 
     const label = this.svg
       .append('text')
@@ -115,7 +117,7 @@ export class SliderProjectComponent implements OnInit {
       .attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'middle')
       .text('')
-      .style('pointer-events', 'none')
+      .style('pointer-events', 'none');
 
     const pushLines = () => {
       d3.selectAll('.line')
@@ -141,8 +143,7 @@ export class SliderProjectComponent implements OnInit {
       }
     
     pushLines();
-    // this.pushLines(lines, slider);
-    slider.call(drag)
+    // slider.call(drag)
   };
 
   constructor() { }
@@ -150,25 +151,28 @@ export class SliderProjectComponent implements OnInit {
   ngOnInit(): void {
     this.drawSlider();
     console.log(this.data)
+    this.test();
   }
 
-  /* public pushLines = (lines: any, slider: any) => {
-    d3.selectAll('.line')
-      .each(function(d: any, i: number) {
-        const el = d3.select(this);
-        const x = parseInt(el.attr('x1'));
-        const sx = parseInt(slider.attr('cx'));
-        const dx = Math.abs(sx - x);
-        const r = 25;
+  public test(): void {
+    
 
-        if (x >= sx - r && x <= sx + r) {
-          const dy = Math.sqrt(Math.abs(r * r - dx * dx));
-          el.attr('y1', 200 + dy);
-          el.attr('y2', i % 10 === 0 ? 220 + dy : 210 + dy);
+    d3.select('#svg')
+      .on('mousemove', function(event: MouseEvent) {
+        const {x, y} = event;
+        console.log(event);
+
+        if (y < 400) {
+          d3.select('#svg')
+            .transition()
+            .duration(1500)
+            .style('background-color', '#f0e000');
         } else {
-          el.attr('y1', 200);
-          el.attr('y2', i % 10 === 0 ? 220 : 210)
+          d3.select('#svg')
+            .transition()
+            .duration(1500)
+            .style('background-color', '#cece');
         }
       })
-    } */
+  }
 }

@@ -19,6 +19,7 @@ import { DraggingComponent } from './dragging/dragging.component';
 import { EventHandlingComponent } from './event-handling/event-handling.component';
 import { SliderProjectComponent } from './slider-project/slider-project.component';
 import { ScalesComponent } from './scales/scales.component';
+import { ScaleOrdinalComponent } from './scale-ordinal/scale-ordinal.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ScalesComponent } from './scales/scales.component';
     DraggingComponent,
     EventHandlingComponent,
     SliderProjectComponent,
-    ScalesComponent
+    ScalesComponent,
+    ScaleOrdinalComponent
   ],
   imports: [
     BrowserModule,
