@@ -94,7 +94,6 @@ export class ScaleOrdinalComponent implements OnInit {
 
   ngOnInit(): void {
     this.draw();
-    
   }
 
 }

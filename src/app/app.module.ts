@@ -21,6 +21,7 @@ import { SliderProjectComponent } from './slider-project/slider-project.componen
 import { ScalesComponent } from './scales/scales.component';
 import { ScaleOrdinalComponent } from './scale-ordinal/scale-ordinal.component';
 import { DivergingScalesComponent } from './diverging-scales/diverging-scales.component';
+import { ScaleTimeComponent } from './scale-time/scale-time.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { DivergingScalesComponent } from './diverging-scales/diverging-scales.co
     SliderProjectComponent,
     ScalesComponent,
     ScaleOrdinalComponent,
-    DivergingScalesComponent
+    DivergingScalesComponent,
+    ScaleTimeComponent
   ],
   imports: [
     BrowserModule,
