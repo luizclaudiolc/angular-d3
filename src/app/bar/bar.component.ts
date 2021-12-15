@@ -19,22 +19,29 @@ const mouseEvents = (_event: any): void => {
   );
 };
 
-const animacoes = (event: any): void => {
-  d3.selectAll('rect')
-    .on('click', function(event: any) {
-      console.log(event);
-      const bar = d3.select(this);
-      const yPos = bar.attr('y');
+// const animacoes = (event: any): void => {
+//   d3.selectAll('rect')
+//     .on('click', function(event: any) {
+//       console.log('aqui')
+//       /* d3.select(this)
+//         .transition()
+//         .duration(150)
+//         .ease(d3.easeBounceOut) */
 
-      bar
-        .attr('stroke-width', 6)
-        .attr('y', (d, i) => Number(yPos) -2)
-        .transition()
-        .duration(1000)
-        .attr('y', (d, i) => Number(yPos))
-        .attr('stroke-width', 0)
-    })
-};
+//       console.log(event);
+//       const bar = d3.select(this);
+//       const yPos = bar.attr('y');
+
+//       bar
+//         .attr('stroke-width', 6)
+//         .attr('y', (d, i) => 0)
+//         .transition()
+//         .duration(1000)
+//         .ease(d3.easeBounceOut)
+//         .attr('y', (d, i) => Number(yPos))
+//         .attr('stroke-width', 0)
+//     })
+// };
 @Component({
   selector: 'app-bar',
   templateUrl: './bar.component.html',
@@ -100,6 +107,7 @@ export class BarComponent implements OnInit {
       .data(data)
       .enter()
       .append('rect')
+      .attr('class', 'barras')
       .attr('x', (d: any) => x(d.Framework))
       .attr('y', (d: any) => y(d.Stars))
       .attr('width', x.bandwidth())
@@ -113,7 +121,7 @@ export class BarComponent implements OnInit {
     this.createSvg();
     this.drawBars(this.data);
     this.mouseEvents = mouseEvents;
-    this.animate = animacoes;
+    // this.animate = animacoes;
 
     this.mouseEvents(this.data);
   }

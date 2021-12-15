@@ -23,6 +23,7 @@ import { ScaleOrdinalComponent } from './scale-ordinal/scale-ordinal.component';
 import { DivergingScalesComponent } from './diverging-scales/diverging-scales.component';
 import { ScaleTimeComponent } from './scale-time/scale-time.component';
 import { AxisGeneratorComponent } from './axis-generator/axis-generator.component';
+import { AnimationsComponentComponent } from './animations-component/animations-component.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { AxisGeneratorComponent } from './axis-generator/axis-generator.componen
     ScaleOrdinalComponent,
     DivergingScalesComponent,
     ScaleTimeComponent,
-    AxisGeneratorComponent
+    AxisGeneratorComponent,
+    AnimationsComponentComponent,
   ],
   imports: [
     BrowserModule,
