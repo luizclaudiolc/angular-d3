@@ -24,6 +24,7 @@ import { DivergingScalesComponent } from './diverging-scales/diverging-scales.co
 import { ScaleTimeComponent } from './scale-time/scale-time.component';
 import { AxisGeneratorComponent } from './axis-generator/axis-generator.component';
 import { AnimationsComponentComponent } from './animations-component/animations-component.component';
+import { BubbleCharComponent } from './bubble-char/bubble-char.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { AnimationsComponentComponent } from './animations-component/animations-
     ScaleTimeComponent,
     AxisGeneratorComponent,
     AnimationsComponentComponent,
+    BubbleCharComponent,
   ],
   imports: [
     BrowserModule,
