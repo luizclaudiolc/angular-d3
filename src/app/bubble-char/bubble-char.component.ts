@@ -196,8 +196,6 @@ export class BubbleCharComponent implements OnInit {
             .attr('cursor', 'pointer');
         })
     }
-
-    
   };
 
 
@@ -205,18 +203,5 @@ export class BubbleCharComponent implements OnInit {
 
   ngOnInit(): void {
     this.drawBubble();
-    // this.t()
   }
-
-  public t(): void {
-    d3.select(this.svg)
-      .selectAll('.grid')
-      .selectAll('line')
-      .on('mouseenter', function () {
-        console.log('aqui...')
-        d3.select(this)
-          .attr('stroke', 'red')
-    })
-  }
-
 }
