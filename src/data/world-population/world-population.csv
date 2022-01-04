@@ -1,0 +1,242 @@
+﻿Rank,Country,Region,Population,Percentage,Date
+1,China,Asia,1411778724,17.80%,20-Nov
+2,India,Asia,1386141732,17.50%,21-Dec
+3,United States,Americas,332960297,4.20%,21-Dec
+4,Indonesia,Asia,271350000,3.43%,20-Dec
+5,Pakistan,Asia,225200000,2.84%,21-Jul
+6,Brazil,Americas,214143381,2.70%,21-Dec
+7,Nigeria,Africa,211401000,2.67%,21-Jul
+8,Bangladesh,Asia,171950056,2.17%,21-Dec
+9,Russia,"Europe,Asia",146171015,1.85%,21-Jan
+10,Mexico,Americas,126014024,1.59%,20-Mar
+11,Japan,Asia,125470000,1.58%,21-Dec
+12,Ethiopia,Africa,117876000,1.49%,21-Jul
+13,Philippines,Asia,111287016,1.41%,21-Dec
+14,Egypt,Africa,102741996,1.30%,21-Dec
+15,Vietnam,Asia,98510000,1.24%,21-Jul
+16,DR Congo,Africa,92378000,1.17%,21-Jul
+17,Iran,Asia,85066199,1.07%,21-Dec
+18,Turkey,"Asia,Europe",83614362,1.06%,20-Dec
+19,Germany,Europe,83129285,1.05%,21-Jun
+20,France,Europe,67505000,0.85%,21-Oct
+21,United Kingdom,Europe,67081234,0.85%,20-Jun
+22,Thailand,Asia,66735055,0.84%,21-Dec
+23,SouthAfrica,Africa,60142978,0.76%,21-Jul
+24,Tanzania,Africa,59441988,0.75%,21-Jul
+25,Italy,Europe,59097904,0.75%,21-Aug
+26,Myanmar,Asia,55294979,0.70%,21-Jul
+27,SouthKorea,Asia,51671569,0.65%,21-Jul
+28,Colombia,Americas,51049498,0.65%,21-Jun
+29,Kenya,Africa,47564296,0.60%,19-Aug
+30,Spain,Europe,47394223,0.60%,21-Jan
+31,Argentina,Americas,45808747,0.58%,21-Jul
+32,Algeria,Africa,44700000,0.56%,21-Jan
+33,Sudan,Africa,44069000,0.56%,21-Dec
+34,Uganda,Africa,42885900,0.54%,21-Jul
+35,Ukraine,Europe,41270899,0.52%,21-Nov
+36,Iraq,Asia,41190700,0.52%,21-Jul
+37,Canada,Americas,38527066,0.49%,21-Dec
+38,Poland,Europe,38151000,0.48%,21-Sep
+39,Morocco,Africa,36469998,0.46%,21-Dec
+40,Uzbekistan,Asia,35286126,0.45%,21-Dec
+41,Saudi Arabia,Asia,35013414,0.44%,20-Jul
+42,Peru,Americas,33035304,0.42%,21-Jul
+43,Afghanistan,Asia,32890171,0.42%,20-Jul
+44,Malaysia,Asia,32688000,0.41%,21-Dec
+45,Angola,Africa,32097671,0.41%,21-Jun
+46,Mozambique,Africa,30832244,0.39%,21-Jul
+47,Ghana,Africa,30792608,0.39%,21-Jun
+48,Yemen,Asia,30491000,0.39%,21-Jul
+49,Nepal,Asia,30378055,0.38%,21-Jul
+50,Venezuela,Americas,28705000,0.36%,21-Jul
+51,IvoryCoast,Africa,27087732,0.34%,21-Jul
+52,Madagascar,Africa,26923353,0.34%,21-Jul
+53,Australia,Oceania,25922849,0.33%,21-Dec
+54,NorthKorea,Asia,25660000,0.32%,21-Jul
+55,Cameroon,Africa,24348251,0.31%,19-Jul
+56,Niger,Africa,24112753,0.30%,21-Jul
+57,Taiwan,Asia,23413879,0.30%,21-Oct
+58,SriLanka,Asia,22156000,0.28%,21-Jul
+59,BurkinaFaso,Africa,21510181,0.27%,20-Jul
+60,Mali,Africa,20856000,0.26%,21-Jul
+61,Chile,Americas,19678363,0.25%,21-Jun
+62,Romania,Europe,19186201,0.24%,21-Jan
+63,Kazakhstan,Asia,19128608,0.24%,21-Dec
+64,Malawi,Africa,18898441,0.24%,21-Jul
+65,Zambia,Africa,18400556,0.23%,21-Jul
+66,Syria,Asia,18276000,0.23%,21-Jul
+67,Ecuador,Americas,17886660,0.23%,21-Dec
+68,Netherlands,Europe,17673631,0.22%,21-Dec
+69,Senegal,Africa,17223497,0.22%,21-Jul
+70,Guatemala,Americas,17109746,0.22%,21-Jul
+71,Chad,Africa,16818391,0.21%,21-Jul
+72,Somalia,Africa,16360000,0.21%,21-Jul
+73,Zimbabwe,Africa,15790716,0.20%,21-Jul
+74,Cambodia,Asia,15552211,0.20%,19-Mar
+75,SouthSudan,Africa,13249924,0.17%,20-Jul
+76,Rwanda,Africa,12955768,0.16%,21-Jul
+77,Guinea,Africa,12907395,0.16%,21-Jul
+78,Burundi,Africa,12574571,0.16%,21-Jul
+79,Benin,Africa,12506347,0.16%,21-Jul
+80,Bolivia,Americas,11797257,0.15%,21-Jul
+81,Tunisia,Africa,11746695,0.15%,20-Jul
+82,Haiti,Americas,11743017,0.15%,20-Jul
+83,Belgium,Europe,11601753,0.15%,21-Oct
+84,Cuba,Americas,11181595,0.14%,20-Dec
+85,Jordan,Asia,11109860,0.14%,21-Dec
+86,Greece,Europe,10718565,0.14%,20-Jan
+87,Czech Republic,Europe,10682029,0.14%,21-Sep
+88,Dominican Republic,Americas,10535535,0.13%,21-Jul
+89,Sweden,Europe,10443153,0.13%,21-Oct
+90,Portugal,Europe,10347892,0.13%,21-Mar
+91,Azerbaijan,Asia,10139196,0.13%,21-Jul
+92,Hungary,Europe,9730772,0.12%,21-Jan
+93,Tajikistan,Asia,9504000,0.12%,21-Jan
+94,United Arab Emirates,Asia,9503738,0.12%,19-Dec
+95,Honduras,Americas,9450711,0.12%,21-Jul
+96,Israel,Asia,9451100,0.12%,21-Dec
+97,Belarus,Europe,9349645,0.12%,21-Jan
+98,PapuaNewGuinea,Oceania,9122994,0.12%,21-Jul
+99,Austria,Europe,8976467,0.11%,21-Oct
+100,Switzerland,Europe,8717105,0.11%,31Sep2021
+101,SierraLeone,Africa,8297882,0.11%,21-Jul
+102,Togo,Africa,7886000,0.10%,21-Jul
+103,HongKong(China),Asia,7394700,0.09%,21-Jun
+104,Paraguay,Americas,7353038,0.09%,21-Jul
+105,Laos,Asia,7337783,0.09%,21-Jul
+106,Libya,Africa,6959000,0.09%,21-Jul
+107,Bulgaria,Europe,6875040,0.09%,21-Jun
+108,Serbia,Europe,6871547,0.09%,21-Jan
+109,ElSalvador,Americas,6825935,0.09%,21-Jul
+110,Lebanon,Asia,6769000,0.09%,21-Jul
+111,Kyrgyzstan,Asia,6663000,0.08%,21-Apr
+112,Nicaragua,Americas,6595674,0.08%,20-Jun
+113,Turkmenistan,Asia,6118000,0.08%,21-Jul
+114,Denmark,Europe,5867412,0.07%,21-Oct
+115,Congo,Africa,5657000,0.07%,21-Jul
+116,CentralAfricanRepublic,Africa,5633412,0.07%,20-Jul
+117,Finland,Europe,5517780,0.07%,21-Oct
+118,Slovakia,Europe,5459781,0.07%,20-Dec
+119,Singapore,Asia,5453600,0.07%,21-Jun
+120,Norway,Europe,5415166,0.07%,21-Oct
+121,Palestine,Asia,5227193,0.07%,21-Jul
+122,CostaRica,Americas,5163038,0.07%,21-Jun
+123,NewZealand,Oceania,5134950,0.06%,21-Dec
+124,Ireland,Europe,5011500,0.06%,21-Apr
+125,Kuwait,Asia,4670713,0.06%,20-Dec
+126,Liberia,Africa,4661010,0.06%,21-Jul
+127,Oman,Asia,4447408,0.06%,21-Oct
+128,Panama,Americas,4278500,0.05%,20-Jul
+129,Mauritania,Africa,4271197,0.05%,21-Jul
+130,Croatia,Europe,4036355,0.05%,20-Dec
+131,Georgia,Asia,3728573,0.05%,21-Jan
+132,Eritrea,Africa,3601000,0.05%,21-Jul
+133,Uruguay,Americas,3554915,0.04%,21-Jun
+134,Mongolia,Asia,3414831,0.04%,21-Dec
+135,BosniaandHerzegovina,Europe,3320954,0.04%,20-Jul
+136,PuertoRico(United States),Americas,3285874,0.04%,20-Apr
+137,Armenia,Asia,2963900,0.04%,21-Mar
+138,Albania,Europe,2829741,0.04%,21-Jan
+139,Qatar,Asia,2799202,0.04%,19-Jul
+140,Lithuania,Europe,2777991,0.04%,21-Nov
+141,Jamaica,Americas,2734093,0.03%,19-Dec
+142,Moldova,Europe,2597100,0.03%,21-Jan
+143,Namibia,Africa,2550226,0.03%,21-Jul
+144,Gambia,Africa,2487000,0.03%,21-Jul
+145,Botswana,Africa,2410338,0.03%,21-Jul
+146,Gabon,Africa,2233272,0.03%,21-Jul
+147,Lesotho,Africa,2159000,0.03%,21-Jul
+148,Slovenia,Europe,2108977,0.03%,21-Apr
+149,NorthMacedonia,Europe,2068808,0.03%,20-Dec
+150,Latvia,Europe,1879700,0.02%,21-Oct
+151,Kosovo,Europe,1782115,0.02%,19-Dec
+152,Guinea-Bissau,Africa,1646077,0.02%,21-Jul
+153,Equatorial Guinea,Africa,1505588,0.02%,21-Jul
+154,Bahrain,Asia,1501635,0.02%,20-Mar
+155,Trinidad and Tobago,Americas,1367558,0.02%,21-Jun
+156,Estonia,Europe,1330068,0.02%,21-Jan
+157,EastTimor,Asia,1317780,0.02%,21-Jul
+158,Mauritius,Africa,1266334,0.02%,21-Jun
+159,Eswatini,Africa,1172000,0.01%,21-Jul
+160,Djibouti,Africa,976107,0.01%,19-Jul
+161,Fiji,Oceania,898402,0.01%,21-Jul
+162,Cyprus,Europe,888005,0.01%,19-Dec
+163,Comoros,Africa,758316,0.01%,17-Dec
+164,Bhutan,Asia,756129,0.01%,21-Jul
+165,Guyana,Americas,743699,0.01%,19-Jul
+166,Solomon Islands,Oceania,728041,0.01%,21-Jul
+167,Macau(China),Asia,682300,0.01%,21-Sep
+168,Luxembourg,Europe,634730,0.01%,21-Jan
+169,Montenegro,Europe,621306,0.01%,20-Jul
+170,WesternSahara,Africa,612000,0.01%,21-Jul
+171,Suriname,Americas,598000,0.01%,19-Jul
+172,CapeVerde,Africa,563198,0.01%,21-Jul
+173,Malta,Europe,514564,0.01%,19-Dec
+174,Transnistria,Europe,469000,0.01%,18-Jan
+175,Belize,Americas,430191,0.01%,21-Jul
+176,Brunei,Asia,429999,0.01%,21-Jul
+177,Bahamas,Americas,393450,0.00%,21-Jul
+178,Maldives,Asia,383135,0.00%,19-Dec
+179,Iceland,Europe,374830,0.00%,21-Sep
+180,NorthernCyprus,Asia,372486,0.00%,18-Dec
+181,Vanuatu,Oceania,301295,0.00%,21-Jul
+182,Barbados,Americas,288000,0.00%,21-Jul
+183,FrenchPolynesia(France),Oceania,279890,0.00%,21-Jul
+184,NewCaledonia(France),Oceania,273674,0.00%,21-Jul
+185,Abkhazia,Asia,245424,0.00%,20-Jan
+186,SãoToméandPríncipe,Africa,214610,0.00%,21-Jul
+187,Samoa,Oceania,199853,0.00%,21-Jul
+188,SaintLucia,Americas,178696,0.00%,18-Jul
+189,Guam(United States),Oceania,178306,0.00%,21-Jul
+190,Curaçao(Netherlands),Americas,153671,0.00%,21-Jan
+191,RepublicofArtsakh,Asia,148900,0.00%,21-Jan
+192,Kiribati,Oceania,120740,0.00%,21-Jul
+193,Grenada,Americas,113000,0.00%,21-Jul
+194,Aruba(Netherlands),Americas,111050,0.00%,20-Dec
+195,SaintVincentandtheGrenadines,Americas,110696,0.00%,20-Jul
+196,Jersey(British Crown Dependency),Europe,107800,0.00%,19-Dec
+197,Micronesia,Oceania,105754,0.00%,21-Jul
+198,U.S.VirginIslands(United States),Americas,104000,0.00%,21-Jul
+199,Tonga,Oceania,99532,0.00%,21-Jul
+200,AntiguaandBarbuda,Americas,99337,0.00%,21-Jul
+201,Seychelles,Africa,99202,0.00%,21-Jun
+202,IsleofMan(British Crown Dependency),Europe,85000,0.00%,21-Jul
+203,Andorra,Europe,78015,0.00%,20-Dec
+204,Dominica,Americas,72000,0.00%,21-Jul
+205,CaymanIslands(United Kingdom),Americas,65786,0.00%,20-Sep
+206,Bermuda(United Kingdom),Americas,64055,0.00%,21-Jul
+207,Guernsey(British Crown Dependency),Europe,63124,0.00%,20-Jun
+208,AmericanSamoa(United States),Oceania,56951,0.00%,21-Jul
+209,NorthernMarianaIslands(United States),Oceania,56801,0.00%,21-Jul
+210,Greenland(Denmark),Americas,56653,0.00%,21-Jul
+211,MarshallIslands,Oceania,54516,0.00%,21-Jul
+212,SaintKittsandNevis,Americas,54000,0.00%,21-Jul
+213,SouthOssetia,Asia,53532,0.00%,15-Oct
+214,FaroeIslands(Denmark),Europe,53613,0.00%,21-Nov
+215,TurksandCaicosIslands(United Kingdom),Americas,42953,0.00%,19-Jul
+216,SintMaarten(Netherlands),Americas,41486,0.00%,19-Jan
+217,Liechtenstein,Europe,39151,0.00%,21-Jun
+218,Monaco,Europe,38350,0.00%,20-Dec
+219,SaintMartin(France),Americas,34065,0.00%,18-Jan
+220,Gibraltar(United Kingdom),Europe,34000,0.00%,21-Jul
+221,SanMarino,Europe,33668,0.00%,21-Oct
+222,Åland(Finland),Europe,30317,0.00%,21-Oct
+223,BritishVirginIslands(United Kingdom),Americas,30000,0.00%,21-Jul
+224,Palau,Oceania,17957,0.00%,21-Jul
+225,CookIslands(NewZealand),Oceania,15342,0.00%,21-Jul
+226,Anguilla(United Kingdom),Americas,15000,0.00%,21-Jul
+227,Nauru,Oceania,11832,0.00%,21-Jul
+228,WallisandFutuna(France),Oceania,11369,0.00%,21-Jan
+229,Tuvalu,Oceania,10679,0.00%,21-Jul
+230,SaintBarthélemy(France),Americas,10124,0.00%,18-Jan
+231,"SaintHelena,AscensionandTristandaCunha(United Kingdom)",Africa,6000,0%,21-Jul
+232,SaintPierreandMiquelon(France),Americas,5985,0%,18-Jan
+233,Montserrat(United Kingdom),Americas,5000,0%,21-Jul
+234,FalklandIslands(United Kingdom),Americas,4000,0%,21-Jul
+235,ChristmasIsland(Australia),Oceania,1966,0%,20-Jun
+236,NorfolkIsland(Australia),Oceania,1734,0%,20-Jun
+237,Niue(NewZealand),Oceania,1549,0%,21-Jul
+238,Tokelau(NewZealand),Oceania,1501,0%,21-Jul
+239,VaticanCity,Europe,825,0%,19-Feb
+240,Cocos(Keeling)Islands(Australia),Oceania,573,0%,20-Jun
+241,PitcairnIslands(United Kingdom),Oceania,40,0%,21-Jan

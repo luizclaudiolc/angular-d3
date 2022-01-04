@@ -40,7 +40,7 @@ export class DraggingComponent implements OnInit {
         .attr('stroke', '#000')
         .attr('stroke-width', 2)
         .attr('opacity', 0.5)
-        .style('cursor', 'drag');
+        .style('cursor', 'pointer');
     });
     drag.on('drag', function (event: any) {
       const {x, y} = event;

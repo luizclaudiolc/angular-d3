@@ -53,6 +53,10 @@ export class BubbleCharComponent implements OnInit {
     .attr('transform', `translate(${this.margin.left}, ${0})`)
     .attr('id', 'y-axis');
 
+    this.svg.append('g')
+      .attr('transform', `translate(${0}, ${this.margin.rigth})`)
+      .attr('id', 'r-axis');
+
     /* this.svg.append('polyline')
       .attr('points', `50,50 690,50 690,${(this.height - (this.margin.top + this.margin.bottom) - 45)} `)
       .attr('stroke', '#000')
@@ -69,6 +73,39 @@ export class BubbleCharComponent implements OnInit {
     const container = this.svg.append('g')
       .attr('clip-path', 'url(#clip)');
 
+    const tooltip = d3.select('#bubble').append('div')
+      .attr('class', 'tooltip')
+      .style('opacity', 0)
+      .style('position', 'absolute')
+      .style('background-color', '#fff')
+      .style('border', '1px solid #000')
+      .style('border-radius', '5px')
+      .style('padding', '10px')
+      .style('font-size', '12px');
+
+    const mouseover = function (event: any, d: any) {
+      tooltip
+        .style('opacity', 0.8)
+        .style('left', `${event.pageX + 30}px`)
+        .style('top', `${event.pageY - 30}px`)
+        .html(`
+        Largura: ${d.weight}
+        <br>
+        Altura: ${d.height}
+        `);
+    }
+
+    const mousemove = function (event: any) {
+      tooltip
+        .style('left', `${event.pageX + 30}px`)
+        .style('top', `${event.pageY - 30}px`);
+    }
+
+    const mouseout = function () {
+      tooltip
+        .style('opacity', 0);
+    }
+
     let dataset: Array<any>;
     
     const changDataset = () => {
@@ -81,6 +118,7 @@ export class BubbleCharComponent implements OnInit {
         dataset.push({
           weight: Math.round(Math.random() * 100), // random weight between 60 and 100
           height: Math.round(Math.random() * 60) + 140, // random height between 160 and 200
+          age: Math.round(Math.random() * 50), // random age between 60 and 100
         })
       }
       console.log(dataset);
@@ -89,14 +127,14 @@ export class BubbleCharComponent implements OnInit {
     
     // criação do gráfico
     const drawChart = () => {
-      // animations end time
-      const transitions = d3.transition().duration(2000);
-
       // scales
       const scaleX = d3.scaleLinear(d3.extent(dataset, (d) => d.weight) as [number, number], 
         [this.margin.left, this.width - (this.margin.left + this.margin.rigth)]);
       
       const scaleY = d3.scaleLinear(d3.extent(dataset, (d) => d.height) as [number, number],
+        [this.height - (this.margin.top + this.margin.bottom), this.margin.top]);
+
+      const scaleRigth = d3.scaleLinear(d3.extent(dataset, (d) => d.age) as [number, number],
         [this.height - (this.margin.top + this.margin.bottom), this.margin.top]);
 
       const scaleS = d3.scaleSqrt()
@@ -147,11 +185,19 @@ export class BubbleCharComponent implements OnInit {
         .transition()
         .duration(2000)
         .call(axisY as any);
+
+      const axisRigth = d3.axisRight(scaleRigth);
+        d3.select('#r-axis')
+        .attr('transform', `translate(${this.width - (this.margin.left + this.margin.rigth)}, ${0})`)
+        .transition()
+        .duration(2000)
+        .call(axisRigth as any);
       
       // Create circles
       const circles = container.selectAll('circle').data(dataset);
       circles.enter()
         .append('circle')
+        .attr('id', (d: any, i: any) => `circle-${i}`)
         .attr('cx', (d: any) => scaleX(d.weight))
         .attr('cy', (d: any) => scaleY(d.height))
         .attr('r', 0)
@@ -180,6 +226,57 @@ export class BubbleCharComponent implements OnInit {
         .attr('r', 0)
         .remove();
 
+    /*   circles.on('mouseover', (event: any, d: any) => {
+        const { pageX, pageY } = event;
+        console.log('to aaquiii');
+        tooltip.transition().style('opacity', 0.9);
+        tooltip.html(`${d.weight}kg - ${d.height}cm`)
+      }).on('mouseout', (event: any, d: any) => {
+        tooltip.transition().style('opacity', 0);
+      })
+ */
+      // Create bars from age
+      /* const bars = container.selectAll('line').data(dataset);
+      bars.enter()
+        .append('line')
+        .attr('x1', (d: any) => scaleX(d.weight))
+        .attr('y1', (d: any) => scaleY(d.height))
+        .attr('x2', (d: any) => scaleX(d.weight))
+        .attr('y2', (d: any) => scaleY(d.height) - scaleRigth(d.age))
+        .attr('width', 0)
+        .attr('height', 0)
+        .transition()
+        .duration(2000)
+        .attr('x1', (d: any) => scaleX(d.weight))
+        .attr('y1', (d: any) => scaleY(d.height))
+        .attr('x2', (d: any) => scaleX(d.weight))
+        .attr('y2', (d: any) => scaleY(d.height) - scaleRigth(d.age))
+        .attr('width', (d: any) => scaleRigth(d.age))
+        .attr('height', (d: any) => scaleY(d.height) - scaleY(d.height) + scaleRigth(d.age))
+        .attr('fill', '#cece')
+        .attr('opacity', 0.8);
+
+      bars
+        .transition()
+        .duration(2000)
+        .attr('x1', (d: any) => scaleX(d.weight))
+        .attr('y1', (d: any) => scaleY(d.height))
+        .attr('x2', (d: any) => scaleX(d.weight))
+        .attr('y2', (d: any) => scaleY(d.height) - scaleRigth(d.age))
+        .attr('width', (d: any) => scaleRigth(d.age))
+        .attr('height', (d: any) => scaleY(d.height) - scaleY(d.height) + scaleRigth(d.age))
+        .attr('fill', '#cece')
+        .attr('opacity', 0.8);
+
+      bars.exit() // remove bars
+        .transition()
+        .duration(2000)
+        .attr('width', 0)
+        .attr('height', 0)
+        .remove();
+
+        console.log(bars); */
+
         d3.selectAll('.grid')
         .selectAll('line')
         .on('mouseenter', function () {
@@ -195,6 +292,11 @@ export class BubbleCharComponent implements OnInit {
             .attr('stroke-width', 1)
             .attr('cursor', 'pointer');
         })
+
+        d3.selectAll('circle')
+        .on('mouseover', mouseover)
+        .on('mousemove', mousemove)
+        .on('mouseout', mouseout);
     }
   };
 
