@@ -23,77 +23,72 @@ export class NodesEndLinksComponent implements OnInit {
     .attr('height', this.height)
     .append('g')
     .attr('transform', `translate(${this.margin.left}, ${this.margin.rigth})`);
-    
-    this.svg.append('g').attr('class', 'links');
-    this.svg.append('g').attr('class', 'nodes');
-    
-    const tooltip = d3.select('#flags')
-      .append('div')
-      .style('position', 'absolute')
-      .style('opacity', 0)
-      .style('background-color', 'white')
-      .style('border', 'solid')
-      .style('border-width', '2px')
-      .style('border-radius', '5px');
-    
+
     this.dataset
       .then((data: any) => {
-        console.log(data);
         const nodes = data.nodes;
         const links = data.links;
 
-        const ticked = () => {
-          updateLinks();
-          updateNodes();
-        }
+        console.log({ nodes, links });
 
-        const force = d3.forceSimulation(nodes)
-          .force('charge', d3.forceManyBody().strength(-5))
-          .force('center', d3.forceCenter(this.width / 2, this.height / 2))
-          .force('link', d3.forceLink().links(links).distance(15))
-          .on('tick', ticked);
+        const simulation = d3.forceSimulation()
+          .force('link', d3.forceLink().id((d: any) => d.code).distance(5))
+          .force('charge', d3.forceManyBody())
+          .force('center', d3.forceCenter(this.width / 2, this.height / 2));
 
-          const updateLinks = () => {
-            const link = d3.select('.links')
-              .selectAll('line')
-              .data(links)
-              .join('line')
-              .attr('stroke', '#999')
-              .attr('stroke-width', 1)
-              .attr('x1', (d: any) => d.source.x)
-              .attr('y1', (d: any) => d.source.y)
-              .attr('x2', (d: any) => d.target.x)
-              .attr('y2', (d: any) => d.target.y)
+        const link = this.svg
+          .append('g')
+          .selectAll('line')
+          .data(links)
+          .enter()
+          .append('line')
+          .attr('stroke', '#000');
+
+        const node = this.svg
+          .append('g')
+          .selectAll('circle')
+          .data(nodes)
+          .enter()
+          .append('circle')
+          .attr('r', 5)
+          .call(d3.drag()
+            .on('start', draggedStart)
+            .on('drag', dragged)
+            .on('end', dragEnded));
+
+            const ticked = () => {
+              link
+              .attr("x1", function(d: any) { return d.source.x; })
+              .attr("y1", function(d: any) { return d.source.y; })
+              .attr("x2", function(d: any) { return d.target.x; })
+              .attr("y2", function(d: any) { return d.target.y; });
+              
+              node
+                .attr("cx", function(d: any) { return d.x; })
+                .attr("cy", function(d: any) { return d.y; });
+            }
+
+            simulation.nodes(nodes).on('tick', ticked).alphaDecay(0);
+            simulation.force('link', d3.forceLink().links(links));
+
+          function draggedStart (d: any, event: any) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            event.subject.fx = event.subject.x;
+            event.subject.fy = event.subject.y;
           }
-  
-          const updateNodes = () => {
-            const node = d3.select('.nodes')
-              .selectAll('circle')
-              .data(nodes)
-              .join('circle')
-              .attr('r', 5)
-              .attr('fill', '#ff0000')
-              .attr('stroke', '#fff')
-              .attr('stroke-width', 1)
-              .attr('cx', (d: any) => d.x)
-              .attr('cy', (d: any) => d.y);
+
+          function dragged (d: any, event: any) {
+            event.subject.fx = event.x;
+            event.subject.fy = event.y;            
           }
-
-          const drag = d3.drag();
-
-          drag.on('start', (event: any, d: any) => {
-            console.log('drag start');
-          })
-          drag.on('drag', (event: any, d: any) => {
-            console.log('drag');
-          })
-          drag.on('end', (event: any, d: any) => {
-            console.log('drag end');
-          })
-
-      }).catch(error => {
-        console.log(error);
-      });
+          
+          function dragEnded (event: any) {
+            if (!event.active) simulation.alphaTarget(0);
+            event.subject.fx = null;
+            event.subject.fy = null;
+          }
+      })
+        .catch((e) => console.log(e))
   } 
   constructor() { }
 
