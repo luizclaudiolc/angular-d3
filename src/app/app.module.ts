@@ -27,6 +27,7 @@ import { AnimationsComponentComponent } from './animations-component/animations-
 import { BubbleCharComponent } from './bubble-char/bubble-char.component';
 import { NodesEndLinksComponent } from './nodes-end-links/nodes-end-links.component';
 import { SimulationChallengeComponent } from './simulation-challenge/simulation-challenge.component';
+import { LineGeneratorComponent } from './line-generator/line-generator.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { SimulationChallengeComponent } from './simulation-challenge/simulation-
     BubbleCharComponent,
     NodesEndLinksComponent,
     SimulationChallengeComponent,
+    LineGeneratorComponent,
   ],
   imports: [
     BrowserModule,
