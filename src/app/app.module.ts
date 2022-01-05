@@ -26,6 +26,7 @@ import { AxisGeneratorComponent } from './axis-generator/axis-generator.componen
 import { AnimationsComponentComponent } from './animations-component/animations-component.component';
 import { BubbleCharComponent } from './bubble-char/bubble-char.component';
 import { NodesEndLinksComponent } from './nodes-end-links/nodes-end-links.component';
+import { SimulationChallengeComponent } from './simulation-challenge/simulation-challenge.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { NodesEndLinksComponent } from './nodes-end-links/nodes-end-links.compon
     AnimationsComponentComponent,
     BubbleCharComponent,
     NodesEndLinksComponent,
+    SimulationChallengeComponent,
   ],
   imports: [
     BrowserModule,
