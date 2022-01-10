@@ -32,6 +32,22 @@ export class LineGeneratorComponent implements OnInit {
       .append('g')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
 
+      /* d3.csv('https://raw.githubusercontent.com/luizclaudiolc/angular-d3/master/src/data/vaccination/vaccination-data.csv')
+      .then((data: any) => {
+        function obj () {
+          const country = data.map((d: any) => d.COUNTRY);
+          const firstVaccination = data.map((d: any) => d.FIRST_VACCINE_DATE);
+          console.log({country, firstVaccination})
+
+          return {
+            Pais: country,
+            PrimeiraDose: firstVaccination,
+          }
+        }
+        console.log(obj())
+        
+      }) */
+
     const txt = svg.append('text')
       .attr('x', 20)
       .attr('y', 20)
@@ -61,8 +77,9 @@ export class LineGeneratorComponent implements OnInit {
         const keys = Object.keys(curves);
         const value = Object.values(curves);
         ix = (ix === value.length) ? 0 : ix;
+        console.log(ix)
         line.curve(value[ix]);
-        svg.select('path').attr('d', line(this.dataset as any));
+        svg.select('path').attr('d', line(this.dataset as any))
         svg.select('text').text(keys[ix]);
       }
 
@@ -79,7 +96,7 @@ export class LineGeneratorComponent implements OnInit {
       curveBasisClosed: d3.curveBasisClosed,
       curveBasisOpen: d3.curveBasisOpen,
       curveBundle: d3.curveBundle,
-      curveCardinal: d3.curveCardinal.tension(.5),
+      curveCardinal: d3.curveCardinal.tension(0),
       curveCardinalClosed: d3.curveCardinalClosed,
       curveCardinalOpen: d3.curveCardinalOpen,
       curveCatmullRom: d3.curveCatmullRom,
@@ -93,6 +110,8 @@ export class LineGeneratorComponent implements OnInit {
       curveStep: d3.curveStep,
       curveStepAfter: d3.curveStepAfter,
       curveStepBefore: d3.curveStepBefore,
+      curveBumpX: d3.curveBumpX,
+      curveBumpY: d3.curveBumpY,
     };
   }
 

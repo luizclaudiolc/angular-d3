@@ -56,20 +56,20 @@ export class NodesEndLinksComponent implements OnInit {
             .on('drag', dragged)
             .on('end', dragEnded));
 
-            const ticked = () => {
-              link
-              .attr("x1", function(d: any) { return d.source.x; })
-              .attr("y1", function(d: any) { return d.source.y; })
-              .attr("x2", function(d: any) { return d.target.x; })
-              .attr("y2", function(d: any) { return d.target.y; });
-              
-              node
-                .attr("cx", function(d: any) { return d.x; })
-                .attr("cy", function(d: any) { return d.y; });
-            }
+        const ticked = () => {
+          link
+          .attr("x1", function(d: any) { return d.source.x; })
+          .attr("y1", function(d: any) { return d.source.y; })
+          .attr("x2", function(d: any) { return d.target.x; })
+          .attr("y2", function(d: any) { return d.target.y; });
+          
+          node
+            .attr("cx", function(d: any) { return d.x; })
+            .attr("cy", function(d: any) { return d.y; });
+        }
 
-            simulation.nodes(nodes).on('tick', ticked).alphaDecay(0);
-            simulation.force('link', d3.forceLink().links(links));
+        simulation.nodes(nodes).on('tick', ticked).alphaDecay(0);
+        simulation.force('link', d3.forceLink().links(links));
 
           function draggedStart (d: any, event: any) {
             if (!event.active) simulation.alphaTarget(0.3).restart();

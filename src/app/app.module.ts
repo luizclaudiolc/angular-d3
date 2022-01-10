@@ -28,6 +28,7 @@ import { BubbleCharComponent } from './bubble-char/bubble-char.component';
 import { NodesEndLinksComponent } from './nodes-end-links/nodes-end-links.component';
 import { SimulationChallengeComponent } from './simulation-challenge/simulation-challenge.component';
 import { LineGeneratorComponent } from './line-generator/line-generator.component';
+import { CovidCasesComponent } from './covid-cases/covid-cases.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { LineGeneratorComponent } from './line-generator/line-generator.componen
     NodesEndLinksComponent,
     SimulationChallengeComponent,
     LineGeneratorComponent,
+    CovidCasesComponent,
   ],
   imports: [
     BrowserModule,
