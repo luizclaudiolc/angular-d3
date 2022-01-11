@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { IntrojsService } from '../introjs.service';
 
 @Component({
   selector: 'app-line-generator',
@@ -51,6 +52,7 @@ export class LineGeneratorComponent implements OnInit {
     const txt = svg.append('text')
       .attr('x', 20)
       .attr('y', 20)
+      .attr('id', 'txt')
       .text('Curves in D3.js')
 
     const points = this.svg.append('g')
@@ -58,6 +60,7 @@ export class LineGeneratorComponent implements OnInit {
       .data(this.dataset)
       .enter()
       .append('circle')
+      .attr('id', (d: any, i: any) => `point-${i}`)
       .attr('cx', (d: any) => d[0])
       .attr('cy', (d: any) => d[1])
       .attr('r', 5);
@@ -115,10 +118,14 @@ export class LineGeneratorComponent implements OnInit {
     };
   }
 
-  constructor() { }
+  constructor(private introService: IntrojsService) { }
 
   ngOnInit(): void {
     this.draw();
+  }
+
+  ngAfterViewInit(): void {
+    this.introService.t1();
   }
 
 }
