@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-import * as attrs from 'd3-selection-multi';
-import { selectAll, Selection, ArrayLike } from 'd3-selection';
-import * as d3SelectionMulti from 'd3-selection-multi';
-import { IntrojsService } from '../introjs.service';
 
 @Component({
-  selector: 'app-line-generator',
-  templateUrl: './line-generator.component.html',
-  styleUrls: ['./line-generator.component.scss']
+  selector: 'app-area-generator',
+  templateUrl: './area-generator.component.html',
+  styleUrls: ['./area-generator.component.scss']
 })
-export class LineGeneratorComponent implements OnInit {
+export class AreaGeneratorComponent implements OnInit {
   private svg: any;
-  private margin = {top: 20, right: 20, bottom: 20, left: 20};
+  private margin = {top: 20, right: 20, bottom: 30, left: 40};
   private width = 750;
-  private height = 400;
+  private height = 450;
+
   private dataset = [
     [100, 200],
     [150, 90],
@@ -24,23 +21,21 @@ export class LineGeneratorComponent implements OnInit {
     [410, 120],
     [475, 250],
     [550, 350],
-    [600, 50],
+    [600, 200],
   ];
 
   private draw(): void {
-    this.svg = d3.select('#line')
+    this.svg = d3.select('#area')
       .append('svg')
       .style('background-color', '#cece')
       .attr('width', this.width)
-      .attr('height', this.height)
-      .append('g')
-      .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
+      .attr('height', this.height);
 
-    const txt = this.svg.append('text')
+    /* const txt = this.svg.append('text')
       .attr('x', 20)
       .attr('y', 20)
       .attr('id', 'txt')
-      .text('Curves in D3.js')
+      .text('Area in D3.js') */
 
     const points = this.svg.append('g')
       .selectAll('circle')
@@ -52,15 +47,15 @@ export class LineGeneratorComponent implements OnInit {
       .attr('cy', (d: any) => d[1])
       .attr('r', 5);
 
-    const line = d3.line();
-    // line.x((d: any) => d[0]);
-    // line.y((d: any) => d[1]);
+    const areaGenerator = d3.area();
+    // areaGenerator.x((d: any) => d[0]);
+    // areaGenerator.y((d: any) => d[1]);
+    areaGenerator.y0(this.height / 2);
+    console.log(areaGenerator.y0());
 
     const path = this.svg.append('path')
-      .attr('d', line(this.dataset as any))
-      .attr('stroke', '#ff0000')
-      .attr('stroke-width', 2)
-      .attr('fill', 'none');
+      .attr('d', areaGenerator(this.dataset as any))
+      .attr('fill', 'gray');
     
     const nextCurve = () => {
       ix++;
@@ -68,30 +63,31 @@ export class LineGeneratorComponent implements OnInit {
       const value = Object.values(curves);
       ix = (ix === value.length) ? 0 : ix;
       console.log(ix)
-      line.curve(value[ix]);
-      this.svg.select('path').attr('d', line(this.dataset as any))
+      areaGenerator.curve(value[ix]);
+      this.svg.select('path').attr('d', areaGenerator(this.dataset as any));
       this.svg.select('text').text(keys[ix]);
+      this.svg.selectAll('circle').remove();
     }
 
-    const btn = d3.select('#line')
-      .append('div')
-      .append('button')
-      .attr('class', 'btn btn-primary')
-      .text('Change dataset')
-      .on('click', nextCurve);
+    const btn = d3.select('#area')
+    .append('div')
+    .append('button')
+    .attr('class', 'btn btn-primary')
+    .text('Change dataset')
+    .on('click', nextCurve);
 
     let ix = 0;
     const curves = {
       curveBasis: d3.curveBasis,
       curveBasisClosed: d3.curveBasisClosed,
       curveBasisOpen: d3.curveBasisOpen,
-      curveBundle: d3.curveBundle,
+    /*  curveBundle: d3.curveBundle,
       curveCardinal: d3.curveCardinal.tension(0),
       curveCardinalClosed: d3.curveCardinalClosed,
       curveCardinalOpen: d3.curveCardinalOpen,
       curveCatmullRom: d3.curveCatmullRom,
       curveCatmullRomClosed: d3.curveCatmullRomClosed,
-      curveCatmullRomOpen: d3.curveCatmullRomOpen,
+      curveCatmullRomOpen: d3.curveCatmullRomOpen, */
       curveLinear: d3.curveLinear,
       curveLinearClosed: d3.curveLinearClosed,
       curveMonotoneX: d3.curveMonotoneX,
@@ -103,16 +99,12 @@ export class LineGeneratorComponent implements OnInit {
       curveBumpX: d3.curveBumpX,
       curveBumpY: d3.curveBumpY,
     };
-  }
+  };
 
-  constructor(private introService: IntrojsService) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.draw();
-  }
-
-  ngAfterViewInit(): void {
-    this.introService.t1();
   }
 
 }

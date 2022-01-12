@@ -43,12 +43,13 @@ export class CovidCasesComponent implements OnInit {
           .style('opacity', 0.8)
           .style('left', `${event.pageX + 30}px`)
           .style('top', `${event.pageY - 30}px`)
+          // .style('color', '#0f0f')
           .html(`
             País: ${d.COUNTRY}
             <br>
             Pessoas totalmente vacinadas: 
-            ${Number(d.PERSONS_FULLY_VACCINATED).toLocaleString('pt-BR')}
-          `);
+            <strong>${Number(d.PERSONS_FULLY_VACCINATED).toLocaleString('pt-BR')}
+          </strong>`);
       }
   
       const mousemove = function (event: any) {
