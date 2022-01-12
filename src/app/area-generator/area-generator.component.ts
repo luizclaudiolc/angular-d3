@@ -73,7 +73,7 @@ export class AreaGeneratorComponent implements OnInit {
     .append('div')
     .append('button')
     .attr('class', 'btn btn-primary')
-    .text('Change dataset')
+    .text('Change Area')
     .on('click', nextCurve);
 
     let ix = 0;
