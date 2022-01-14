@@ -11,7 +11,7 @@ export class ArcPieGeneratorComponent implements OnInit {
   private margin = { top: 20, right: 20, bottom: 30, left: 40 };
   private width = 750;
   private height = 450;
-  private dataset = [15, 35, 10, 25, 8, 12, 5];
+  private dataset = [15, 35, 10, 8, 12, 5, 25, 32];
   private colors = d3.schemeOrRd[this.dataset.length]; // serve fazer uma escaça de cor no grafico
 
   private draw(): void {
@@ -31,7 +31,7 @@ export class ArcPieGeneratorComponent implements OnInit {
     arcGen.padAngle(0.04); // serve para definir o tamanho do angulo
     arcGen.padRadius(50); // serve para definir o raio do angulo
 
-   /*  this.svg
+    /*  this.svg
       .append('path')
       .attr('d', arcGen)
       .attr('fill', '#ff0000')
@@ -39,12 +39,12 @@ export class ArcPieGeneratorComponent implements OnInit {
       .attr('stroke-width', 2)
       .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`); */
 
-    const pie = d3.pie() //(this.dataset); // Declara a função e já passa os dados
+    const pie = d3.pie()(this.dataset); // Declara a função e já passa os dados
     // console.log(pie);
 
     this.svg
       .selectAll('path')
-      .data(pie(this.dataset))
+      .data(pie)
       // .enter()
       .join(
         (enter: any) => enter.append('path').attr('d', arcGen),
@@ -73,7 +73,7 @@ export class ArcPieGeneratorComponent implements OnInit {
 
     this.svg
       .selectAll('text')
-      .data(pie(this.dataset))
+      .data(pie)
       .enter()
       .append('text')
       .text((d: any, i: any) => this.dataset[i])
@@ -83,7 +83,66 @@ export class ArcPieGeneratorComponent implements OnInit {
       .attr('text-anchor', 'middle')
       .attr('font-size', '1.5em')
       .style('pointer-events', 'none');
-  }
+
+    function animateSile(path: any) {
+      path.transition()
+        .duration(750)
+        .attrTween('d', function (d: any) {
+          const interpolate = d3.interpolate(d.endAngle, d.startAngle);
+          return function (t: any) {
+            d.startAngle = interpolate(t);
+            return arcGen(d);
+          };
+        });
+    }
+
+    /* function animateSileBack(path: any) {
+      path.transition()
+        .duration(750)
+        .attrTween('d', function (d: any) {
+          const interpolate = d3.interpolate(d.startAngle, d.endAngle);
+          return function (t: any) {
+            d.endAngle = interpolate(t);
+            return arcGen(d);
+          };
+        });
+    } */
+
+    function ani (path: any) {
+      arcGen
+        .innerRadius(120)
+        .outerRadius(180)
+
+        d3.selectAll(path)
+          .transition()
+          .duration(200)
+          .attr('d', (d: any) => arcGen(d))
+    }
+
+    function aniBack (path: any) {
+      arcGen
+        .innerRadius(100)
+        .outerRadius(160)
+
+        d3.selectAll(path)
+          .transition()
+          .duration(200)
+          .attr('d', (d: any) => arcGen(d))
+    }
+
+    d3.selectAll('path')
+      .on('mouseover', function (d: any, i: any) {
+        const el = d3.select(this);
+        ani(el);
+      })
+      .on('mouseout', function (d: any, i: any) {
+        const el = d3.select(this);
+        aniBack(el);
+      });
+    
+    const path = d3.selectAll('path');
+    animateSile(path);
+}
 
   constructor() {}
 
@@ -91,3 +150,4 @@ export class ArcPieGeneratorComponent implements OnInit {
     this.draw();
   }
 }
+
