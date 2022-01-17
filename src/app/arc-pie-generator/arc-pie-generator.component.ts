@@ -12,7 +12,7 @@ export class ArcPieGeneratorComponent implements OnInit {
   private width = 750;
   private height = 450;
   private dataset = [15, 35, 10, 8, 12, 5, 25, 32];
-  private colors = d3.schemeOrRd[this.dataset.length]; // serve fazer uma escaça de cor no grafico
+  private colors = d3.schemeSpectral[this.dataset.length]; // serve fazer uma escaça de cor no grafico
 
   private draw(): void {
     this.svg = d3
@@ -71,7 +71,7 @@ export class ArcPieGeneratorComponent implements OnInit {
     //   .attr('r', 2)
     //   .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`);
 
-    this.svg
+    /* this.svg
       .selectAll('text')
       .data(pie)
       .enter()
@@ -82,11 +82,11 @@ export class ArcPieGeneratorComponent implements OnInit {
       .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`)
       .attr('text-anchor', 'middle')
       .attr('font-size', '1.5em')
-      .style('pointer-events', 'none');
+      .style('pointer-events', 'none'); */
 
-    function animateSile(path: any) {
+    function initialAnimation(path: any) {
       path.transition()
-        .duration(750)
+        .duration(250)
         .attrTween('d', function (d: any) {
           const interpolate = d3.interpolate(d.endAngle, d.startAngle);
           return function (t: any) {
@@ -108,7 +108,7 @@ export class ArcPieGeneratorComponent implements OnInit {
         });
     } */
 
-    function ani (path: any) {
+    function animationSlice (path: any) {
       arcGen
         .innerRadius(120)
         .outerRadius(180)
@@ -119,7 +119,7 @@ export class ArcPieGeneratorComponent implements OnInit {
           .attr('d', (d: any) => arcGen(d))
     }
 
-    function aniBack (path: any) {
+    function animationSliceBack (path: any) {
       arcGen
         .innerRadius(100)
         .outerRadius(160)
@@ -133,15 +133,15 @@ export class ArcPieGeneratorComponent implements OnInit {
     d3.selectAll('path')
       .on('mouseover', function (d: any, i: any) {
         const el = d3.select(this);
-        ani(el);
+        animationSlice(el);
       })
       .on('mouseout', function (d: any, i: any) {
         const el = d3.select(this);
-        aniBack(el);
+        animationSliceBack(el);
       });
     
     const path = d3.selectAll('path');
-    animateSile(path);
+    initialAnimation(path);
 }
 
   constructor() {}
