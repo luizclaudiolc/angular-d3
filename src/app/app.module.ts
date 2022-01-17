@@ -31,6 +31,7 @@ import { LineGeneratorComponent } from './line-generator/line-generator.componen
 import { CovidCasesComponent } from './covid-cases/covid-cases.component';
 import { AreaGeneratorComponent } from './area-generator/area-generator.component';
 import { ArcPieGeneratorComponent } from './arc-pie-generator/arc-pie-generator.component';
+import { LinksAndLayoutsComponent } from './links-and-layouts/links-and-layouts.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { ArcPieGeneratorComponent } from './arc-pie-generator/arc-pie-generator.
     CovidCasesComponent,
     AreaGeneratorComponent,
     ArcPieGeneratorComponent,
+    LinksAndLayoutsComponent,
   ],
   imports: [
     BrowserModule,
