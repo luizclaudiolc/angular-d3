@@ -113,7 +113,7 @@ export class ArcPieGeneratorComponent implements OnInit {
         .innerRadius(120)
         .outerRadius(180)
 
-        d3.selectAll(path)
+        path
           .transition()
           .duration(200)
           .attr('d', (d: any) => arcGen(d))
@@ -124,7 +124,7 @@ export class ArcPieGeneratorComponent implements OnInit {
         .innerRadius(100)
         .outerRadius(160)
 
-        d3.selectAll(path)
+        path
           .transition()
           .duration(200)
           .attr('d', (d: any) => arcGen(d))
