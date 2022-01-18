@@ -9,52 +9,112 @@ import * as d3 from 'd3';
 export class LinksAndLayoutsComponent implements OnInit {
   private svg: any;
   private margin = { top: 30, right: 30, bottom: 30, left: 40 };
-  private width = 750;
-  private height = 450;
+  private width = 960;
+  private height = 600;;
   private dataset = {
-    name: 'Root',
+    name: 'Aparecida e Sebastião',
     children: [
       {
-        name: 'A',
+        name: 'Rosimeri',
         children: [
           {
-            name: 'A1',
-          },
-          {
-            name: 'A2',
-          },
-        ],
-      },
-      {
-        name: 'B',
-      },
-      {
-        name: 'C',
-        children: [
-          {
-            name: 'C1',
-          },
-          {
-            name: 'C2',
-          },
-        ],
-      },
-      {
-        name: 'D',
-        children: [
-          {
-            name: 'D1',
+            name: 'Lyncoln',
             children: [
               {
-                name: 'D11',
+                name: 'Julia',
               },
+            ],
+          },
+          {
+            name: 'Levelyn',
+            children: [
               {
-                name: 'D12',
+                name: 'Vicente',
               },
             ],
           },
         ],
-      }
+      },
+      {
+        name: 'Luiz Paulo',
+        children: [
+          {
+            name: 'Stefany',
+            children: [
+              {
+                name: 'Bernardo',
+              },
+            ],
+          },
+          {
+            name: 'Sandy',
+            children: [
+              {
+                name: 'Alice',
+              },
+            ],
+          },
+          {
+            name: 'Shay',
+            children: [
+              {
+                name: 'Luiz Gustavo',
+              },
+            ],
+          },
+          {
+            name: 'L.Paulo',
+          },
+          
+          {
+            name: 'Saulo',
+          },
+          {
+            name: 'Silas',
+          },
+        ],
+      },
+      {
+        name: 'Ana Maria',
+        children: [
+          {
+            name: 'Bruno',
+          },
+          {
+            name: 'Hugo',
+          },
+          {
+            name: 'Tiago',
+          },
+          {
+            name: 'Diego',
+            children: [
+              {
+                name: 'José',
+              },
+            ],
+          },
+          {
+            name: 'Diogo',
+          },
+        ],
+      },
+      // {
+      //   name: 'D',
+      //   children: [
+      //     {
+      //       name: 'D1',
+      //       children: [
+      //         {
+      //           name: 'D11',
+      //         },
+      //         {
+      //           name: 'D12',
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // }
     ],
   };
 
@@ -263,6 +323,22 @@ export class LinksAndLayoutsComponent implements OnInit {
         .attr('y', (d: any) => radialPoints(d.x, d.y)[1] - 10)
         .text((d: any) => d.data.name);
     };
+
+    d3.selectAll('circle')
+    .on('mouseenter', function () {
+      d3.select(this).transition().duration(250)
+        .attr('fill', '#F6F8FA')
+        .attr('stroke', 'black')
+        .attr('stroke-width', '2px')
+        .attr('r', 7.5);
+    })
+    .on('mouseleave', function () {
+      d3.select(this).transition().duration(250)
+      .attr('fill', 'darkorange')
+      .attr('stroke', '#000')
+      .attr('stroke-width', 1)
+      .attr('r', 5);
+    });
   };
 
   constructor() {}

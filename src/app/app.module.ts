@@ -33,6 +33,7 @@ import { AreaGeneratorComponent } from './area-generator/area-generator.componen
 import { ArcPieGeneratorComponent } from './arc-pie-generator/arc-pie-generator.component';
 import { LinksAndLayoutsComponent } from './links-and-layouts/links-and-layouts.component';
 import { SymbolGeneratorComponent } from './symbol-generator/symbol-generator.component';
+import { StacksComponentComponent } from './stacks-component/stacks-component.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { SymbolGeneratorComponent } from './symbol-generator/symbol-generator.co
     ArcPieGeneratorComponent,
     LinksAndLayoutsComponent,
     SymbolGeneratorComponent,
+    StacksComponentComponent,
   ],
   imports: [
     BrowserModule,
