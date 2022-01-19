@@ -131,7 +131,7 @@ export class StacksComponentComponent implements OnInit {
       };
 
         stackData = stack(this.dataset);
-        console.log(stackData);
+        // console.log(stackData);
         minValue = d3.min(stackData, d => d3.min(d, d => d3.min(d)));
         maxValue = d3.max(stackData, d => d3.max(d, d => d3.max(d)));
         scaleX = d3.scaleLinear()
