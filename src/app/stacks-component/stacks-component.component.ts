@@ -151,6 +151,8 @@ export class StacksComponentComponent implements OnInit {
 
       const btnOrder = this.svg.append('g')
         .append('rect')
+        .attr('rx', 5) // serve para arrendar a borda do retangulo
+        .attr('ry', 5)  // serve para arrendar a borda do retangulo
         .attr('x', this.margin.left)
         .attr('y', this.margin.top - 10)
         .attr('width', this.margin.left + 180)
