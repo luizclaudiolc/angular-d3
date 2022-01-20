@@ -9,111 +9,94 @@ import { arc } from 'd3';
 })
 export class SmileComponent implements OnInit {
   private svg: any;
-  private margins = {
-    margin: 50,
-    width: 750,
-    height: 400,
-    raio: 30,
-    eyeOffsetY: 80
-  };
+  private margins = { top: 20, bottom: 20, left: 20, rigth: 20 };
+  private width = 750;
+  private height = 400;
+  private propertyEyes = {
+    offset: 100,
+    rx: 20,
+    ry: 30,
+  }
 
   private drawSmile(): void {
     this.svg = d3.select('#smile')
       .append('svg')
-      .attr('width', this.margins.width)
-      .attr('height', this.margins.height)
-      .style('background-color', '#fff')
-      .append('g')
-      .attr('transform', `translate(${this.margins.margin},${this.margins.margin})`);
+      .attr('width', this.width)
+      .attr('height', this.height)
+      .style('background-color', '#fff');
 
-    this.svg
-      .append('g')
-      .append('circle')
-      .attr('cx', (this.margins.width / 2) - this.margins.margin)
-      .attr('cy', (this.margins.height / 2) - this.margins.margin)
-      .attr('r', 170)
-      .style('fill', '#ffff00')
-      .attr('stroke', '#000')
-      .attr('stroke-width', 6);
+      const circlePrincipal = this.svg.append('g')
+        .append('circle')
+        .attr('cx', this.width / 2)
+        .attr('cy', this.height / 2)
+        .attr('r', 195)
+        .attr('fill', '#fff000')
+        .attr('stroke', '#000')
+        .attr('stroke-width', 7);
 
-      this.svg
-      .append('g')
-      .append('ellipse')
-      .attr('id', 'eye-left')
-      .attr('class', 'eye')
-      .attr('cx', this.margins.width / 2 - 130)
-      .attr('cy', this.margins.height / 2 - this.margins.eyeOffsetY)
-      .attr('rx', 20)
-      .attr('ry', 30)
+      const eyeLeft = this.svg.append('g')
+        .append('ellipse')
+        .attr('cx', this.width / 2 - this.propertyEyes.offset)
+        .attr('cy', this.height / 2.5)
+        .attr('rx', this.propertyEyes.rx)
+        .attr('ry', this.propertyEyes.ry)
+        .attr('fill', '#000')
+        .attr('id', 'eyeLeft');
 
-      this.svg
-      .append('g')
-      .append('ellipse')
-      .attr('id', 'eye-rigth')
-      .attr('class', 'eye')
-      .attr('cx', this.margins.width / 2 + 30)
-      .attr('cy', this.margins.height / 2 - this.margins.eyeOffsetY)
-      .attr('rx', 20)
-      .attr('ry', 30)
+      const eyeRight = this.svg.append('g')
+        .append('ellipse')
+        .attr('cx', this.width / 2 + this.propertyEyes.offset)
+        .attr('cy', this.height / 2.5)
+        .attr('rx', this.propertyEyes.rx)
+        .attr('ry', this.propertyEyes.ry)
+        .attr('fill', '#000')
+        .attr('id', 'eyeRight');
 
-      this.svg
-      .append('g')
-      .append('circle')
-      .attr('class', 'piscar')
-      .attr('cx', (this.margins.width / 2) + 30)
-      .attr('cy', (this.margins.height / 2) - 140)
-      .attr('r', this.margins.raio - 1)
-      .style('fill', "#ffff00");
+      const blinkLeft = this.svg.append('g')
+        .append('ellipse')
+        .attr('cx', this.width / 2 - this.propertyEyes.offset)
+        .attr('cy', this.height / 5 - 5)
+        .attr('rx', this.propertyEyes.rx + 5)
+        .attr('ry', this.propertyEyes.ry + 5)
+        .attr('fill', '#fff000')
+        .attr('id', 'blinkLeft')
+        .attr('class', 'piscar');
 
-      this.svg
-      .append('g')
-      .append('circle')
-      .attr('class', 'piscar')
-      .attr('cx', (this.margins.width / 2) - 130)
-      .attr('cy', (this.margins.height / 2) - 140)
-      .attr('r', this.margins.raio - 1)
-      .style('fill', "#ffff00");
+      const blinkRight = this.svg.append('g')
+        .append('ellipse')
+        .attr('cx', this.width / 2 + this.propertyEyes.offset)
+        .attr('cy', this.height / 5 - 5)
+        .attr('rx', this.propertyEyes.rx + 5)
+        .attr('ry', this.propertyEyes.ry + 5)
+        .attr('fill', '#fff000')
+        .attr('id', 'blinkRight')
+        .attr('class', 'piscar');
 
-      const g = this.svg
-        .attr('id', 'sorriso')
-        .append('g')
-        .attr('transform', `translate(${this.margins.width / 2 - 50},${190})`)
+      const smile = this.svg.append('g')
+        .attr('id', 'smile')
+        .attr('transform', `translate(${this.width / 2}, ${this.height / 2 + 20})`);
 
-      g.append('path')
-        .attr('d', arc()
-        .innerRadius(80)
-        .outerRadius(100)
-        .startAngle(Math.PI / 2)
-        .endAngle(Math.PI / 2 + Math.PI))
+      smile.append('path')
+        .attr('d', d3.arc()
+        (
+          {
+            innerRadius: 100,
+            outerRadius: 120,
+            startAngle: Math.PI / 2,
+            endAngle: Math.PI / 2 + Math.PI,
+            padAngle: 0.4,
+          }
+        ));
   }
 
   constructor() { }
 
   ngOnInit(): void {
     this.drawSmile();
-    // this.createEye();
-    this.moveEye();
+    this.blinkEyes();
   }
 
-  public createEye(): void {
-    d3.selectAll('circle')
-      .on('mousemove', function (event: any) {
-        const { x, y } = event;
-        console.log(`X: ${x} | Y: ${y}`);
-        d3.selectAll('.eye')
-          .transition()
-          .duration(100)
-          .attr('r', x > 400 ? 50 : 25)
-      })
-      .on('mouseout', function () {
-        d3.selectAll('.eye')
-          .transition()
-          .duration(400)
-          .attr('r', 35)
-      })
-  }
-
-  public moveEye(): void {
+  public blinkEyes(): void {
     d3.selectAll('circle')
       .attr('cursor', 'pointer')
       .on('mousedown', function(event: any) {
@@ -122,13 +105,13 @@ export class SmileComponent implements OnInit {
           d3.selectAll('.piscar')
             .transition()
             .duration(150)
-            .attr('cy', 115)
+            .attr('cy', 163);
       })
       .on('mouseup', function() {
         d3.selectAll('.piscar')
           .transition()
           .duration(150)
-          .attr('cy', 55)
+          .attr('cy', 75);
       })
   }
 }
