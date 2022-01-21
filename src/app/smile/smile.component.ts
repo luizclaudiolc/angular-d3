@@ -32,7 +32,8 @@ export class SmileComponent implements OnInit {
         .attr('r', 195)
         .attr('fill', '#fff000')
         .attr('stroke', '#000')
-        .attr('stroke-width', 7);
+        .attr('stroke-width', 7)
+        .style('cursor', 'pointer');
 
       const eyeLeft = this.svg.append('g')
         .append('ellipse')
@@ -78,15 +79,13 @@ export class SmileComponent implements OnInit {
 
       smile.append('path')
         .attr('d', d3.arc()
-        (
-          {
-            innerRadius: 100,
-            outerRadius: 120,
-            startAngle: Math.PI / 2,
-            endAngle: Math.PI / 2 + Math.PI,
-            padAngle: 0.4,
-          }
-        ));
+          .innerRadius(100)
+          .outerRadius(120)
+          .startAngle(Math.PI / 2)
+          .endAngle(Math.PI / 2 + Math.PI)
+          .padAngle(0.4)
+          .cornerRadius(10)
+          );
   }
 
   constructor() { }
@@ -98,20 +97,23 @@ export class SmileComponent implements OnInit {
 
   public blinkEyes(): void {
     d3.selectAll('circle')
-      .attr('cursor', 'pointer')
-      .on('mousedown', function(event: any) {
-        const { offsetX, offsetY } = event;
-        console.log(`offsetX: ${offsetX}  |  offsetY: ${offsetY}`);
-          d3.selectAll('.piscar')
-            .transition()
-            .duration(150)
-            .attr('cy', 163);
-      })
-      .on('mouseup', function() {
-        d3.selectAll('.piscar')
-          .transition()
-          .duration(150)
-          .attr('cy', 75);
-      })
+      .on('mousedown', this.mousedown)
+      .on('mouseup', this.mouseup);
+  }
+
+  public mousedown(event: any): void {
+    const { offsetX, offsetY } = event;
+    console.log(`offsetX: ${offsetX}  |  offsetY: ${offsetY}`);
+      d3.selectAll('.piscar')
+        .transition()
+        .duration(150)
+        .attr('cy', 163);
+  }
+
+  public mouseup(event: any): void {
+    d3.selectAll('.piscar')
+      .transition()
+      .duration(150)
+      .attr('cy', 75);
   }
 }
