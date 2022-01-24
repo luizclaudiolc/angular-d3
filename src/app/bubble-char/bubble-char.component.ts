@@ -135,7 +135,7 @@ export class BubbleCharComponent implements OnInit {
 
       const gridY = d3.axisLeft(scaleY)
         .tickFormat(() => '')
-        .tickSize(-690)
+        .tickSize(-(this.width - (this.margin.left + this.margin.rigth) - 30)) // largura do grid: ;
         .tickSizeOuter(0);
 
       d3.select('#y-grid')
@@ -145,7 +145,7 @@ export class BubbleCharComponent implements OnInit {
 
       d3.selectAll('.grid')
         .selectAll('line')
-        .attr('stroke', '#cece')
+        .attr('stroke', (d: any) => d === d3.min(dataset, d => d.height) ? 'none' : '#cece')
         /* serve trasejar as linhas do grid sendo o primeoro valor tamanho da linha e o 
         segundo valor distancia entre as linhas */
         .attr('stroke-dasharray', '8 2'); 
