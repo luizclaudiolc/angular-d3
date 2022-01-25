@@ -16,14 +16,14 @@ export class AxisGeneratorComponent implements OnInit {
       { month: 'Fev', percentage: 45 },
       { month: 'Mar', percentage: 35 },
       { month: 'Abr', percentage: 50 },
-      { month: 'Mai', percentage: 75 },
+      { month: 'Mai', percentage: 20 },
       { month: 'Jun', percentage: 60 },
       { month: 'Jul', percentage: 65 },
       { month: 'Ago', percentage: 50 },
       { month: 'Set', percentage: 35 },
       { month: 'Out', percentage: 100 },
       { month: 'Nov', percentage: 15 },
-      { month: 'Dez', percentage: 17 } 
+      { month: 'Dez', percentage: 66 } 
     ]
   };
 
@@ -84,13 +84,16 @@ export class AxisGeneratorComponent implements OnInit {
 
     svg.append('g')
       .append('path')
-      // .transition()
-      // .duration(2000)
-      // .ease(d3.easeSinOut)
       .attr('d', line(this.data.monthAndPercentage.map(d => [scaleX(d.month),
         scaleY(d.percentage)] as [number, number])))
+      .attr('stroke-dasharray', '1500') // preciso pegar o getTotalLength() para melhorar essa função
+      .attr('stroke-dashoffset', 1500)
+      .transition()
+      .duration(1000)
+      .ease(d3.easeExpIn)
+      .attr('stroke-dashoffset', 0)
       .attr('stroke', '#000')
-      .attr('stroke-width', 2)
+      .attr('stroke-width', 1.5)
       .attr('fill', 'none');
 
     svg.append('g')
@@ -98,7 +101,7 @@ export class AxisGeneratorComponent implements OnInit {
       .data(this.data.monthAndPercentage)
       .join(
         (enter: any) => enter.append('circle'),
-        (update: any) => update.append('circle'),
+        (update: any) => update,
         (exit: any) => exit.remove()
       )
       .attr('id', (d: any, i: any) => `circle-${i}`)
@@ -111,7 +114,8 @@ export class AxisGeneratorComponent implements OnInit {
     function mouseenter (this: any) {
       d3.select(this)
         .transition()
-        .duration(150)
+        .duration(75)
+        .style('cursor', 'pointer')
         .attr('r', 7.5)
         .attr('stroke', '#000')
         .attr('stroke-width', 1.5);
@@ -119,15 +123,29 @@ export class AxisGeneratorComponent implements OnInit {
     function mouseleave (this: any) {
       d3.select(this)
         .transition()
-        .duration(150)
+        .duration(75)
         .attr('r', 5)
         .attr('stroke', '#000')
         .attr('stroke-width', 1);
     };
+    function click (this: any) {
+      d3.select(this)
+        .transition()
+        .duration(75)
+        .attr('r', 10)
+        .attr('stroke', '#000')
+        .attr('stroke-width', 1.5)
+        .transition()
+        .duration(75)
+        .attr('r', 7.5)
+        .attr('stroke', '#000')
+        .attr('stroke-width', 1);
+    }
 
     d3.selectAll('circle')
       .on('mouseenter', mouseenter)
-      .on('mouseleave', mouseleave);
+      .on('mouseleave', mouseleave)
+      .on('click', click);
   };
 
   constructor() { }

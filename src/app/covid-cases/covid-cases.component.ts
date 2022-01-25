@@ -16,6 +16,8 @@ export class CovidCasesComponent implements OnInit {
     'https://raw.githubusercontent.com/luizclaudiolc/angular-d3/master/src/data/vaccination/vaccination-data.csv'
   );
   private data: any[] = [];
+  // criar um array de cores
+  private colors = d3.scaleOrdinal(d3.schemePastel1);
   constructor() {}
 
   ngOnInit(): void {
@@ -31,13 +33,16 @@ export class CovidCasesComponent implements OnInit {
       .attr('class', 'tooltip')
       .style('visibility', 'hidden')
       .style('position', 'absolute')
-      .style('background-color', '#fff')
+      .style('background-color', '#F6F8FA')
       .style('border', '1px solid #000')
       .style('border-radius', '5px')
       .style('padding', '10px')
       .style('font-size', '12px');
 
-      const mouseover = function (event: any, d: any) {
+      const mouseover = function (this: any, event: any, d: any) {
+        d3.select(this)
+          .style('opacity', 0.8);
+
         tooltip
           .style('visibility', 'visible')
           .style('opacity', 0.8)
@@ -58,7 +63,10 @@ export class CovidCasesComponent implements OnInit {
           .style('top', `${event.pageY - 30}px`);
       }
   
-      const mouseout = function () {
+      const mouseout = function (this: any) {
+        d3.select(this)
+          .style('opacity', 1);
+
         tooltip
           .style('visibility', 'hidden');
       }
@@ -72,10 +80,12 @@ export class CovidCasesComponent implements OnInit {
       const scaleX = d3.scaleBand()
         .domain(Americas.map((d) => d.ISO3))
         .range([this.margin.left, this.width - this.margin.rigtht])
-        .padding(0.1);
+        .padding(0.2)
+        .paddingInner(0.4)
+        .paddingOuter(0.2);
 
       const scaleY = d3.scaleLinear()
-        .domain([d3.max(Americas, (d) => Number(d.PERSONS_FULLY_VACCINATED)) as any, 0])
+        .domain([d3.max(Americas, (d) => Number(d.PERSONS_FULLY_VACCINATED)), 0] as [number, number])
         .range([this.margin.top, this.height - this.margin.bottom]);
 
       this.svg
@@ -107,23 +117,26 @@ export class CovidCasesComponent implements OnInit {
       this.svg
         .selectAll('rect')
         .data(Americas)
-        .enter()
-        .append('rect')
+        .join(
+          (enter: any) => enter.append('rect'),
+          (update: any) => update,
+          (exit: any) => exit.remove()
+        )
         .attr('x', (d: any, i: any) => scaleX(d.ISO3))
         .attr('y', (d: any, i: any) => scaleY(Number(d.PERSONS_FULLY_VACCINATED)))
         .attr('width', scaleX.bandwidth())
         .attr('height', (d: any, i: any) =>
           this.height - this.margin.bottom - scaleY(Number(d.PERSONS_FULLY_VACCINATED))
         )
-        .attr('fill', '#cece')
+        .attr('fill', (d: any, i: any) => this.colors(d.ISO3))
         .attr('stroke', '#000')
         .attr('stroke-width', 0.5)
-        
+        .attr('id', (d: any, i: any) => `bar-${i}`);
         
       d3.selectAll('rect')
         .on('mouseover', mouseover)
         .on('mousemove', mousemove)
-        .on('mouseout', mouseout);
+        .on('mouseout', mouseout)
     });
   }
 }

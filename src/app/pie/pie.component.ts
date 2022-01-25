@@ -67,10 +67,11 @@ export class PieComponent implements OnInit {
       .selectAll('text')
       .data(pie)
       .join(
-        (enter: any) => enter.append('text').text((d: any, i: any) => this.data[i].Framework),
-        (update: any) => update.text((d: any, i: any) => this.data[i].Framework),
+        (enter: any) => enter.append('text'),
+        (update: any) => update,
         (exit: any) => exit.remove()
       )
+      .text((d: any, i: any) => this.data[i].Framework)
       .attr('x', (d: any) => this.arcGen.centroid(d)[0])
       .attr('y', (d: any) => this.arcGen.centroid(d)[1])
       .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`)
@@ -106,58 +107,6 @@ export class PieComponent implements OnInit {
           const el = d3.select(this);
           animateSliceBack(el);
         });
-
-        /* const tooltip =
-          d3.select('#pie')
-            .append('div')
-            .style('background-color', '#F6F8FA')
-            .style('position', 'absolute')
-            .style('padding', '10px')
-            .style('border-radius', '5px')
-            .style('opacity', '0')
-            .style('font-size', '14px')
-            .style('color', '#121826')
-            .style('text-align', 'center')
-            // .style('width', '200px')
-            // .style('height', '50px');
-
-        const tooltipMouseOver = function (event: any, d: any) {
-          tooltip
-            .style('opacity', 0.8)
-            .style('left', `${event.pageX}px`)
-            .style('top', `${event.pageY}px`)
-            .html(`
-              <div>
-                <span>${d.data.Framework}</span>
-                <br>
-                <span>${d.data.Stars}</span>
-              </div>
-            `);
-        };
-
-        const tooltipMouseMove = function (event: any, d: any) {
-          tooltip
-            .style('opacity', 0.8)
-            .style('left', `${event.pageX}px`)
-            .style('top', `${event.pageY}px`)
-            .html(`
-              <div>
-                <span>${d.data.Framework}</span>
-                <br>
-                <span>${d.data.Stars}</span>
-              </div>
-            `);
-        };
-
-        const tooltipMouseOut = (d: any) => {
-          tooltip
-            .style('opacity', 0);
-        }
-
-        d3.selectAll('path')
-          .on('mouseover', tooltipMouseOver)
-          .on('mousemove', tooltipMouseMove)
-          .on('mouseout', tooltipMouseOut); */
   };
 
   

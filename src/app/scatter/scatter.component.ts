@@ -8,64 +8,64 @@ import * as d3 from 'd3';
 })
 export class ScatterComponent implements OnInit {
   private data = [
-    {"Framework": "Vue", "Stars": "166443", "Released": "2014"},
-    {"Framework": "React", "Stars": "150793", "Released": "2013"},
-    {"Framework": "Angular", "Stars": "62342", "Released": "2016"},
-    {"Framework": "Backbone", "Stars": "27647", "Released": "2010"},
-    {"Framework": "Ember", "Stars": "21471", "Released": "2011"},
+    {'Framework': 'Vue', 'Stars': '166443', 'Released': '2014'},
+    {'Framework': 'React', 'Stars': '150793', 'Released': '2013'},
+    {'Framework': 'Angular', 'Stars': '62342', 'Released': '2016'},
+    {'Framework': 'Backbone', 'Stars': '27647', 'Released': '2010'},
+    {'Framework': 'Ember', 'Stars': '21471', 'Released': '2011'},
+    {'Framework': 'Knockout', 'Stars': '69055', 'Released': '2012'},
+    {'Framework': 'Dojo', 'Stars': '18079', 'Released': '2009'},
+    {'Framework': 'ExtJS', 'Stars': '130171', 'Released': '2014'},
+    {'Framework': 'D3.js', 'Stars': '10865', 'Released': '2015'},
+    {'Framework': 'Meteor', 'Stars': '160983', 'Released': '2009'},
+    {'Framework': 'Laravel', 'Stars': '102063', 'Released': '2018'},
+    {'Framework': 'Redux', 'Stars': '86443', 'Released': '2014'},
+    {'Framework': 'Nest', 'Stars': '146443', 'Released': '2011'},
+    {'Framework': 'Webpack', 'Stars': '166443', 'Released': '2017'},
   ];
 
   private svg: any;
-  private margin = 50;
+  private margin = {top: 40, right: 40, bottom: 30, left: 50};
   private width = 750;
   private height = 400;
-  public colors = [
-    '#f00',
-    '#0f0',
-    '#00f',
-    '#ff0',
-    '#0ff',
-    '#f0f',
-    '#000',
-  ];
+  public colors = d3.scaleOrdinal(d3.schemeTableau10);
 
   private createSvg(): void {
     this.svg = d3.select('#scatter')
       .append('svg')
-      .attr('width', this.width + (this.margin * 2))
-      .attr('height', this.height + (this.margin * 2))
-      .append('g')
-      .attr('transform', `translate(${this.margin}, ${this.margin})`);
+      .attr('width', this.width)
+      .attr('height', this.height)
   }
 
   private drawChart(): void {
     // add eixo X
     const x = d3.scaleLinear()
-    .domain([2008, 2018])
-    .range([0, this.width]);
+    .domain([2008, d3.max(this.data, d => Number(d.Released))] as [number, number])
+    .range([this.margin.left, this.width - this.margin.right]);
 
     this.svg.append('g')
-      .attr('transform', `translate(0, ${this.height})`)
+      .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
       .call(d3.axisBottom(x).tickFormat(d3.format('d')));
 
     // add eixo Y
     const y = d3.scaleLinear()
-      .domain([0, 200000])
-      .range([this.height, 0]);
+      .domain(d3.extent(this.data, d => Number(d.Stars)) as [number, number])
+      .range([this.height - this.margin.bottom, this.margin.top]);
 
     this.svg.append('g')
+      .attr('transform', `translate(${this.margin.left}, 0)`)
       .call(d3.axisLeft(y));
 
     // add dots
     const dots = this.svg.append('g');
-    dots.selectAll('dot')
+    dots.selectAll('circle')
       .data(this.data)
       .enter()
       .append('circle')
       .attr('cx', (d: any) => x(d.Released))
       .attr('cy', (d: any) => y(d.Stars))
-      .attr('r', 30)
-      .style('fill', (d: any, i: number) => this.colors[i]);
+      .attr('r', 10)
+      .style('fill', (d: any, i: number) => this.colors(d.Framework));
 
     // add labels
     dots.selectAll('text')
@@ -73,8 +73,9 @@ export class ScatterComponent implements OnInit {
       .enter()
       .append('text')
       .text((d: any) => d.Framework)
-      .attr('x', (d: any) => x(d.Released) - 25)
-      .attr('y', (d: any) => y(d.Stars) + 5)
+      .attr('x', (d: any) => x(d.Released))
+      .attr('y', (d: any) => y(d.Stars) - 10)
+      .attr('text-anchor', 'middle');
   }
 
   constructor() { }
@@ -92,15 +93,15 @@ export class ScatterComponent implements OnInit {
         d3.select(this)
         .transition()
         .duration(150)
-        .attr('r', 40)
-        .style('opacity', 0.4)
+        .attr('r', 15)
+        .style('opacity', 0.6)
         .style('cursor', 'pointer');
       })
       .on('mouseout', function() {
         d3.select(this)
         .transition()
         .duration(150)
-        .attr('r', 30)
+        .attr('r', 10)
         .style('opacity', 1)
         .style('cursor', 'default');
       });

@@ -8,11 +8,20 @@ import * as d3 from 'd3';
 })
 export class BarComponent implements OnInit {
   private data = [
-    {"Framework": "Vue", "Stars": "166443", "Released": "2014"},
     {"Framework": "React", "Stars": "150793", "Released": "2013"},
-    {"Framework": "Angular", "Stars": "62342", "Released": "2016"},
+    {"Framework": "Vue", "Stars": "166443", "Released": "2014"},
     {"Framework": "Backbone", "Stars": "27647", "Released": "2010"},
+    {"Framework": "Angular", "Stars": "62342", "Released": "2016"},
     {"Framework": "Ember", "Stars": "21471", "Released": "2011"},
+    {"Framework": "Meteor", "Stars": "104618", "Released": "2010"},
+    {"Framework": "jQuery", "Stars": "82473", "Released": "2011"},
+    {"Framework": "Knockout.js", "Stars": "180859", "Released": "2010"},
+    {"Framework": "Dojo", "Stars": "160500", "Released": "2009"},
+    {"Framework": "Ext JS", "Stars": "102688", "Released": "2009"},
+    {"Framework": "D3.js", "Stars": "78000", "Released": "2009"},
+    {"Framework": "CoffeeScript", "Stars": "96000", "Released": "2009"},
+    {"Framework": "Lodash", "Stars": "45000", "Released": "2009"},
+    {"Framework": "Nuxt.js", "Stars": "15500", "Released": "2009"},
   ];
 
   private svg: any;
@@ -20,7 +29,7 @@ export class BarComponent implements OnInit {
   private width = 750;
   private height = 400;
 
-  public colors = d3.schemeYlGn[this.data.length];
+  public colors = d3.scaleOrdinal(d3.schemeTableau10);
 
   private createSvg(): void {
     this.svg = d3.select('#bar')
@@ -51,30 +60,20 @@ export class BarComponent implements OnInit {
       .selectAll('rect')
       .data(data)
       .join(
-        (enter: any) => enter
-          .append('g')
-          .append('rect')
-          .attr('id', (d: any, i: any) => `bar-${i}`)
-          .attr('x', (d: any) => x(d.Framework))
-          .attr('y', (d: any) => y(Number(d.Stars)))
-          .attr('rx', 4)
-          .attr('ry', 4)
-          .attr('width', x.bandwidth())
-          .attr('height', (d: any) => this.height - this.margin.bottom - y(Number(d.Stars)))
-          .attr('stroke', '#000')
-          .attr('stroke-width', 0.5)
-          .attr('fill', (d: any, i: any) => this.colors[i]),
-        (update: any) => update
-          .append('g')
-          .append('rect')
-          .attr('id', (d: any, i: any) => `bar-${i}`)
-          .attr('x', (d: any) => x(d.Framework))
-          .attr('y', (d: any) => y(parseInt(d.Stars)))
-          .attr('width', x.bandwidth())
-          .attr('height', (d: any) => this.height - this.margin.bottom - y(Number(d.Stars)))
-          .attr('fill', (d: any, i: any) => this.colors[i]),
+        (enter: any) => enter.append('rect'),
+        (update: any) => update,
         (exit: any) => exit.remove()
-      );
+      )
+      .attr('id', (d: any, i: any) => `bar-${i}`)
+      .attr('x', (d: any) => x(d.Framework))
+      .attr('y', (d: any) => y(Number(d.Stars)))
+      .attr('rx', 4)
+      .attr('ry', 4)
+      .attr('width', x.bandwidth())
+      .attr('height', (d: any) => this.height - this.margin.bottom - y(Number(d.Stars)))
+      .attr('stroke', '#000')
+      .attr('stroke-width', 0.5)
+      .attr('fill', (d: any, i: any) => this.colors(d.Stars));
   }
 
   constructor() {}
@@ -94,7 +93,7 @@ export class BarComponent implements OnInit {
     d3.selectAll('rect')
       .on('mouseenter', function(event: any) {
         d3.select(this)
-          .style('opacity', 0.8)
+          .style('opacity', 0.5)
           .style('cursor', 'pointer')
           .style('stroke', 'black')
       })

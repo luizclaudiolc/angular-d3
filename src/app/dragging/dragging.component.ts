@@ -23,13 +23,13 @@ export class DraggingComponent implements OnInit {
       .style('background-color', '#f5f5f5')
       .attr('width', this.width)
       .attr('height', this.height)
-      .append('g')
-      .attr('transform', `translate(${this.margins.left}, ${this.margins.top})`);
+      // .append('g')
+      // .attr('transform', `translate(${this.margins.left}, ${this.margins.top})`);
 
     const circle = this.svg.append('circle')
       .attr('cx', this.width / 2)
       .attr('cy', this.height / 2)
-      .attr('r', 50)
+      .attr('r', 70)
       .attr('fill', '#f00');
 
     const drag = d3.drag();

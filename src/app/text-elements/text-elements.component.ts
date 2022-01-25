@@ -8,41 +8,40 @@ import * as d3 from 'd3';
 })
 export class TextElementsComponent implements OnInit {
   private svg: any;
-  private dimentions = {
-    margin: 50,
-    width: 750,
-    height: 400,
-  };
+  private width = 750;
+  private height = 400;
+  private margin = { top: 40, bottom: 40, left: 40, rigth: 40 };
 
   private createSvg(): void {
     this.svg = d3.select('#text')
       .append('svg')
-      .style('background', '#cececc')
-      .attr('width', this.dimentions.width)
-      .attr('height', this.dimentions.height)
-      .append('g')
-      .attr('transform', 
-      'translate(' + this.dimentions.margin + ',' + this.dimentions.margin + ')');
+      .style('background', '#F6F8FA')
+      .attr('width', this.width)
+      .attr('height', this.height);
 
-      this.svg.append('line')
-      .attr('x1', -50)
-      .attr('x2', 700)
-      .attr('y1', 150)
-      .attr('y2', 150)
-      .attr('stroke', '#000');
-
-    this.svg.append('line')
-      .attr('x1', 320)
-      .attr('x2', 320)
-      .attr('y1', -50)
-      .attr('y2', 400)
-      .attr('stroke', '#000');
+    this.svg.append('g')
+      .selectAll('circle')
+      .data([
+        { x: this.margin.left, y: this.height / 2 },
+        { x: this.width / 2, y: this.margin.top },
+        { x: this.width - this.margin.rigth, y: this.height / 2 },
+        { x: this.width / 2, y: this.height - this.margin.bottom }
+      ])
+      .join(
+        (enter: any) => enter.append('circle'),
+        (update: any) => update,
+        (exit: any) => exit.remove()
+      )
+      .attr('cx', (d: any) => d.x)
+      .attr('cy', (d: any) => d.y)
+      .attr('r', 10)
+      .attr('fill', 'orange');
 
     this.svg
       .append('g')
       .append('text')
-      .attr('x', 325)
-      .attr('y', 150)
+      .attr('x', this.width / 2)
+      .attr('y', this.height / 2)
       .text('Hello D3.JS')
       .attr('textLength', 200)
       .style('font-size', 36)
@@ -67,6 +66,8 @@ export class TextElementsComponent implements OnInit {
       .attr('cursor', 'pointer')
       .on('mouseenter', function() {
         d3.select('text')
+          .transition()
+          .duration(1000)
           .style('font-size', 64)
           .attr('textLength', 400)
           .style('fill', '#f00')
@@ -76,12 +77,14 @@ export class TextElementsComponent implements OnInit {
       })
       .on('mouseleave', function() {
         d3.selectAll('text')
+          .transition()
+          .duration(1000)
           .style('font-size', 32)
           .attr('textLength', 200)
           .style('fill', '#000')
           .attr('stroke', '#f00')
           .attr('stroke-width', 0.5)
-          .attr('cursor', 'pointer')
+          // .attr('cursor', 'pointer')
       })
   }
 
