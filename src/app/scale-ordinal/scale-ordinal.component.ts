@@ -15,20 +15,7 @@ export class ScaleOrdinalComponent implements OnInit {
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   public scaleX: any;
   public scaleY: any;
-  public colors = [
-    '#f00',
-    '#0f0',
-    '#f0f',
-    '#f4f4',
-    '#f1f100',
-    '#fff',
-    '#f9f9',
-    '#00f',
-    'gold',
-    'green',
-    '#000',
-    'orange'
-  ];
+  public colors = d3.scaleOrdinal(d3.schemeCategory10);
   
 
   private draw(): void {
@@ -87,7 +74,7 @@ export class ScaleOrdinalComponent implements OnInit {
       .attr('cx', (d) => this.scaleX(d))
       .attr('cy', (d: any, i: number) => this.scaleY(this.data[i]))
       .attr('r', 15)
-      .attr('fill', (d: any, i: number) => this.colors[i])
+      .attr('fill', (d: any, i: number) => this.colors(d));
   }
 
   constructor() { }

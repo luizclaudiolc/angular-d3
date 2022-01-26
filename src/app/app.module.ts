@@ -34,6 +34,7 @@ import { ArcPieGeneratorComponent } from './arc-pie-generator/arc-pie-generator.
 import { LinksAndLayoutsComponent } from './links-and-layouts/links-and-layouts.component';
 import { SymbolGeneratorComponent } from './symbol-generator/symbol-generator.component';
 import { StacksComponentComponent } from './stacks-component/stacks-component.component';
+import { StreamChartComponent } from './stream-chart/stream-chart.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { StacksComponentComponent } from './stacks-component/stacks-component.co
     LinksAndLayoutsComponent,
     SymbolGeneratorComponent,
     StacksComponentComponent,
+    StreamChartComponent,
   ],
   imports: [
     BrowserModule,

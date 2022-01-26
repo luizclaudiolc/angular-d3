@@ -12,18 +12,21 @@ export class AxisGeneratorComponent implements OnInit {
   private height = 400;
   private data = {
     monthAndPercentage: [
-      { month: 'Jan', percentage: 15 },
-      { month: 'Fev', percentage: 45 },
-      { month: 'Mar', percentage: 35 },
-      { month: 'Abr', percentage: 50 },
-      { month: 'Mai', percentage: 20 },
-      { month: 'Jun', percentage: 60 },
-      { month: 'Jul', percentage: 65 },
-      { month: 'Ago', percentage: 50 },
-      { month: 'Set', percentage: 35 },
-      { month: 'Out', percentage: 100 },
-      { month: 'Nov', percentage: 15 },
-      { month: 'Dez', percentage: 66 } 
+      { month: 'Jan', percentage: 95, year: 21 },
+      { month: 'Fev', percentage: 45, year: 21 },
+      { month: 'Mar', percentage: 35, year: 21 },
+      { month: 'Abr', percentage: 50, year: 21 },
+      { month: 'Mai', percentage: 11, year: 21 },
+      { month: 'Jun', percentage: 60, year: 21 },
+      { month: 'Jul', percentage: 65, year: 21 },
+      { month: 'Ago', percentage: 50, year: 21 },
+      { month: 'Set', percentage: 35, year: 21 },
+      { month: 'Out', percentage: 100, year: 21 },
+      { month: 'Nov', percentage: 15, year: 21 },
+      { month: 'Dez', percentage: 66, year: 21 },
+      { month: 'Jan', percentage: 12, year: 22 },
+      { month: 'Fev', percentage: 45, year: 22 },
+      { month: 'Mar', percentage: 35, year: 22 },
     ]
   };
 
@@ -35,7 +38,7 @@ export class AxisGeneratorComponent implements OnInit {
       .attr('height', this.height);
     
     const scaleX = d3.scalePoint() 
-      .domain(this.data.monthAndPercentage.map(d => d.month))
+      .domain(this.data.monthAndPercentage.map(d => `${d.month}/${d.year}`))
       .range([this.margin.left, this.width - this.margin.right]);
 
     const scaleY = d3.scaleLinear()
@@ -60,9 +63,7 @@ export class AxisGeneratorComponent implements OnInit {
 
     svg.append('g')
       .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
-      .call(axisX)
-      .selectAll('text')
-      .attr('font-size', '12px')
+      .call(axisX);
       // .attr('transform', 'rotate(-15)')
 
     svg.append('g')
@@ -84,12 +85,11 @@ export class AxisGeneratorComponent implements OnInit {
 
     svg.append('g')
       .append('path')
-      .attr('d', line(this.data.monthAndPercentage.map(d => [scaleX(d.month),
-        scaleY(d.percentage)] as [number, number])))
-      .attr('stroke-dasharray', '1500') // preciso pegar o getTotalLength() para melhorar essa função
-      .attr('stroke-dashoffset', 1500)
+      .attr('d', line(this.data.monthAndPercentage.map(d => [scaleX(`${d.month}/${d.year}`), scaleY(d.percentage)] as [number, number])))
+      .attr('stroke-dasharray', 2000) // preciso pegar o getTotalLength() para melhorar essa função
+      .attr('stroke-dashoffset', 2000)
       .transition()
-      .duration(1000)
+      .duration(800)
       .ease(d3.easeExpIn)
       .attr('stroke-dashoffset', 0)
       .attr('stroke', '#000')
@@ -104,8 +104,8 @@ export class AxisGeneratorComponent implements OnInit {
         (update: any) => update,
         (exit: any) => exit.remove()
       )
-      .attr('id', (d: any, i: any) => `circle-${i}`)
-      .attr('cx', (d: any) => scaleX(d.month) as any)
+      .attr('id', (_d: any, i: any) => `circle-${i}`)
+      .attr('cx', (d: any) => scaleX(`${d.month}/${d.year}`) as any)
       .attr('cy', (d: any) => scaleY(d.percentage))
       .attr('r', 5)
       .attr('fill', '#F6F8FA')
