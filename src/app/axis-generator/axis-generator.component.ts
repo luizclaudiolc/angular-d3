@@ -33,7 +33,7 @@ export class AxisGeneratorComponent implements OnInit {
   private drawAxis(): void {
     const svg = d3.select('#axis')
       .append('svg')
-      .style('background-color', '#F6F8FA')
+      // .style('background-color', '#F6F8FA')
       .attr('width', this.width)
       .attr('height', this.height);
     
@@ -76,6 +76,7 @@ export class AxisGeneratorComponent implements OnInit {
     .selectAll('line')
     .attr('stroke', (d) => d === 0 ? 'none' : '#cece')
     .attr('stroke-dasharray', '5,2')
+    .attr('stroke-opaicty', 0.1)
     .attr('stroke-width', 1.5);
 
     const line = d3.line()

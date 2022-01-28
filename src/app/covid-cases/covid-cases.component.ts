@@ -73,7 +73,7 @@ export class CovidCasesComponent implements OnInit {
 
       this.svg = d3.select('#bar-cases')
         .append('svg')
-        .style('background-color', '#f0f0f0')
+        // .style('background-color', '#f0f0f0')
         .attr('width', this.width)
         .attr('height', this.height)
 
