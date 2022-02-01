@@ -117,6 +117,10 @@ export class AxisGeneratorComponent implements OnInit {
       .attr('stroke-dasharray', '10,5')
       .attr('opacity', 0.1);
 
+    d3.select('g#line-g-y-axis')
+      .selectAll('text')
+      .attr('pointer-events', 'none');
+
     d3.select('#line-g-y-axis').select('path.domain').attr('stroke', 'none');
 
     // ****** Line ****** //
