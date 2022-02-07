@@ -22,6 +22,7 @@ export class SliderProjectComponent implements OnInit {
     this.updateSlider();
     this.pushLines();
     this.moveSlider();
+    this.keyboardEvents();
   }
 
   drawSlider(): void {
@@ -122,7 +123,7 @@ export class SliderProjectComponent implements OnInit {
       const {x, y} = event;
       console.log({x, y});
 
-      if (x >= this.margins.left && x < this.width / 2) {
+      if ( x < this.width / 2) {
         d3.selectAll('.lines')
           .transition()
           .duration(500)
@@ -137,12 +138,12 @@ export class SliderProjectComponent implements OnInit {
       const el = d3.selectAll('.slider-circle');
       const xPos = parseInt(el.attr('cx'));
       let newPos = xPos + event.dx;
-      console.log(newPos);
+      console.log(this.width / 2);
       
       if (newPos < this.margins.left) newPos = this.margins.left;
       if (newPos > this.width - this.margins.right) newPos = this.width - this.margins.right;
     
-      el.attr('cx', newPos)
+      el.attr('cx', newPos);
       this.pushLines();
     };
     
@@ -159,5 +160,39 @@ export class SliderProjectComponent implements OnInit {
       .on('end', dragEnd);
 
     this.circle.call(drag);
+  };
+
+  keyboardEvents(): void {
+    document.addEventListener('keydown', (e) => {
+      const key = e.key;
+
+      const keysFn = {
+        ArrowLeft: () => {
+          this.circle
+            .attr('stroke', '#f00');
+            
+          const el = d3.selectAll('.slider-circle');
+          const xPos = parseInt(el.attr('cx'));
+          let newPos = xPos - 2;
+          if (newPos < this.margins.left) newPos = this.margins.left;
+          el.attr('cx', newPos)
+          this.pushLines();
+        },
+        ArrowRight: () => {
+          const el = d3.selectAll('.slider-circle');
+          const xPos = parseInt(el.attr('cx'));
+          let newPos = xPos + 2;
+          // console.log(this.width / 2);
+
+          if (newPos < this.margins.left) newPos = this.margins.left;
+          if (newPos > this.width - this.margins.right) newPos = this.width - this.margins.right;
+
+          el.attr('cx', newPos)
+          this.pushLines();
+        },
+      }[key];
+
+      keysFn?.();
+    });
   };
 }
