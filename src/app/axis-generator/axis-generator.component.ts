@@ -153,7 +153,8 @@ export class AxisGeneratorComponent implements OnInit {
         .attr('cy', (d: any) => this.scaleY(d.percentage))
         .attr('r', 5)
         .attr('fill', '#F6F8FA')
-        .attr('stroke', (d: any) => `${this.color(d)}`);
+        .attr('stroke', (d: any) => `${this.color(d)}`)
+        .attr('class', 'dot')
   };
 
   // ****** line Animation ****** //
@@ -181,28 +182,36 @@ export class AxisGeneratorComponent implements OnInit {
   // ****** mouseEvents ****** //
   mouseEvents(): void {
     const { color } = this;
-    
-    d3.selectAll('circle')
-      .on('mousemove', function () {
-        d3.select(this)
+    const mouseEnter = (event: any) => {
+      const target = event.target;
+      d3.select(target)
           .attr('r', 7.5)
           .attr('stroke', (d: any) => `${color(d)}`)
           .attr('stroke-width', 2)
           .attr('cursor', 'pointer')
-      })
-      .on('mouseleave', function () {
-        d3.select(this)
+    };
+
+    const mouseLeave = (event: any) => {
+      const target = event.target;
+      d3.select(target)
           .attr('r', 5)
           .attr('stroke-width', 1)
           .attr('stroke', (d: any) => `${color(d)}`);
-      })
-      .on('click', function () {
-        d3.select(this)
+    };
+
+    const mouseClick = (event: any) => {
+      const target = event.target;
+      d3.select(target)
           .attr('r', 10)
           .attr('stroke', (d: any) => `${color(d)}`)
           .transition()
-          .attr('r', 5)
-      });
+          .attr('r', 7.5)
+    };
+    
+    d3.selectAll('.dot')
+      .on('mouseenter', mouseEnter)
+      .on('mouseleave', mouseLeave)
+      .on('click', mouseClick);
   };
   
 }

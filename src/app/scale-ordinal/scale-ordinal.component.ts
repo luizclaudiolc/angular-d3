@@ -12,16 +12,17 @@ export class ScaleOrdinalComponent implements OnInit {
   width = 750;
   height = 400;
   data = [
-    {name: 'Germany', value: 8940000},
-    {name: 'USA', value: 5000000},
-    {name: 'France', value: 7200000},
-    {name: 'UK', value: 6200000},
-    {name: 'Italy', value: 6200000},
-    {name: 'Spain', value: 5000000},
-    {name: 'Portugal', value: 1550000},
-    {name: 'Austria', value: 300000},
-    {name: 'Belgium', value: 300000},
-    {name: 'Switzerland', value: 300000},
+    {name: 'Germany', value: 100000},
+    {name: 'USA', value: 150000},
+    {name: 'France', value: 75000},
+    {name: 'UK', value: 250000},
+    {name: 'Italy', value: 99000},
+    {name: 'Spain', value: 72000},
+    {name: 'Portugal', value: 20000},
+    {name: 'Austria', value: 10000},
+    {name: 'Belgium', value: 125000},
+    {name: 'Switzerland', value: 30000},
+    {name: 'Brazil', value: 50000},
   ];
   scaleX: any;
   scaleY: any;
@@ -74,12 +75,15 @@ export class ScaleOrdinalComponent implements OnInit {
 
     // *** axisX *** //
     const axisX = d3.axisBottom(this.scaleX)
+      .ticks(5)
       .tickSizeOuter(0)
       // .tickSizeInner(0)
       // .tickPadding(5)
       .tickFormat((d: any) => d === 0 ? '0' : `${d / 1000}M`);
 
     d3.select('#ordinal-g-x-axis')
+      .transition()
+      .duration(450)
       .call(axisX as any)
       .attr('transform', `translate(0, ${this.height - this.margin.bottom})`);
 
@@ -87,6 +91,10 @@ export class ScaleOrdinalComponent implements OnInit {
     const axisY = d3.axisLeft(this.scaleY);
       
     d3.select('#ordinal-g-y-axis')
+      .transition()
+      .ease(d3.easeLinear)
+      .duration(550)
+      .delay((d, i) => i * 500)
       .call(axisY as any)
       .attr('transform', `translate(${this.margin.left}, 0)`)
       .selectAll('line')
@@ -110,7 +118,7 @@ export class ScaleOrdinalComponent implements OnInit {
         (exit) => exit.remove()
       )
       .attr('x', (d) => this.scaleX(this.margin.left))
-      .attr('y', (d) => this.scaleY(d.name) - this.scaleY.bandwidth() + this.margin.top)
+      .attr('y', (d) => this.scaleY(d.name) - this.scaleY.bandwidth() + this.scaleY.bandwidth())
       .attr('height', this.scaleY.bandwidth())
       .transition()
       .ease(d3.easeLinear)
@@ -127,13 +135,15 @@ export class ScaleOrdinalComponent implements OnInit {
       const target = event.target; // outra forma de recuperar o this
       d3.select(target)
         .attr('opacity', 0.5)
-        .attr('stroke', '#000');
+        .attr('stroke', '#000')
+        .attr('cursor', 'pointer');
     };
     const mouseLeave = (event: any) => {
       const target = event.target;
       d3.select(target)
         .attr('opacity', 1)
-        .attr('stroke', 'none');
+        .attr('stroke', 'none')
+        .attr('cursor', 'default');
     };
 
     const mouseClick = (event: any) => {
@@ -142,7 +152,73 @@ export class ScaleOrdinalComponent implements OnInit {
       const index = id.split('-')[2];
       const name = this.data[index].name;
       const value = this.data[index].value;
-      console.log(`${name} - ${value}`);
+      const newValue = this.data[index].value = value + 50000;
+
+    ((name: string) => {
+      const switchFn = {
+        Switzerland: () => {
+          console.log('Switzerland', index);
+          newValue
+          this.drawUpdate();
+        },
+        Belgium: () => {
+          console.log('Belgium', index);
+          newValue
+          this.drawUpdate();
+        },
+        Austria: () => {
+          console.log('Austria', index);
+          newValue
+          this.drawUpdate();
+        },
+        Portugal: () => {
+          console.log('Portugal', index);
+          newValue
+          this.drawUpdate();
+        },
+        Spain: () => {
+          console.log('Spain', index);
+          newValue
+          this.drawUpdate();
+        },
+        Italy: () => {
+          console.log('Italy', index);
+          newValue
+          this.drawUpdate();
+        },
+        UK: () => {
+          console.log('UK', index);
+          newValue
+          this.drawUpdate();
+        },
+        France: () => {
+          console.log('France', index);
+          newValue
+          this.drawUpdate();
+        },
+        USA: () => {
+          console.log('USA', index);
+          newValue
+          this.drawUpdate();
+        },
+        Germany: () => {
+          console.log('Germany', index);
+          newValue
+          this.drawUpdate();
+        },
+        Brazil: () => {
+          console.log('Brazil', index);
+          newValue
+          this.drawUpdate();
+        }
+      };
+
+      return (switchFn as any)[name]();
+    })(name);
+
+    this.data.sort((a, b) => b.value - a.value);
+    this.drawUpdate();
+      
     };
 
     d3.selectAll('rect')
