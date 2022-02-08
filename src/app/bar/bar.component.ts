@@ -50,10 +50,14 @@ export class BarComponent implements OnInit {
 
     const axisX = this.svg.append('g')
       .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
+      .transition()
+      .duration(1000)
       .call(d3.axisBottom(x));
 
     const axisY = this.svg.append('g')
       .attr('transform', `translate(${this.margin.left}, 0)`)
+      .transition()
+      .duration(1000)
       .call(d3.axisLeft(y));
 
     const bars = this.svg
@@ -67,17 +71,15 @@ export class BarComponent implements OnInit {
       .attr('id', (d: any, i: any) => `bar-${i}`)
       .attr('x', (d: any) => x(d.Framework))
       .attr('y', (d: any) => y(Number(d.Stars)))
-      .attr('rx', 4)
-      .attr('ry', 4)
-      .transition()
-      .ease(d3.easeLinear)
-      .duration(1000)
-      .delay((d: any, i: any) => i * 100)
+      // .attr('rx', 2)
+      // .attr('ry', 2)
       .attr('width', x.bandwidth())
-      .attr('height', (d: any) => this.height - this.margin.bottom - y(Number(d.Stars)))
-      .attr('stroke', '#000')
-      .attr('stroke-width', 0.5)
-      .attr('fill', (d: any, i: any) => this.colors(d.Stars));
+      .attr('fill', (d: any, i: any) => this.colors(d))
+      .transition()
+      .ease(d3.easePoly)
+      .duration(200)
+      .delay((d: any, i: any) => i * 50)
+      .attr('height', (d: any) => this.height - this.margin.bottom - y(Number(d.Stars)));
   }
 
   constructor() {}
@@ -89,7 +91,7 @@ export class BarComponent implements OnInit {
   }
 
   public mouseEvent(data: any): void {
-    const { width, height, margin } = this;
+    const { width, height, colors } = this;
     const y = d3.scaleLinear()
       .domain([0, d3.max(data, (d: any) => Number(d.Stars))] as [number, number])
       .range([this.height - this.margin.bottom, this.margin.top]);
@@ -98,25 +100,23 @@ export class BarComponent implements OnInit {
       .on('mouseenter', function(event: any) {
         d3.select(this)
           .style('opacity', 0.5)
-          .style('cursor', 'pointer')
-          .style('stroke', 'black')
+          .style('cursor', 'pointer');
       })
       .on('mouseleave', function() {
         d3.select(this)
           .style('opacity', 1)
-          .style('cursor', 'default')
+          .style('cursor', 'default');
       })
       .on('click', function(event: any) {
         d3.select(this)
+          .attr('stroke-width', 16)
+          .attr('y', (d: any) => y(Number(d.Stars)) - 8)
+          .attr('stroke', (d: any) => colors(d))
           .transition()
-          .duration(150)
-          .attr('height', (d: any) => height - margin.bottom - y(Number(d.Stars)) - 5)
-          .attr('y', (d: any) => y(Number(d.Stars)) - 5)
-          .transition()
-          .duration(150)
-          .attr('height', (d: any) => height - margin.bottom - y(Number(d.Stars)))
-          .attr('y', (d: any) => y(Number(d.Stars)));
-        
+          .duration(400)
+          .attr('y', (d: any) => y(Number(d.Stars)))
+          .attr('stroke-width', 0);
+
       })
   }
 }
