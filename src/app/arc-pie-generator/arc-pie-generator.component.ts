@@ -11,7 +11,7 @@ export class ArcPieGeneratorComponent implements OnInit {
   margin = { top: 20, right: 20, bottom: 30, left: 40 };
   width = 750;
   height = 400;
-  dataset = [150, 235, 915, 415, 860, 590, 1250, 1320];
+  dataset = [90, 10, 70, 30, 50, 2];
   colors = d3.schemeSpectral[this.dataset.length]; // serve fazer uma escaça de cor no grafico
   arcGen: any;
   pie: any;
@@ -57,8 +57,8 @@ export class ArcPieGeneratorComponent implements OnInit {
     this.arcGen = d3.arc()
       .innerRadius(100)
       .outerRadius(160)
-      .cornerRadius(5)
-      .padAngle(0.04)
+      .cornerRadius(2)
+      .padAngle(0.03)
       .padRadius(50);
       // .startAngle(0)
       // .endAngle(Math.PI / 4);
@@ -73,16 +73,12 @@ export class ArcPieGeneratorComponent implements OnInit {
     // *** create pie generator *** //
     this.pie = d3.pie();
 
-    // transformar valores em porcentagem
-    const data = this.dataset.map((d: any) => {
-      return { value: d, percentage: (d * 100) / this.dataset.reduce((a, b) => a + b) };
-    });
-    console.log(data.map((d: any) => Math.floor(d.percentage)));
+    // const data = this.transformeValueInPercentage(this.dataset);
 
     // *** create arc generator *** //
     d3.select('g#pie-arc-group')
       .selectAll('path')
-      .data(this.pie(data.map((d) => d.percentage)))
+      .data(this.pie(this.dataset))
       .join(
         enter => enter.append('path'),
         update => update,
@@ -90,7 +86,6 @@ export class ArcPieGeneratorComponent implements OnInit {
       )
       .attr('fill', (d: any, i: any) => this.colors[i])
       .attr('stroke', '#000')
-      .attr('stroke-width', 2)
       .attr('d', this.arcGen);
   };
 
@@ -99,9 +94,9 @@ export class ArcPieGeneratorComponent implements OnInit {
     d3.selectAll('path')
       .transition()
       .duration(350)
-      .attrTween('d', function (d: any) {
+      .attrTween('d', (d: any) => {
         const interpolate = d3.interpolate(d.endAngle, d.startAngle);
-        return function (t: any) {
+        return (t: any) => {
           d.startAngle = interpolate(t);
           return arcGen(d);
         };
@@ -118,6 +113,7 @@ export class ArcPieGeneratorComponent implements OnInit {
     const mouseLeave = (event: any) => {
       const el = d3.select(event.target);
       this.animationSliceBack(el);
+      this.removeText(el);
     };
 
     d3.selectAll('path')
@@ -151,20 +147,36 @@ export class ArcPieGeneratorComponent implements OnInit {
 
   addText(el: any): void {
     const { arcGen } = this;
-    /* const data = this.dataset.map((d: any) => {
-      return { value: d, percentage: (d * 100) / this.dataset.reduce((a, b) => a + b) };
-    });
-    const text = data.map((d: any) => Math.floor(d.percentage)); */
-
+    const percentage = this.transformeValueInPercentage(el.data().map((d: any) => d.value));
     d3.select('g#pie-arc-text')
       .append('text')
       .attr('x', this.width / 2)
       .attr('y', this.height / 2)
-      .attr('font-size', '2.5em')
-      .attr('fill', (d: any, i: any) => this.colors[i])
+      .attr('font-size', '3.5em')
+      .attr('fill', '#f00f0f')
       .attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'middle')
-      .text((d: any, i: number) => `%`);
+      .text((d: any, i: number) => `${percentage.map((d: any) => Math.round(d.percentage))}%`);
+
+    d3.select('g#pie-arc-text')
+      .append('text')
+      .attr('x', this.margin.left)
+      .attr('y', this.margin.top)
+      .attr('font-size', '1.5em')
+      .attr('fill', '#f00f0f')
+      .text((d: any, i: number) => `Valor em R$: ${el.data().map((d: any) => d.value)}`);
   };
+
+  removeText(el: any): void {
+    d3.select('g#pie-arc-text')
+      .selectAll('text')
+      .remove();
+  };
+
+  transformeValueInPercentage(data: any): any {
+    return data.map((d: any) => {
+      return { value: d, percentage: (d * 100) / this.dataset.reduce((a, b) => a + b) };
+    });
+  }
 }
 
