@@ -17,7 +17,7 @@ export class CovidCasesComponent implements OnInit {
   );
   private data: any[] = [];
   // criar um array de cores
-  private colors = d3.scaleOrdinal(d3.schemePastel1);
+  private colors = d3.scaleOrdinal(d3.schemeCategory10);
   constructor() {}
 
   ngOnInit(): void {
@@ -39,9 +39,10 @@ export class CovidCasesComponent implements OnInit {
       .style('padding', '10px')
       .style('font-size', '12px');
 
-      const mouseover = function (this: any, event: any, d: any) {
-        d3.select(this)
-          .style('opacity', 0.8);
+      const mouseEnter = (event: any, d: any) => {
+        d3.select(event.currentTarget)
+          .style('opacity', 0.8)
+          .style('cursor', 'pointer');
 
         tooltip
           .style('visibility', 'visible')
@@ -57,19 +58,30 @@ export class CovidCasesComponent implements OnInit {
           </strong>`);
       }
   
-      const mousemove = function (event: any) {
+      const mousemove = (event: any) => {
         tooltip
           .style('left', `${event.pageX + 30}px`)
           .style('top', `${event.pageY - 30}px`);
       }
   
-      const mouseout = function (this: any) {
-        d3.select(this)
+      const mouseLeave =  (event: any) => {
+        d3.select(event.target)
           .style('opacity', 1);
 
         tooltip
           .style('visibility', 'hidden');
       }
+
+      const mouseClick = (event: any) => {
+        d3.select(event.target)
+          .attr('stroke-width', 10)
+          .attr('y', (d: any) => scaleY(Number(d.PERSONS_FULLY_VACCINATED)) - 5)
+          .attr('stroke', (d: any) => this.colors(d.ISO3))
+          .transition()
+          .duration(250)
+          .attr('y', (d: any) => scaleY(Number(d.PERSONS_FULLY_VACCINATED)))
+          .attr('stroke-width', 0)
+      };
 
       this.svg = d3.select('#bar-cases')
         .append('svg')
@@ -106,13 +118,21 @@ export class CovidCasesComponent implements OnInit {
       const axisX = d3.axisBottom(scaleX)
         .tickSizeOuter(0)
         .tickPadding(2);
-        d3.select('#x-axis').call(axisX as any);
+        
+        d3.select('#x-axis')
+          .transition()
+          .duration(1000)
+          .call(axisX as any);
 
       const axisY = d3.axisLeft(scaleY)
         .ticks(5)
         .tickSizeOuter(0)
         .tickFormat(d3.format('.1s'));
-        d3.select('#y-axis').call(axisY as any);
+        
+        d3.select('#y-axis')
+          .transition()
+          .duration(1000)
+          .call(axisY as any);
 
       this.svg
         .selectAll('rect')
@@ -129,14 +149,13 @@ export class CovidCasesComponent implements OnInit {
           this.height - this.margin.bottom - scaleY(Number(d.PERSONS_FULLY_VACCINATED))
         )
         .attr('fill', (d: any, i: any) => this.colors(d.ISO3))
-        .attr('stroke', '#000')
-        .attr('stroke-width', 0.5)
         .attr('id', (d: any, i: any) => `bar-${i}`);
         
       d3.selectAll('rect')
-        .on('mouseover', mouseover)
+        .on('mouseenter', mouseEnter)
         .on('mousemove', mousemove)
-        .on('mouseout', mouseout)
+        .on('mouseout', mouseLeave)
+        .on('click', mouseClick);
     });
   }
 }
