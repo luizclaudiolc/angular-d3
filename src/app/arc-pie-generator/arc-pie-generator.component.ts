@@ -11,7 +11,7 @@ export class ArcPieGeneratorComponent implements OnInit {
   margin = { top: 20, right: 20, bottom: 30, left: 40 };
   width = 750;
   height = 400;
-  dataset = [90, 10, 70, 30, 50, 2];
+  dataset = [90, 10, 70, 30, 50, 4, 6, 8, 10, 120];
   colors = d3.schemeSpectral[this.dataset.length]; // serve fazer uma escaça de cor no grafico
   arcGen: any;
   pie: any;
@@ -23,6 +23,7 @@ export class ArcPieGeneratorComponent implements OnInit {
     this.updatePie();
     this.initialAnimation();
     this.mouseEvents();
+    this.textWithTotal();
   }
 
   drawSvg(): void {
@@ -42,7 +43,10 @@ export class ArcPieGeneratorComponent implements OnInit {
       d3.select('svg#pie-arc')
         .append('g')
         .attr('id', 'pie-arc-text')
-        // .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`);
+      
+      d3.select('svg#pie-arc')
+        .append('g')
+        .attr('id', 'pie-arc-text-dinamic')
   };
 
   updatePie(): void {
@@ -148,7 +152,7 @@ export class ArcPieGeneratorComponent implements OnInit {
   addText(el: any): void {
     const { arcGen } = this;
     const percentage = this.transformeValueInPercentage(el.data().map((d: any) => d.value));
-    d3.select('g#pie-arc-text')
+    d3.select('g#pie-arc-text-dinamic')
       .append('text')
       .attr('x', this.width / 2)
       .attr('y', this.height / 2)
@@ -158,7 +162,7 @@ export class ArcPieGeneratorComponent implements OnInit {
       .attr('alignment-baseline', 'middle')
       .text((d: any, i: number) => `${percentage.map((d: any) => Math.round(d.percentage))}%`);
 
-    d3.select('g#pie-arc-text')
+    d3.select('g#pie-arc-text-dinamic')
       .append('text')
       .attr('x', this.margin.left)
       .attr('y', this.margin.top)
@@ -168,15 +172,25 @@ export class ArcPieGeneratorComponent implements OnInit {
   };
 
   removeText(el: any): void {
-    d3.select('g#pie-arc-text')
+    d3.select('g#pie-arc-text-dinamic')
       .selectAll('text')
       .remove();
   };
 
-  transformeValueInPercentage(data: any): any {
+  transformeValueInPercentage(data: Array<any>): any {
     return data.map((d: any) => {
       return { value: d, percentage: (d * 100) / this.dataset.reduce((a, b) => a + b) };
     });
   }
+
+  textWithTotal(): void {
+    d3.select('g#pie-arc-text-dinamic')
+      .append('text')
+      .attr('x', this.width / 2 + 150)
+      .attr('y', this.margin.top + 30)
+      .attr('font-size', '3.5em')
+      .attr('fill', '#f00f0f')
+      // .text('aqui')
+  };
 }
 
