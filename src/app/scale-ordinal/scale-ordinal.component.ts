@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-scale-ordinal',
@@ -36,6 +37,7 @@ export class ScaleOrdinalComponent implements OnInit {
     this.drawSvg();
     this.drawUpdate();
     this.mouseEvents();
+    this.updateData();
   }
 
   drawSvg(): void {
@@ -170,6 +172,17 @@ export class ScaleOrdinalComponent implements OnInit {
     this.data[index].value = value;
     this.data.sort((a, b) => b.value - a.value);
     this.drawUpdate();
+  };
+
+  // *** update Data *** //
+  updateData(): void {
+    setInterval(() => {
+      console.log('rodei')
+      this.data.map((d) => {
+        const newValue = d.value + Math.floor(Math.random() * (100000 - 50000) + 50000);
+        this.changeData(d.name, newValue);
+      });
+    }, 5000);
   };
 
 }
