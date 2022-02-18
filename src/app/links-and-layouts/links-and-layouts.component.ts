@@ -135,158 +135,6 @@ export class LinksAndLayoutsComponent implements OnInit {
       d3.select('g#links-g-container').append('g').attr('id', 'links-g-labels');
       d3.select('g#links-g-container').append('g').attr('id', 'links-g-group');
 
-      
-      
-      
-      
-    //   .on('click', () => {
-    //     this.index++;
-    //     this.index > 4 ? this.index = -1 : null;
-
-    //     if (this.index === 0) {
-    //       verticalTree();
-    //     } else if (this.index === 1) {
-    //       verticalCluster();
-    //     } else if (this.index === 2) {
-    //       horizontalTree();
-    //     } else if (this.index === 3) {
-    //       horizontalCluster();
-    //     } else if (this.index === 4) {
-    //       radialTree();
-    //     } else {
-    //       radialCluster();
-    //     }
-    //   });
-
-    // const rootNode = d3.hierarchy(this.dataset, (d: any) => d.children);
-    // const g = this.svg.append('g')
-    //   .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
-    
-    // const links = g.append('g')
-    //   .selectAll('path')
-    //   .data(rootNode.links())
-    //   .join(
-    //     (enter: any) => enter.append('path'),
-    //     (update: any) => update.attr('d', d3.linkHorizontal()),
-    //     (exit: any) => exit.remove()
-    //   )
-    //   .attr('fill', 'none')
-    //   .attr('stroke', 'gray');
-
-    // const dots = g.append('g')
-    //   .selectAll('circle')
-    //   .data(rootNode.descendants())
-    //   .join(
-    //     (enter: any) => enter.append('circle'),
-    //     (update: any) => update,
-    //     (exit: any) => exit.remove()
-    //   )
-    //   .attr('r', 5)
-    //   .attr('fill', 'darkorange')
-    //   .attr('stroke', '#000')
-    //   .attr('stroke-width', 1);
-
-    // const labels = g.append('g')
-    //   .selectAll('text')
-    //   .data(rootNode.descendants())
-    //   .join(
-    //     (enter: any) => enter.append('text').attr('text-anchor', 'middle'),
-    //     (update: any) => update.attr('text-anchor', 'middle'),
-    //     (exit: any) => exit.remove()
-    //   )
-
-    // const verticalTree = (): void => {
-    //   g.transition().duration(1500)
-    //     .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
-
-    //   const layout = d3.tree().size([this.width - (this.margin.left + this.margin.right),
-    //     this.height - (this.margin.top + this.margin.bottom)]);
-      
-    //   layout(rootNode);
-
-    //   links.data(rootNode.links()).transition().duration(1500)
-    //     .attr('d', d3.linkVertical().x((d: any) => d.x).y((d: any) => d.y));
-
-    //   dots.data(rootNode.descendants()).transition().duration(1500)
-    //     .attr('cx', (d: any) => d.x)
-    //     .attr('cy', (d: any) => d.y);
-
-    //   labels.data(rootNode.descendants())
-    //     .transition().duration(1500)
-    //     .attr('x', (d: any) => d.x)
-    //     .attr('y', (d: any) => d.y - 10)
-    //     .text((d: any) => d.data.name);
-    // };
-
-    // const verticalCluster = (): void => {
-    //   g.transition().duration(1500)
-    //     .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
-
-    //   const layout = d3.cluster().size([this.width - (this.margin.left + this.margin.right),
-    //     this.height - (this.margin.top + this.margin.bottom)]);
-      
-    //   layout(rootNode);
-
-    //   links.data(rootNode.links()).transition().duration(1500)
-    //     .attr('d', d3.linkVertical().x((d: any) => d.x).y((d: any) => d.y));
-
-    //   dots.data(rootNode.descendants()).transition().duration(1500)
-    //     .attr('cx', (d: any) => d.x)
-    //     .attr('cy', (d: any) => d.y);
-
-    //   labels.data(rootNode.descendants())
-    //     .transition().duration(1500)
-    //     .attr('x', (d: any) => d.x)
-    //     .attr('y', (d: any) => d.y - 10)
-    //     .text((d: any) => d.data.name);
-    // };
-
-    // const horizontalTree = (): void => {
-    //   g.transition().duration(1500)
-    //     .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
-
-    //   const layout = d3.tree().size([this.height - (this.margin.top + this.margin.bottom),
-    //     this.width - (this.margin.left + this.margin.right)]);
-      
-    //   layout(rootNode);
-
-    //   links.data(rootNode.links()).transition().duration(1500)
-    //     .attr('d', d3.linkHorizontal().x((d: any) => d.y).y((d: any) => d.x));
-
-    //   dots.data(rootNode.descendants()).transition().duration(1500)
-    //     .attr('cx', (d: any) => d.y)
-    //     .attr('cy', (d: any) => d.x);
-
-    //   labels.data(rootNode.descendants())
-    //     .transition().duration(1500)
-    //     .attr('x', (d: any) => d.y)
-    //     .attr('y', (d: any) => d.x - 10)
-    //     .text((d: any) => d.data.name);
-    // };
-
-    // const horizontalCluster = (): void => {
-    //   g.transition().duration(1500)
-    //   .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
-
-    //   const layout = d3.cluster().size([this.height - (this.margin.top + this.margin.bottom),
-    //     this.width - (this.margin.left + this.margin.right)]);
-      
-    //   layout(rootNode);
-
-    //   links.data(rootNode.links()).transition().duration(1500)
-    //     .attr('d', d3.linkHorizontal().x((d: any) => d.y).y((d: any) => d.x));
-
-    //   dots.data(rootNode.descendants()).transition().duration(1500)
-    //     .attr('cx', (d: any) => d.y)
-    //     .attr('cy', (d: any) => d.x);
-
-    //   labels.data(rootNode.descendants())
-    //     .transition().duration(1500)
-    //     .attr('x', (d: any) => d.y)
-    //     .attr('y', (d: any) => d.x - 10)
-    //     .text((d: any) => d.data.name);
-    // };
-
     // const radialTree = (): void => {
     //   g.transition().duration(1500)
     //     .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`);
@@ -545,10 +393,10 @@ export class LinksAndLayoutsComponent implements OnInit {
     );
   };
 
-  private radialPoints = (x: number, y: number): [number, number] => {
+  private radialPoints = (x: number, y: number): Array<number> => {
     return [
       y * Math.cos(x -= Math.PI / 2),
-      y * Math.sin(x)
+      y * Math.sin(x),
     ]
   };
 }

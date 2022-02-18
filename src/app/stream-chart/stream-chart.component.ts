@@ -58,15 +58,15 @@ export class StreamChartComponent implements OnInit {
 
     const stackData = stack(data);
     
-    const minValue = d3.min(stackData, d=>d3.min(d, d=>d3.min(d)));
-    const maxValue = d3.max(stackData, d=>d3.max(d, d=>d3.max(d)));
+    const minValue = d3.min(stackData, d => d3.min(d, d => d3.min(d)));
+    const maxValue = d3.max(stackData, d => d3.max(d, d => d3.max(d)));
 
     const scaleX = d3.scaleLinear()
       .domain([0, data.length -1])
       .range([this.margin.left, this.width - this.margin.right]);
 
     const scaleY = d3.scaleLinear()
-      .domain([minValue, maxValue] as [number, number])
+      .domain([minValue, maxValue] as Array<number>)
       .range([this.height - this.margin.bottom, this.margin.top]);
 
     const colors = d3.schemePastel2;

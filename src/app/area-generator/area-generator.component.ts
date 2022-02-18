@@ -13,21 +13,17 @@ export class AreaGeneratorComponent implements OnInit {
   private height = 450;
 
   private dataset = [
-    [100, 200],
-    [150, 90],
-    [200, 150],
-    [250, 300],
-    [310, 190],
-    [410, 120],
-    [475, 250],
-    [550, 350],
-    [600, 200],
+    [this.margin.left, this.height / 2],
+    [this.width / 2, this.margin.top],
+    [this.width - this.margin.right, this.height / 2],
+    [this.width / 2, this.height - this.margin.bottom],
+    [this.margin.left, this.height / 2]
   ];
 
   private draw(): void {
     this.svg = d3.select('#area')
       .append('svg')
-      .style('background-color', '#cece')
+      // .style('background-color', '#009541')
       .attr('width', this.width)
       .attr('height', this.height);
 
@@ -45,27 +41,40 @@ export class AreaGeneratorComponent implements OnInit {
       .attr('id', (d: any, i: any) => `point-${i}`)
       .attr('cx', (d: any) => d[0])
       .attr('cy', (d: any) => d[1])
-      .attr('r', 5);
+      .attr('r', 5)
+      .attr('fill', 'transparent')
 
     const areaGenerator = d3.area();
     // areaGenerator.x((d: any) => d[0]);
     // areaGenerator.y((d: any) => d[1]);
     areaGenerator.y0(this.height / 2);
-    console.log(areaGenerator.y0());
+    // console.log(areaGenerator.y0());
 
     const path = this.svg.append('path')
-      .attr('d', areaGenerator(this.dataset as any))
-      .attr('fill', 'gray');
+      .attr('d', areaGenerator(this.dataset as Array<any>))
+      .attr('fill', '#FFCA00');
+
+    // this.svg.append('circle')
+    //   .attr('cx', this.width / 2)
+    //   .attr('cy', this.height / 2)
+    //   .attr('r', 120)
+    //   .attr('fill', '#312682')
     
     const nextCurve = () => {
+      const curves = Object.entries(curvesObj);
+      console.log(curves);
       ix++;
-      const keys = Object.keys(curves);
-      const value = Object.values(curves);
-      ix = (ix === value.length) ? 0 : ix;
+      ix = (ix === curves.length) ? 0 : ix;
       console.log(ix)
-      areaGenerator.curve(value[ix]);
-      this.svg.select('path').attr('d', areaGenerator(this.dataset as any));
-      this.svg.select('text').text(keys[ix]);
+      areaGenerator.curve(curves[ix][1]);
+      this.svg.select('path')
+      .transition()
+      .duration(1000)
+      .ease(d3.easeLinear)
+      // .delay((d: any, i: any) => i * 1000)
+      .attr('d', areaGenerator(this.dataset as any));
+
+      this.svg.select('text').text(curves[ix][0]);
       this.svg.selectAll('circle').remove();
     }
 
@@ -77,7 +86,7 @@ export class AreaGeneratorComponent implements OnInit {
     .on('click', nextCurve);
 
     let ix = 0;
-    const curves = {
+    const curvesObj = {
       curveBasis: d3.curveBasis,
       curveBasisClosed: d3.curveBasisClosed,
       curveBasisOpen: d3.curveBasisOpen,

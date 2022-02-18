@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-import * as attrs from 'd3-selection-multi';
-import { selectAll, Selection, ArrayLike } from 'd3-selection';
-import * as d3SelectionMulti from 'd3-selection-multi';
 import { IntrojsService } from '../introjs.service';
 
 @Component({
@@ -11,11 +8,11 @@ import { IntrojsService } from '../introjs.service';
   styleUrls: ['./line-generator.component.scss']
 })
 export class LineGeneratorComponent implements OnInit {
-  private svg: any;
-  private margin = {top: 20, right: 20, bottom: 20, left: 20};
-  private width = 750;
-  private height = 400;
-  private dataset = [
+  svg: any;
+  margin = {top: 20, right: 20, bottom: 20, left: 20};
+  width = 750;
+  height = 400;
+  dataset = [
     [100, 200],
     [150, 90],
     [200, 150],
@@ -27,10 +24,16 @@ export class LineGeneratorComponent implements OnInit {
     [600, 50],
   ];
 
-  private draw(): void {
+  constructor(private introService: IntrojsService) { }
+
+  ngOnInit(): void {
+    this.draw();
+  }
+
+  draw(): void {
     this.svg = d3.select('#line')
       .append('svg')
-      .style('background-color', '#cece')
+      .style('background-color', '#FAFAFA')
       .attr('width', this.width)
       .attr('height', this.height)
       .append('g')
@@ -42,16 +45,6 @@ export class LineGeneratorComponent implements OnInit {
       .attr('id', 'txt')
       .text('Curves in D3.js')
 
-    const points = this.svg.append('g')
-      .selectAll('circle')
-      .data(this.dataset)
-      .enter()
-      .append('circle')
-      .attr('id', (d: any, i: any) => `point-${i}`)
-      .attr('cx', (d: any) => d[0])
-      .attr('cy', (d: any) => d[1])
-      .attr('r', 5);
-
     const line = d3.line();
     // line.x((d: any) => d[0]);
     // line.y((d: any) => d[1]);
@@ -62,15 +55,32 @@ export class LineGeneratorComponent implements OnInit {
       .attr('stroke-width', 2)
       .attr('fill', 'none');
     
+      const points = this.svg.append('g')
+      .selectAll('circle')
+      .data(this.dataset)
+      .enter()
+      .append('circle')
+      .attr('id', (d: any, i: any) => `point-${i}`)
+      .attr('cx', (d: any) => d[0])
+      .attr('cy', (d: any) => d[1])
+      .attr('r', 5)
+      .attr('fill', '#FAFAFA')
+      .attr('stroke', '#000')
+      .attr('stroke-width', 2);
+    
     const nextCurve = () => {
+      const curves = Object.entries(curvesObj);
       ix++;
-      const keys = Object.keys(curves);
-      const value = Object.values(curves);
-      ix = (ix === value.length) ? 0 : ix;
-      console.log(ix)
-      line.curve(value[ix]);
-      this.svg.select('path').attr('d', line(this.dataset as any))
-      this.svg.select('text').text(keys[ix]);
+      ix = (ix === curves.length) ? 0 : ix;
+      line.curve(curves[ix][1]);
+      this.svg.select('path')
+      .attr('stroke-dasharray', '1900')
+      .attr('stroke-dashoffset', '1000')
+      .transition()
+      .duration(1000)
+      .attr('stroke-dashoffset', 0)
+      .attr('d', line(this.dataset as any))
+      this.svg.select('text').text(curves[ix][0]);
     }
 
     const btn = d3.select('#line')
@@ -81,7 +91,7 @@ export class LineGeneratorComponent implements OnInit {
       .on('click', nextCurve);
 
     let ix = 0;
-    const curves = {
+    const curvesObj = {
       curveBasis: d3.curveBasis,
       curveBasisClosed: d3.curveBasisClosed,
       curveBasisOpen: d3.curveBasisOpen,
@@ -103,16 +113,20 @@ export class LineGeneratorComponent implements OnInit {
       curveBumpX: d3.curveBumpX,
       curveBumpY: d3.curveBumpY,
     };
-  }
 
-  constructor(private introService: IntrojsService) { }
-
-  ngOnInit(): void {
-    this.draw();
+    d3.selectAll('circle')
+      .on('mouseenter', (event: any) => {
+        d3.select(event.target)
+          .attr('r', 10);
+      })
+      .on('mouseleave', (event: any) => {
+        d3.select(event.target)
+          .attr('r', 5);
+      });
   }
 
   ngAfterViewInit(): void {
-    this.introService.t1();
+    // this.introService.t1();
   }
 
 }

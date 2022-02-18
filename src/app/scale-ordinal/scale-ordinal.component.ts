@@ -13,18 +13,18 @@ export class ScaleOrdinalComponent implements OnInit {
   width = 750;
   height = 400;
   data = [
-    {name: 'Germany', value: 100000},
-    {name: 'USA', value: 150000},
-    {name: 'France', value: 75000},
-    {name: 'UK', value: 250000},
-    {name: 'Italy', value: 99000},
-    {name: 'Spain', value: 72000},
-    {name: 'Portugal', value: 20000},
-    {name: 'Austria', value: 10000},
-    {name: 'Belgium', value: 125000},
-    {name: 'Switzerland', value: 30000},
-    {name: 'Brazil', value: 50000},
-    {name: 'Argentina', value: 30000},
+    {name: 'Germany', value: 10000},
+    {name: 'USA', value: 15000},
+    {name: 'France', value: 7500},
+    {name: 'UK', value: 25000},
+    {name: 'Italy', value: 9900},
+    {name: 'Spain', value: 7200},
+    {name: 'Portugal', value: 2000},
+    {name: 'Austria', value: 1000},
+    {name: 'Belgium', value: 12500},
+    {name: 'Switzerland', value: 3000},
+    {name: 'Brazil', value: 5000},
+    {name: 'Argentina', value: 3000},
   ];
   scaleX: any;
   scaleY: any;
@@ -62,7 +62,7 @@ export class ScaleOrdinalComponent implements OnInit {
       .attr('height', this.height);
 
     // *** scaleX *** //
-    const XDomain = [0, d3.max(this.data, (d) => d.value) as number];
+    const XDomain = [0, d3.max(this.data, (d) => d.value)] as Array<number>;
     this.scaleX = d3.scaleLinear()
       .domain(XDomain)
       .range([this.margin.left, this.width - this.margin.rigth]);
@@ -120,7 +120,7 @@ export class ScaleOrdinalComponent implements OnInit {
         (update) => update,
         (exit) => exit.remove()
       )
-      .attr('x', (d) => this.scaleX(this.margin.left))
+      .attr('x', (d) => this.scaleX(0))
       .attr('y', (d) => this.scaleY(d.name) - this.scaleY.bandwidth() + this.scaleY.bandwidth())
       .attr('height', this.scaleY.bandwidth())
       .attr('id', (d: any, i: number) => `rects-Ordinal-${i}`)
@@ -155,7 +155,7 @@ export class ScaleOrdinalComponent implements OnInit {
       const index = id.split('-')[2];
       const name = this.data[index].name;
       const value = this.data[index].value;
-      const newValue = this.data[index].value = value + 50000;
+      const newValue = this.data[index].value = value + 500;
 
     this.changeData(name, newValue);
     };
@@ -170,19 +170,25 @@ export class ScaleOrdinalComponent implements OnInit {
   changeData(name: string, value: number): void {
     const index = this.data.findIndex((d) => d.name === name);
     this.data[index].value = value;
-    this.data.sort((a, b) => b.value - a.value);
+    this.data.sort((a, b) => a.value - b.value);
     this.drawUpdate();
   };
 
   // *** update Data *** //
   updateData(): void {
-    setInterval(() => {
-      console.log('rodei')
-      this.data.map((d) => {
-        const newValue = d.value + Math.floor(Math.random() * (100000 - 50000) + 50000);
-        this.changeData(d.name, newValue);
-      });
-    }, 5000);
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i >= this.data.length) {
+        clearInterval(interval);
+        return;
+      }
+      const name = this.data[i].name;
+      const value = this.data[i].value;
+      const newValue = this.data[i % 2 === 0 ? i + 1 : i].value = value + 1000;
+      this.changeData(name, newValue);
+      i++;
+    }
+    , 500);
   };
 
 }
