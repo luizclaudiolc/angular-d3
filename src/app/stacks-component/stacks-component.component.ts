@@ -8,7 +8,7 @@ import * as d3 from 'd3';
 })
 export class StacksComponentComponent implements OnInit {
   svg: any;
-  margin = {top: 20, right: 20, bottom: 20, left: 20};
+  margin = {top: 20, right: 20, bottom: 20, left: 40};
   width = 750;
   height = 400;
   dataset = [
@@ -31,7 +31,7 @@ export class StacksComponentComponent implements OnInit {
   area: any;
   minValue: any;
   maxValue: any;
-  colors = d3.schemeSpectral[9];
+  colors = d3.schemeOranges[9];
 
   constructor() { }
 
@@ -50,8 +50,10 @@ export class StacksComponentComponent implements OnInit {
       .attr('id', 'stacks-svg');
 
     d3.select('svg#stacks-svg').append('g').attr('id', 'stacks-g-path');
-    d3.select('svg#stacks-svg').append('g').attr('id', 'stacks-g-text');
-    d3.select('svg#stacks-svg').append('g').attr('id', 'stacks-g-offset');
+    d3.select('svg#stacks-svg').append('g').attr('id', 'stacks-g-text-order');
+    d3.select('svg#stacks-svg').append('g').attr('id', 'stacks-g-text-offset');
+    d3.select('svg#stacks-svg').append('g').attr('id', 'stacks-g-axis-bottom');
+    d3.select('svg#stacks-svg').append('g').attr('id', 'stacks-g-axis-left');
   };
 
   update(): void {
@@ -68,8 +70,10 @@ export class StacksComponentComponent implements OnInit {
     this.stackData = this.stack(this.dataset);
 
     // *** create Max and Min values *** //
-    this.minValue = d3.min(this.stackData, d => d3.min(d as Array<number>, d => d3.min(d as any)));
-    this.maxValue = d3.max(this.stackData, d => d3.max(d as Array<number>, d => d3.max(d as any)));
+    this.minValue = d3.min(this.stackData, d => d3.min(d as Array<number>,
+      d => d3.min(d as any)));
+    this.maxValue = d3.max(this.stackData, d => d3.max(d as Array<number>,
+      d => d3.max(d as any)));
   
     // *** create scales *** //
     this.scaleX = d3.scaleLinear()
@@ -78,7 +82,7 @@ export class StacksComponentComponent implements OnInit {
 
     this.scaleY = d3.scaleLinear()
       .domain([this.minValue, this.maxValue])
-      .range([this.height - this.margin.bottom, this.margin.top + 20]);
+      .range([this.height - this.margin.bottom, this.margin.top]);
 
     // *** create area *** //
     this.area = d3.area()
@@ -100,13 +104,44 @@ export class StacksComponentComponent implements OnInit {
       .attr('fill', (d: any, i: any) => this.colors[i])
       .attr('stroke', 'silver')
       .attr('stroke-width', 1);
+
+    /* // *** create axis bottom *** //
+    const axisBottom = d3.axisBottom(this.scaleX);
+
+    d3.select('g#stacks-g-axis-bottom')
+      .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
+      .call(axisBottom as any); */
+
+    // *** create axis left *** //
+    const axisLeft = d3.axisLeft(this.scaleY)
+      .tickSize(-this.width + this.margin.left + this.margin.right)
+      .tickSizeOuter(0)
+      .tickPadding(5);
+
+    d3.select('g#stacks-g-axis-left')
+      .attr('transform', `translate(${this.margin.left}, 0)`)
+      .call(axisLeft as any);
+
+    d3.select('g#stacks-g-axis-left')
+      .selectAll('line')
+      .attr('stroke-dasharray', '3,10')
+      .attr('stroke-dashoffset', 1000)
+      .transition()
+      .duration(1000)
+      .ease(d3.easeExpIn)
+      .attr('stroke-dashoffset', 0)
+      .attr('stroke-opacity', 0.5);
+
+    d3.select('g#stacks-g-axis-left')
+      .selectAll('.domain')
+      .remove();
   };
 
   appendText(): void {
     // *** create text Order *** //
     const nextOrder = () => {
-      const currentText = d3.select('#stacks-g-text').selectAll('text').text();
-      const nextOrder = (next: string) => d3.select('#stacks-g-text').selectAll('text').text(next);
+      const currentText = d3.select('#stacks-g-text-order').selectAll('text').text();
+      const nextOrder = (next: string) => d3.select('#stacks-g-text-order').selectAll('text').text(next);
       const key = Object.keys(this.dataset[0]);
 
         if (currentText === 'Order') {
@@ -156,8 +191,8 @@ export class StacksComponentComponent implements OnInit {
 
     // *** create text Offset *** //
     const nextOffset = () => {
-      const currentText = d3.select('#stacks-g-offset').selectAll('text').text();
-      const nextOffset = (next: string) => d3.select('#stacks-g-offset').selectAll('text').text(next);
+      const currentText = d3.select('#stacks-g-text-offset').selectAll('text').text();
+      const nextOffset = (next: string) => d3.select('#stacks-g-text-offset').selectAll('text').text(next);
       const key = Object.keys(this.dataset[0]);
       console.log(currentText);
 
@@ -212,9 +247,9 @@ export class StacksComponentComponent implements OnInit {
     };
 
     // *** create text Order *** //
-    d3.select('#stacks-g-text')
+    d3.select('#stacks-g-text-order')
       .append('text')
-      .attr('x', this.margin.left)
+      .attr('x', this.margin.left + 10)
       .attr('y', this.margin.top)
       .attr('alignment-baseline', 'middle')
       .attr('text-anchor', 'start')
@@ -223,9 +258,9 @@ export class StacksComponentComponent implements OnInit {
       .on('click', nextOrder);
 
     // *** create text Offset *** //
-    d3.select('#stacks-g-offset')
+    d3.select('#stacks-g-text-offset')
       .append('text')
-      .attr('x', this.width - this.margin.right)
+      .attr('x', this.width - this.margin.right - 10)
       .attr('y', this.margin.top)
       .attr('alignment-baseline', 'middle')
       .attr('text-anchor', 'end')
