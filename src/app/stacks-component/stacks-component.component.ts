@@ -127,7 +127,8 @@ export class StacksComponentComponent implements OnInit {
       .attr('stroke-dasharray', '3,10')
       .attr('stroke-dashoffset', 1000)
       .transition()
-      .duration(1000)
+      .delay((d: any, i: any) => i * 50)
+      .duration(500)
       .ease(d3.easeExpIn)
       .attr('stroke-dashoffset', 0)
       .attr('stroke-opacity', 0.5);

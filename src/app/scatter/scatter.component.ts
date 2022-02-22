@@ -7,7 +7,7 @@ import * as d3 from 'd3';
   styleUrls: ['./scatter.component.scss']
 })
 export class ScatterComponent implements OnInit {
-  private data = [
+  data = [
     {'Framework': 'Vue', 'Stars': '166443', 'Released': '2014'},
     {'Framework': 'React', 'Stars': '150793', 'Released': '2013'},
     {'Framework': 'Angular', 'Stars': '62342', 'Released': '2016'},
@@ -24,72 +24,108 @@ export class ScatterComponent implements OnInit {
     {'Framework': 'Webpack', 'Stars': '166443', 'Released': '2017'},
   ];
 
-  private svg: any;
-  private margin = {top: 40, right: 40, bottom: 30, left: 50};
-  private width = 750;
-  private height = 400;
-  public colors = d3.scaleOrdinal(d3.schemeTableau10);
+  svg: any;
+  margin = {top: 40, right: 40, bottom: 30, left: 50};
+  width = 750;
+  height = 400;
+  colors = d3.scaleOrdinal(d3.schemeTableau10);
+  scaleX: any;
+  scaleY: any;
+  points: any;
 
-  private createSvg(): void {
-    this.svg = d3.select('#scatter')
-      .append('svg')
-      .attr('width', this.width)
-      .attr('height', this.height)
-  }
-
-  private drawChart(): void {
-    // add eixo X
-    const x = d3.scaleLinear()
-    .domain([2008, d3.max(this.data, d => Number(d.Released))] as [number, number])
-    .range([this.margin.left, this.width - this.margin.right]);
-
-    this.svg.append('g')
-      .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
-      .call(d3.axisBottom(x).tickFormat(d3.format('d')));
-
-    // add eixo Y
-    const y = d3.scaleLinear()
-      .domain(d3.extent(this.data, d => Number(d.Stars)) as [number, number])
-      .range([this.height - this.margin.bottom, this.margin.top]);
-
-    this.svg.append('g')
-      .attr('transform', `translate(${this.margin.left}, 0)`)
-      .call(d3.axisLeft(y));
-
-    // add dots
-    const dots = this.svg.append('g');
-    dots.selectAll('circle')
-      .data(this.data)
-      .enter()
-      .append('circle')
-      .attr('cx', (d: any) => x(d.Released))
-      .attr('cy', (d: any) => y(d.Stars))
-      .attr('r', 10)
-      .style('fill', (d: any, i: number) => this.colors(d.Framework));
-
-    // add labels
-    dots.selectAll('text')
-      .data(this.data)
-      .enter()
-      .append('text')
-      .text((d: any) => d.Framework)
-      .attr('x', (d: any) => x(d.Released))
-      .attr('y', (d: any) => y(d.Stars) - 10)
-      .attr('text-anchor', 'middle');
-  }
+  
 
   constructor() { }
 
   ngOnInit(): void {
     this.createSvg();
-    this.drawChart();
+    this.updateChart();
     this.eventosMouse();
-    this.textMarked();
   }
 
-  public eventosMouse(): void {
+  createSvg(): void {
+    this.svg = d3.select('#scatter')
+      .append('svg')
+      .attr('width', this.width)
+      .attr('height', this.height)
+      .attr('id', 'svg-scatter');
+
+    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-points');
+    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-text');
+    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-axis-x');
+    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-axis-y');
+  }
+
+  updateChart(): void {
+    if (!this.data.length) return;
+
+    // *** update svg dimensions *** //
+    d3.select('svg#svg-scatter')
+      .attr('width', this.width)
+      .attr('height', this.height);
+
+    // *** create scales *** //
+    this.scaleX = d3.scaleLinear()
+      .domain([2008, d3.max(this.data, d => +d.Released + 1)] as Array<number>)
+      .range([this.margin.left, this.width - this.margin.right]);
+
+    this.scaleY = d3.scaleLinear()
+      .domain(d3.extent(this.data, d => +d.Stars) as Array<number>)
+      .range([this.height - this.margin.bottom, this.margin.top]);
+
+    // *** create axis *** //
+    const axisX: any = d3.axisBottom(this.scaleX)
+      .tickFormat((d: any) => d);
+      
+    d3.select('g#group-scatter-axis-x')
+      .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
+      .call(axisX);
+
+    const axisY: any = d3.axisLeft(this.scaleY)
+      .tickFormat((d: any) => Number(d).toLocaleString('pt-BR'));
+    d3.select('g#group-scatter-axis-y')
+      .attr('transform', `translate(${this.margin.left}, 0)`)
+      .call(axisY);
+
+    // *** create points *** //
+    this.points = d3.select('g#group-scatter-points')
+      .selectAll('circle')
+      .data(this.data)
+      .join(
+        enter => enter.append('circle'),
+        update => update,
+        exit => exit.remove()
+      )
+      .attr('cx', d => this.scaleX(+d.Released))
+      .attr('cy', d => this.scaleY(+d.Stars))
+      .transition()
+      .delay((d, i) => i * 100)
+      .duration(1000)
+      .attr('r', 10)
+      .attr('stroke', d => this.colors(d.Framework))
+      .attr('stroke-width', 1.5)
+      .attr('fill', '#fff')
+      .attr('id', (d, i) => `point-${i}`);
+
+    // *** create text *** //
+    d3.select('g#group-scatter-text')
+      .selectAll('text')
+      .data(this.data)
+      .join(
+        enter => enter.append('text'),
+        update => update,
+        exit => exit.remove()
+      )
+      .attr('x', d => this.scaleX(+d.Released))
+      .attr('y', d => this.scaleY(+d.Stars) - 10)
+      .text(d => d.Framework)
+      .attr('fill', '#000')
+      .attr('text-anchor', 'middle')
+  }
+
+  eventosMouse(): void {
     d3.selectAll('circle')
-      .on('mouseenter', function() {
+    .on('mouseenter', function(event: any) {
         d3.select(this)
         .transition()
         .duration(150)
@@ -105,19 +141,5 @@ export class ScatterComponent implements OnInit {
         .style('opacity', 1)
         .style('cursor', 'default');
       });
-  }
-
-  public textMarked(): void {
-    d3.selectAll('text')
-      .on('mousemove', function() {
-        d3.select(this)
-        .style('fill', '#000')
-        .style('cursor', 'pointer');
-      })
-      .on('mouseout', function() {
-        d3.select(this)
-        .style('fill', '#000')
-        .style('cursor', 'default');
-      })
   }
 }
