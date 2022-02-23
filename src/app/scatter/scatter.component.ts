@@ -32,6 +32,7 @@ export class ScatterComponent implements OnInit {
   scaleX: any;
   scaleY: any;
   points: any;
+  id: string | undefined;
 
   
 
@@ -44,16 +45,21 @@ export class ScatterComponent implements OnInit {
   }
 
   createSvg(): void {
+    this.id = `scatter-${Math.random().toString(36).split('.')[1]}`;
+    
     this.svg = d3.select('#scatter')
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('id', 'svg-scatter');
 
-    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-points');
-    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-text');
+    d3.select('svg#svg-scatter').append('g').attr('id', `group-${this.id}-points`);
+    d3.select('svg#svg-scatter').append('g').attr('id', `group-${this.id}-text`);
     d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-axis-x');
     d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-axis-y');
+    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-grid-x');
+    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-grid-y');
+    
   }
 
   updateChart(): void {
@@ -87,8 +93,37 @@ export class ScatterComponent implements OnInit {
       .attr('transform', `translate(${this.margin.left}, 0)`)
       .call(axisY);
 
+    // *** create grids *** //
+    const gridX: any = d3.axisBottom(this.scaleX)
+      .tickSize(-this.height + this.margin.top + this.margin.bottom)
+      .tickFormat(() => '')
+      .tickSizeOuter(0);
+
+    const gridY: any = d3.axisLeft(this.scaleY)
+      .tickSize(-this.width + this.margin.left + this.margin.right)
+      .tickFormat(() => '')
+      .tickSizeOuter(0);
+
+    d3.select('g#group-scatter-grid-x')
+      .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
+      .call(gridX);
+
+    d3.select('g#group-scatter-grid-y')
+      .attr('transform', `translate(${this.margin.left}, 0)`)
+      .call(gridY);
+
+    d3.select('g#group-scatter-grid-y')
+      .selectAll('line')
+      .attr('stroke', '#ccc')
+      .attr('stroke-dasharray', '2,2');
+
+    d3.select('g#group-scatter-grid-x')
+      .selectAll('line')
+      .attr('stroke', '#ccc')
+      .attr('stroke-dasharray', '2,2');
+
     // *** create points *** //
-    this.points = d3.select('g#group-scatter-points')
+    this.points = d3.select(`g#group-${this.id}-points`)
       .selectAll('circle')
       .data(this.data)
       .join(
@@ -108,7 +143,7 @@ export class ScatterComponent implements OnInit {
       .attr('id', (d, i) => `point-${i}`);
 
     // *** create text *** //
-    d3.select('g#group-scatter-text')
+    d3.select(`g#group-${this.id}-text`)
       .selectAll('text')
       .data(this.data)
       .join(
