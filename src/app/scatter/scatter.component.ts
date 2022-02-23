@@ -45,20 +45,20 @@ export class ScatterComponent implements OnInit {
   }
 
   createSvg(): void {
-    this.id = `scatter-${Math.random().toString(36).split('.')[1]}`;
+    this.id = `scatter-${Math.random().toString(16).split('.')[1]}`;
     
     this.svg = d3.select('#scatter')
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height)
-      .attr('id', 'svg-scatter');
+      .attr('id', `svg-${this.id}`);
 
-    d3.select('svg#svg-scatter').append('g').attr('id', `group-${this.id}-points`);
-    d3.select('svg#svg-scatter').append('g').attr('id', `group-${this.id}-text`);
-    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-axis-x');
-    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-axis-y');
-    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-grid-x');
-    d3.select('svg#svg-scatter').append('g').attr('id', 'group-scatter-grid-y');
+    d3.select(`svg#svg-${this.id}`).append('g').attr('id', `group-${this.id}-points`);
+    d3.select(`svg#svg-${this.id}`).append('g').attr('id', `group-${this.id}-text`);
+    d3.select(`svg#svg-${this.id}`).append('g').attr('id', `group-${this.id}-axis-x`);
+    d3.select(`svg#svg-${this.id}`).append('g').attr('id', `group-${this.id}-axis-y`);
+    d3.select(`svg#svg-${this.id}`).append('g').attr('id', `group-${this.id}-grid-x`);
+    d3.select(`svg#svg-${this.id}`).append('g').attr('id', `group-${this.id}-grid-y`);
     
   }
 
@@ -66,7 +66,7 @@ export class ScatterComponent implements OnInit {
     if (!this.data.length) return;
 
     // *** update svg dimensions *** //
-    d3.select('svg#svg-scatter')
+    d3.select(`svg#svg-${this.id}`)
       .attr('width', this.width)
       .attr('height', this.height);
 
@@ -83,44 +83,15 @@ export class ScatterComponent implements OnInit {
     const axisX: any = d3.axisBottom(this.scaleX)
       .tickFormat((d: any) => d);
       
-    d3.select('g#group-scatter-axis-x')
+    d3.select(`g#group-${this.id}-axis-x`)
       .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
       .call(axisX);
 
     const axisY: any = d3.axisLeft(this.scaleY)
       .tickFormat((d: any) => Number(d).toLocaleString('pt-BR'));
-    d3.select('g#group-scatter-axis-y')
+    d3.select(`g#group-${this.id}-axis-y`)
       .attr('transform', `translate(${this.margin.left}, 0)`)
       .call(axisY);
-
-    // *** create grids *** //
-    const gridX: any = d3.axisBottom(this.scaleX)
-      .tickSize(-this.height + this.margin.top + this.margin.bottom)
-      .tickFormat(() => '')
-      .tickSizeOuter(0);
-
-    const gridY: any = d3.axisLeft(this.scaleY)
-      .tickSize(-this.width + this.margin.left + this.margin.right)
-      .tickFormat(() => '')
-      .tickSizeOuter(0);
-
-    d3.select('g#group-scatter-grid-x')
-      .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
-      .call(gridX);
-
-    d3.select('g#group-scatter-grid-y')
-      .attr('transform', `translate(${this.margin.left}, 0)`)
-      .call(gridY);
-
-    d3.select('g#group-scatter-grid-y')
-      .selectAll('line')
-      .attr('stroke', '#ccc')
-      .attr('stroke-dasharray', '2,2');
-
-    d3.select('g#group-scatter-grid-x')
-      .selectAll('line')
-      .attr('stroke', '#ccc')
-      .attr('stroke-dasharray', '2,2');
 
     // *** create points *** //
     this.points = d3.select(`g#group-${this.id}-points`)
@@ -155,7 +126,36 @@ export class ScatterComponent implements OnInit {
       .attr('y', d => this.scaleY(+d.Stars) - 10)
       .text(d => d.Framework)
       .attr('fill', '#000')
-      .attr('text-anchor', 'middle')
+      .attr('text-anchor', 'middle');
+
+    // *** create grids *** //
+    const gridX: any = d3.axisBottom(this.scaleX)
+      .tickSize(-this.height + this.margin.top + this.margin.bottom)
+      .tickFormat(() => '')
+      .tickSizeOuter(0);
+
+    const gridY: any = d3.axisLeft(this.scaleY)
+      .tickSize(-this.width + this.margin.left + this.margin.right)
+      .tickFormat(() => '')
+      .tickSizeOuter(0);
+
+    d3.select(`g#group-${this.id}-grid-x`)
+      .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
+      .call(gridX);
+
+    d3.select(`g#group-${this.id}-grid-y`)
+      .attr('transform', `translate(${this.margin.left}, 0)`)
+      .call(gridY);
+
+    d3.select(`g#group-${this.id}-grid-y`)
+      .selectAll('line')
+      .attr('stroke', '#ccc')
+      .attr('stroke-dasharray', '2,2');
+
+    d3.select(`g#group-${this.id}-grid-x`)
+      .selectAll('line')
+      .attr('stroke', '#ccc')
+      .attr('stroke-dasharray', '2,2');
   }
 
   eventosMouse(): void {
