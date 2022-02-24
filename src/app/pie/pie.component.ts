@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { GenerateUuidService } from 'src/utils/generate-uuid.service';
 
 @Component({
   selector: 'app-pie',
@@ -7,8 +9,10 @@ import * as d3 from 'd3';
   styleUrls: ['./pie.component.scss']
 })
 export class PieComponent implements OnInit {
+  constructor(@Inject (DOCUMENT) private document: Document,
+    private makeId: GenerateUuidService) { }
 
-  private data = [
+  data = [
     {"Framework": "Vue", "Stars": "166443", "Released": "2014"},
     {"Framework": "React", "Stars": "150793", "Released": "2013"},
     {"Framework": "Angular", "Stars": "62342", "Released": "2016"},
@@ -17,20 +21,54 @@ export class PieComponent implements OnInit {
     {"Framework": "Redux", "Stars": "28481", "Released": "2019"},
   ];
 
-  private svg: any;
-  private margin = { top: 30, right: 30, bottom: 30, left: 40 };
-  private width = 750;
-  private height = 600;
-  private arcGen: any;
-  private colors = d3.schemeReds[this.data.length]; // serve para definir a cor do grafico
+  svg: any;
+  margin = { top: 30, right: 30, bottom: 30, left: 40 };
+  width = 750;
+  height = 450;
+  arcGen: any;
+  colors = d3.schemeGreens[this.data.length]; // serve para definir a cor do grafico
+  id?: string;
 
-  private createPie(): void {
+  ngOnInit(): void {
+    this.id = this.makeId.generateUuid();
+    this.createSvg();
+    this.update();
+    this.eventsAnimations();
+  }
+
+  createSvg(): void {
     this.svg = d3.select('#pie')
       .append('svg')
-      .style('background-color', '#F6F8FA')
+      // .style('background-color', '#F6F8FA')
+      .attr('width', this.width)
+      .attr('height', this.height)
+      .attr('id', `svg-${this.id}`);
+
+    d3.select(`svg#svg-${this.id}`).append('g').attr('id', `g-${this.id}-path`)
+      .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`);
+    d3.select(`svg#svg-${this.id}`).append('g').attr('id', `g-${this.id}-label`)
+      .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`);
+  };
+
+  update(): void {
+    if (!this.data.length) {
+      d3.select(`svg#svg-${this.id}`)
+        .append('text')
+        .attr('x', this.width / 2)
+        .attr('y', this.height / 2)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '20px')
+        .style('font-weight', 'bold')
+        .text('Nenhum dado encontrado...');
+      return;
+    };
+
+    // *** update svg dimensions *** //
+    d3.select(`svg#svg-${this.id}`)
       .attr('width', this.width)
       .attr('height', this.height);
 
+    // *** create arc generator *** //
     this.arcGen = d3.arc()
       .innerRadius(100)
       .outerRadius(200)
@@ -38,81 +76,64 @@ export class PieComponent implements OnInit {
       .padRadius(50)
       .cornerRadius(5);
 
-    // this.svg
-    //   .append('path')
-    //   .attr('d', this.arcGen)
-    //   .attr('fill', '#f0f')
-    //   .attr('stroke', '#121826')
-    //   .style('stroke-width', 1)
-    //   .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`);
+    const pie = d3.pie()(this.data.map(d => +d.Stars));
 
-    const pie = d3.pie()(this.data.map((v) => parseInt(v.Stars))); // Declara a função e já passa os dados
-    // console.log(pie);
-
-    this.svg
+    d3.select(`#g-${this.id}-path`)
       .selectAll('path')
       .data(pie)
       .join(
-        (enter: any) => enter.append('path').attr('d', this.arcGen),
-        (update: any) => update.attr('d', this.arcGen),
-        (exit: any) => exit.remove()
+        enter => enter.append('path'),
+        update => update,
+        exit => exit.remove()
       )
-      .attr('fill', (d: any, i: any) => this.colors[i])
-      .attr('stroke', '#121826')
-      .style('stroke-width', 0.75)
-      // .attr('stroke-dasharray', (d: any, i: any) => i % 3 === 0 ? '5,5' : '0,0')
-      .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`);
+      .attr('d', this.arcGen)
+      .attr('fill', (d, i) => this.colors[i])
+      .attr('stroke', '#000')
+      .attr('stroke-width', 0.75)
+      .attr('id', (d: any, i: any) => `path-${this.id}-${i}`);
 
-    this.svg
+    d3.select(`#g-${this.id}-label`)
       .selectAll('text')
       .data(pie)
       .join(
-        (enter: any) => enter.append('text'),
-        (update: any) => update,
-        (exit: any) => exit.remove()
+        enter => enter.append('text'),
+        update => update,
+        exit => exit.remove()
       )
-      .text((d: any, i: any) => this.data[i].Framework)
-      .attr('x', (d: any) => this.arcGen.centroid(d)[0])
-      .attr('y', (d: any) => this.arcGen.centroid(d)[1])
-      .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`)
+      .text((d, i) => this.data[i].Framework)
+      .attr('x', (d, i) => this.arcGen.centroid(d)[0])
+      .attr('y', (d, i) => this.arcGen.centroid(d)[1])
       .attr('text-anchor', 'middle')
-      .style('font-size', 14);
+      .attr('fill', '#000')
+      .attr('font-size', '12px')
+      .attr('id', (d: any, i: any) => `label-${this.id}-${i}`);
+  };
 
-      const animateSlice = (path: any) => {
-        this.arcGen
+  eventsAnimations(): void {
+    const animateSlice = (id: any) => {
+      this.arcGen
         .innerRadius(120)
         .outerRadius(220);
 
-        path.transition()
+        id.transition()
           .duration(350)
           .attr('d', (d: any) => this.arcGen(d));
-      };
+    };
 
-      const animateSliceBack = (path: any) => {
-        this.arcGen
+    const animateSliceBack = (id: any) => {
+      this.arcGen
         .innerRadius(100)
         .outerRadius(200);
 
-        path.transition()
+        id.transition()
           .duration(350)
           .attr('d', (d: any) => this.arcGen(d));
-      };
+    };
 
-      d3.selectAll('path')
-        .on('mouseover', function () {
-          const el = d3.select(this);
-          animateSlice(el);
-        })
-        .on('mouseout', function () {
-          const el = d3.select(this);
-          animateSliceBack(el);
-        });
+    d3.select(`#g-${this.id}-path`)
+      .selectAll('path')
+      .on('mouseover', (event: any) => animateSlice(d3.select(`#${event.target.id}`)))
+      .on('mouseout', (event: any) => animateSliceBack(d3.select(`#${event.target.id}`)));
+      
   };
-
-  
-  constructor() { }
-
-  ngOnInit(): void {
-    this.createPie();
-  }
 }

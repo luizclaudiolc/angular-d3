@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { GenerateUuidService } from 'src/utils/generate-uuid.service';
 
 @Component({
   selector: 'app-stacks-component',
@@ -32,13 +33,15 @@ export class StacksComponentComponent implements OnInit {
   minValue: any;
   maxValue: any;
   colors = d3.schemeOranges[9];
+  id?: string;
 
-  constructor() { }
+  constructor(private makeId: GenerateUuidService) { }
 
   ngOnInit(): void {
     this.drawSvg();
     this.update();
     this.appendText();
+    this.id = this.makeId.generateUuid();
   }
 
   drawSvg(): void {

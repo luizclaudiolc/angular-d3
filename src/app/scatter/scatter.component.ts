@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { GenerateUuidService } from 'src/utils/generate-uuid.service';
 
 @Component({
   selector: 'app-scatter',
@@ -28,15 +29,15 @@ export class ScatterComponent implements OnInit {
   margin = {top: 40, right: 40, bottom: 30, left: 50};
   width = 750;
   height = 400;
-  colors = d3.scaleOrdinal(d3.schemeTableau10);
+  colors = d3.scaleOrdinal(d3.schemeSpectral[9]);
   scaleX: any;
   scaleY: any;
   points: any;
-  id: string | undefined;
+  id?: string;
 
   
 
-  constructor() { }
+  constructor(private makeId: GenerateUuidService) { }
 
   ngOnInit(): void {
     this.createSvg();
@@ -45,7 +46,7 @@ export class ScatterComponent implements OnInit {
   }
 
   createSvg(): void {
-    this.id = `scatter-${Math.random().toString(16).split('.')[1]}`;
+    this.id = `scatter-${this.makeId.generateUuid()}`;
     
     this.svg = d3.select('#scatter')
       .append('svg')
@@ -82,7 +83,7 @@ export class ScatterComponent implements OnInit {
     // *** create axis *** //
     const axisX: any = d3.axisBottom(this.scaleX)
       .tickFormat((d: any) => d);
-      
+
     d3.select(`g#group-${this.id}-axis-x`)
       .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
       .call(axisX);
@@ -111,7 +112,7 @@ export class ScatterComponent implements OnInit {
       .attr('stroke', d => this.colors(d.Framework))
       .attr('stroke-width', 1.5)
       .attr('fill', '#fff')
-      .attr('id', (d, i) => `point-${i}`);
+      .attr('id', (d, i) => `point-${this.id}-${i}`);
 
     // *** create text *** //
     d3.select(`g#group-${this.id}-text`)
