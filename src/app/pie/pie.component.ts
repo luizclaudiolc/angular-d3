@@ -51,17 +51,7 @@ export class PieComponent implements OnInit {
   };
 
   update(): void {
-    if (!this.data.length) {
-      d3.select(`svg#svg-${this.id}`)
-        .append('text')
-        .attr('x', this.width / 2)
-        .attr('y', this.height / 2)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '20px')
-        .style('font-weight', 'bold')
-        .text('Nenhum dado encontrado...');
-      return;
-    };
+    if (!this.data.length) return;
 
     // *** update svg dimensions *** //
     d3.select(`svg#svg-${this.id}`)
@@ -78,6 +68,7 @@ export class PieComponent implements OnInit {
 
     const pie = d3.pie()(this.data.map(d => +d.Stars));
 
+    // *** create arcs *** //
     d3.select(`#g-${this.id}-path`)
       .selectAll('path')
       .data(pie)
@@ -92,6 +83,7 @@ export class PieComponent implements OnInit {
       .attr('stroke-width', 0.75)
       .attr('id', (d: any, i: any) => `path-${this.id}-${i}`);
 
+    // *** create labels *** //
     d3.select(`#g-${this.id}-label`)
       .selectAll('text')
       .data(pie)
@@ -115,7 +107,9 @@ export class PieComponent implements OnInit {
         .innerRadius(120)
         .outerRadius(220);
 
-        id.transition()
+        id
+          .attr('opacity', 0.5)
+          .transition()
           .duration(350)
           .attr('d', (d: any) => this.arcGen(d));
     };
@@ -125,7 +119,9 @@ export class PieComponent implements OnInit {
         .innerRadius(100)
         .outerRadius(200);
 
-        id.transition()
+        id
+          .attr('opacity', 1)
+          .transition()
           .duration(350)
           .attr('d', (d: any) => this.arcGen(d));
     };
