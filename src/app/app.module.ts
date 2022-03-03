@@ -35,6 +35,7 @@ import { LinksAndLayoutsComponent } from './links-and-layouts/links-and-layouts.
 import { SymbolGeneratorComponent } from './symbol-generator/symbol-generator.component';
 import { StacksComponentComponent } from './stacks-component/stacks-component.component';
 import { StreamChartComponent } from './stream-chart/stream-chart.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { StreamChartComponent } from './stream-chart/stream-chart.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    LayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
