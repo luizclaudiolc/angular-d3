@@ -331,18 +331,35 @@ export class CovidCasesComponent implements OnInit {
   };
 
   createTooltip(): void {
-    d3.select(`#covid-cases`)
+    const tooltip = d3.select(`#covid-cases`)
       .append('div')
       .attr('id', `tooltip-${this.id}`)
-      .attr('style', 'position: absolute; opacity: 0;')
-      .attr('background-color', '#f0f')
-      .attr('border', '1px solid #000')
-      .attr('border-radius', '5px')
+      .style('position', 'absolute')
+      .style('visibility', 'hidden')
+      .style('background-color', '#FAFAFA')
+      .style('border', '1px solid #000')
+      .style('border-radius', '5px')
+      .style('padding', '10px')
+      .style('color', '#000')
 
     d3.select(`g#g-${this.id}-bars`)
       .selectAll('rect')
       .on('mouseover',(event: any, d: any) => {
-        console.log({event, d});
+        tooltip
+          .style('visibility', 'visible')
+          .attr('opaicty', 0.2)
+          .style('top', `${event.pageY - 20}px`)
+          .style('left', `${event.pageX + 20}px`)
+          .text(`${d.COUNTRY} - ${d.PERSONS_FULLY_VACCINATED}`);
       })
+      .on('mouseout', (event: any) => {
+        tooltip
+          .style('visibility', 'hidden');
+      })
+      .on('mousemove', (event: any) => {
+        tooltip
+          .style('top', `${event.pageY - 20}px`)
+          .style('left', `${event.pageX + 20}px`);
+      });
   };
 }
