@@ -203,14 +203,8 @@ export class CovidCasesComponent implements OnInit {
       console.log(americas);
     
       this.updateChart(americas);
-      this.mouseEvets();
-      this.createTooltip();
+      this.interativeEvents();
   };
-
- /*  ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
-    this.drawSvg();
-  } */
 
   drawSvg(): void {
     d3.select(`#covid-cases`)
@@ -290,18 +284,18 @@ export class CovidCasesComponent implements OnInit {
       .attr('id', (d: any, i: any) => `bar-${this.id}-${i}`);
   };
 
-  mouseEvets(): void {
-    const mouseMove = (el: any) => {
-      el
-      .attr('opacity', 0.5)
-      .attr('cursor', 'pointer');
-    };
-
-    const mouseLeave = (el: any) => {
-      el
-      .attr('opacity', 1)
-      .attr('cursor', 'default');
-    };
+  interativeEvents(): void {
+    const tooltip = d3.select(`#covid-cases`)
+      .append('div')
+      .attr('id', `tooltip-${this.id}`)
+      .attr('class', 'tooltip')
+      .style('position', 'absolute')
+      .style('visibility', 'hidden')
+      .style('background-color', '#FAFAFA')
+      .style('border', '1px solid #000')
+      .style('border-radius', '5px')
+      .style('padding', '10px')
+      .style('color', '#000');
 
     const mouseClick = (el: any) => {
       el
@@ -316,43 +310,23 @@ export class CovidCasesComponent implements OnInit {
 
     d3.select(`g#g-${this.id}-bars`)
       .selectAll('rect')
-      .on('mousemove', (event: any) => {
-        const el = d3.select(event.target);
-        mouseMove(el);
-      })
-      .on('mouseleave', (event: any) => {
-        const el = d3.select(event.target);
-        mouseLeave(el);
-      })
-      .on('click', (event: any) => {
-        const el = d3.select(event.target);
-        mouseClick(el);
-      });
-  };
-
-  createTooltip(): void {
-    const tooltip = d3.select(`#covid-cases`)
-      .append('div')
-      .attr('id', `tooltip-${this.id}`)
-      .style('position', 'absolute')
-      .style('visibility', 'hidden')
-      .style('background-color', '#FAFAFA')
-      .style('border', '1px solid #000')
-      .style('border-radius', '5px')
-      .style('padding', '10px')
-      .style('color', '#000')
-
-    d3.select(`g#g-${this.id}-bars`)
-      .selectAll('rect')
       .on('mouseover',(event: any, d: any) => {
+        console.log(event.target.id)
+        d3.select(event.currentTarget)
+          .attr('cursor', 'pointer')
+          .attr('opacity', 0.8)
+
         tooltip
           .style('visibility', 'visible')
-          .attr('opaicty', 0.2)
           .style('top', `${event.pageY - 20}px`)
           .style('left', `${event.pageX + 20}px`)
           .text(`${d.COUNTRY} - ${d.PERSONS_FULLY_VACCINATED}`);
       })
       .on('mouseout', (event: any) => {
+        d3.select(event.currentTarget)
+          .attr('cursor', 'default')
+          .attr('opacity', 1);
+
         tooltip
           .style('visibility', 'hidden');
       })
@@ -360,6 +334,10 @@ export class CovidCasesComponent implements OnInit {
         tooltip
           .style('top', `${event.pageY - 20}px`)
           .style('left', `${event.pageX + 20}px`);
-      });
+      })
+      .on('click', (event: any) => {
+        const el = d3.select(event.target);
+        mouseClick(el);
+      })
   };
 }
