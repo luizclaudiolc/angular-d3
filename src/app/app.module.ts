@@ -36,6 +36,16 @@ import { SymbolGeneratorComponent } from './symbol-generator/symbol-generator.co
 import { StacksComponentComponent } from './stacks-component/stacks-component.component';
 import { StreamChartComponent } from './stream-chart/stream-chart.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { NavBarComponent } from '../shared/nav-bar/nav-bar.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import {MatIconModule} from '@angular/material/icon';
+import { HeaderComponent } from '../shared/header/header.component';
 
 @NgModule({
   declarations: [
@@ -72,11 +82,21 @@ import { LayoutModule } from '@angular/cdk/layout';
     SymbolGeneratorComponent,
     StacksComponentComponent,
     StreamChartComponent,
+    NavBarComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     LayoutModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    FlexLayoutModule,
+    MatMenuModule,
+    MatDividerModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

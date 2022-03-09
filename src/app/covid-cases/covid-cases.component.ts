@@ -320,7 +320,7 @@ export class CovidCasesComponent implements OnInit {
           .style('visibility', 'visible')
           .style('top', `${event.pageY - 20}px`)
           .style('left', `${event.pageX + 20}px`)
-          .text(`${d.COUNTRY} - ${d.PERSONS_FULLY_VACCINATED}`);
+          .text(`${d.COUNTRY} - ${Number(d.PERSONS_FULLY_VACCINATED).toLocaleString('pt-BR')}`);
       })
       .on('mouseout', (event: any) => {
         d3.select(event.currentTarget)

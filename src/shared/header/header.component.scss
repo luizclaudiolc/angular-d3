@@ -1,0 +1,30 @@
+.title {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 10px;
+}
+
+// .title::before {
+//     content: "";
+//     display: block;
+//     width: 175px;
+//     height: 2px;
+//     background-color: #000;
+//     margin: 0 auto;
+//     margin-bottom: 0.5em;
+// }
+
+// .title::after {
+//     content: "";
+//     display: block;
+//     width: 175px;
+//     height: 2px;
+//     background-color: #000;
+//     margin: 0 auto;
+//     margin-top: 0.5em;
+// }
+
+.sub-title {
+    text-align: center;
+    font-size: 1.2em;
+}
