@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ArcPieGeneratorComponent } from './pages/arc-pie-generator/arc-pie-generator.component';
 import { CovidCasesComponent } from './pages/covid-cases/covid-cases.component';
 import { LineGeneratorComponent } from './pages/line-generator/line-generator.component';
+import { ScaleOrdinalComponent } from './pages/scale-ordinal/scale-ordinal.component';
 
 const routes: Routes = [
   {
@@ -11,15 +12,19 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'bar',
+    path: 'barras-verticais',
     component: CovidCasesComponent,
   },
   {
-    path: 'pie',
+    path: 'barras-horizontais',
+    component: ScaleOrdinalComponent,
+  },
+  {
+    path: 'grafico-pizza',
     component: ArcPieGeneratorComponent,
   },
   {
-    path: 'line',
+    path: 'grafico-linha',
     component: LineGeneratorComponent,
   },
 ];

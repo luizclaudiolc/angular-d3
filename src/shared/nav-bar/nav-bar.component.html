@@ -1,19 +1,57 @@
 <mat-toolbar fxLayout="row" color="primary" class="mat-elevation-z6">
-    <span fxFlex>
-        <a routerLink="/">
-            <img
-            width="30px"
-            height="30px"
-            src="https://camo.githubusercontent.com/586ccf0aad9684edc821658cee04146cf36d1f1d5ec904bbefd72728909ccb2e/68747470733a2f2f64336a732e6f72672f6c6f676f2e737667"
-            alt="logo" />
-        </a>
-    </span>
-    <button mat-icon-button *ngFor="let item of itensMenu">
-        <a mat-menu-item [routerLink]="item.link">
-            <mat-icon>
-                {{ item.icon }}
-            </mat-icon>
-        </a>
+  <button mat-icon-button [matMenuTriggerFor]="graficos" fxShow.xs>
+    <mat-icon> menu </mat-icon>
+  </button>
+  <mat-menu #graficos="matMenu">
+    <button mat-menu-item [matMenuTriggerFor]="all">Todos</button>
+  </mat-menu>
+
+  <mat-menu #all="matMenu">
+    <button mat-menu-item [matMenuTriggerFor]="bars">
+      <mat-icon>bar_chart</mat-icon>
+      <span>Barras</span>
     </button>
-    
+    <button mat-menu-item [matMenuTriggerFor]="pie">
+      <mat-icon>pie_chart</mat-icon>
+      <span>Pizza</span>
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="line">
+      <mat-icon>show_chart</mat-icon>
+      <span>Linha</span>
+    </button>
+  </mat-menu>
+
+  <mat-menu #pie="matMenu">
+    <ng-container *ngFor="let item of itemsMenuPie">
+      <a mat-menu-item [routerLink]="item.link">
+        {{ item.label }}
+      </a>
+    </ng-container>
+  </mat-menu>
+
+  <mat-menu #bars="matMenu">
+    <ng-container *ngFor="let item of itemsMenuBars">
+      <a mat-menu-item [routerLink]="item.link">
+        {{ item.label }}
+      </a>
+    </ng-container>
+  </mat-menu>
+
+  <mat-menu #line="matMenu">
+    <ng-container *ngFor="let item of itemsMenuLine">
+      <a mat-menu-item [routerLink]="item.link">
+        {{ item.label }}
+      </a>
+    </ng-container>
+  </mat-menu>
+  <span fxFlex fxLayoutAlign="center">
+    <a routerLink="/">
+      <img
+        width="30px"
+        height="30px"
+        src="https://camo.githubusercontent.com/586ccf0aad9684edc821658cee04146cf36d1f1d5ec904bbefd72728909ccb2e/68747470733a2f2f64336a732e6f72672f6c6f676f2e737667"
+        alt="logo"
+      />
+    </a>
+  </span>
 </mat-toolbar>

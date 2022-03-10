@@ -9,23 +9,33 @@ import { ItensMenu } from '../interfaces/itens-menu';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent implements OnInit {
+  itemsMenuBars: ItensMenu[] = [
+    {
+      label: 'Barra Vertical',
+      icon: 'bar_chart',
+      link: '/barras-verticais'
+    },
+    {
+      label: 'Barra Horizontal',
+      icon: 'storage',
+      link: '/barras-horizontais'
+    },
+  ];
 
-  itensMenu: ItensMenu[] = [
+  itemsMenuPie: ItensMenu[] = [
     {
-      label: 'Home',
-      icon: 'home',
-      link: '/bar',
+      label: 'Grafico de Pizza',
+      icon: 'pie_chart',
+      link: '/grafico-pizza'
     },
+  ];
+
+  itemsMenuLine: ItensMenu[] = [
     {
-      label: 'Entrar',
-      icon: 'login',
-      link: '/pie',
+      label: 'Grafico de Linha',
+      icon: 'show_chart',
+      link: '/grafico-linha'
     },
-    {
-      label: 'Sair',
-      icon: 'logout',
-      link: '/line',
-    }
   ];
 
   constructor() { }
