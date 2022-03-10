@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-import { IntrojsService } from '../introjs.service';
+import { IntrojsService } from 'src/app/introjs.service';
 
 @Component({
   selector: 'app-line-generator',

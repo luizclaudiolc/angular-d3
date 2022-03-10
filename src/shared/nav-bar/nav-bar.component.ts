@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import * as d3 from 'd3';
+import { fromEvent, tap } from 'rxjs';
 import { ItensMenu } from '../interfaces/itens-menu';
 
 @Component({
@@ -10,18 +12,26 @@ export class NavBarComponent implements OnInit {
 
   itensMenu: ItensMenu[] = [
     {
-      label: 'Entrar',
-      icon: 'login'
+      label: 'Home',
+      icon: 'home',
+      link: '/bar',
     },
     {
-      label: 'Bar',
-      icon: '3d_rotation',
+      label: 'Entrar',
+      icon: 'login',
+      link: '/pie',
     },
+    {
+      label: 'Sair',
+      icon: 'logout',
+      link: '/line',
+    }
   ];
 
   constructor() { }
 
   ngOnInit(): void {
+  
   }
 
 }

@@ -1,9 +1,19 @@
 <mat-toolbar fxLayout="row" color="primary" class="mat-elevation-z6">
     <span fxFlex>
-        <img
-        width="30px"
-        height="30px"
-        src="https://camo.githubusercontent.com/586ccf0aad9684edc821658cee04146cf36d1f1d5ec904bbefd72728909ccb2e/68747470733a2f2f64336a732e6f72672f6c6f676f2e737667"
-        alt="logo" />
+        <a routerLink="/">
+            <img
+            width="30px"
+            height="30px"
+            src="https://camo.githubusercontent.com/586ccf0aad9684edc821658cee04146cf36d1f1d5ec904bbefd72728909ccb2e/68747470733a2f2f64336a732e6f72672f6c6f676f2e737667"
+            alt="logo" />
+        </a>
     </span>
+    <button mat-icon-button *ngFor="let item of itensMenu">
+        <a mat-menu-item [routerLink]="item.link">
+            <mat-icon>
+                {{ item.icon }}
+            </mat-icon>
+        </a>
+    </button>
+    
 </mat-toolbar>
