@@ -3,7 +3,7 @@
     <mat-icon> menu </mat-icon>
   </button>
   <mat-menu #graficos="matMenu">
-    <button mat-menu-item [matMenuTriggerFor]="all">Todos</button>
+    <button mat-menu-item [matMenuTriggerFor]="all">Graficos</button>
   </mat-menu>
 
   <mat-menu #all="matMenu">
@@ -18,6 +18,10 @@
     <button mat-menu-item [matMenuTriggerFor]="line">
       <mat-icon>show_chart</mat-icon>
       <span>Linha</span>
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="plot">
+      <mat-icon>scatter_plot</mat-icon>
+      <span>Scatter</span>
     </button>
   </mat-menu>
 
@@ -44,6 +48,15 @@
       </a>
     </ng-container>
   </mat-menu>
+
+  <mat-menu #plot="matMenu">
+    <ng-container *ngFor="let item of itemsMenuPlot">
+      <a mat-menu-item [routerLink]="item.link">
+        {{ item.label }}
+      </a>
+    </ng-container>
+  </mat-menu>
+  
   <span fxFlex fxLayoutAlign="center">
     <a routerLink="/">
       <img

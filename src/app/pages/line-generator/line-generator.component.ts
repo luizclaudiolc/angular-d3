@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import * as d3 from 'd3';
+import { merge } from 'd3';
+import { filter, mapTo, Observable } from 'rxjs';
 import { IntrojsService } from 'src/app/introjs.service';
 
 @Component({
@@ -24,7 +27,11 @@ export class LineGeneratorComponent implements OnInit {
     [600, 50],
   ];
 
-  constructor(private introService: IntrojsService) { }
+  isLoading$!: Observable<boolean>;
+  private _showLoaderEvents$!: Observable<boolean>;
+  private _hideLoaderEvents$!: Observable<boolean>;
+
+  constructor(private introService: IntrojsService, private router: Router) { }
 
   ngOnInit(): void {
     this.draw();

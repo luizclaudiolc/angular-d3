@@ -59,6 +59,9 @@ export class CovidCasesComponent implements OnInit {
         )
         .subscribe();
 
+      const dom = document.getElementById('tooltip')?.getBoundingClientRect();
+      console.log(dom);
+
       // console.log(data);
       // this.data = data[0];
       // console.log(this.data);
@@ -285,18 +288,6 @@ export class CovidCasesComponent implements OnInit {
   };
 
   interativeEvents(): void {
-    const tooltip = d3.select(`#covid-cases`)
-      .append('div')
-      .attr('id', `tooltip-${this.id}`)
-      .attr('class', 'tooltip')
-      .style('position', 'absolute')
-      .style('visibility', 'hidden')
-      .style('background-color', '#FAFAFA')
-      .style('border', '1px solid #000')
-      .style('border-radius', '5px')
-      .style('padding', '10px')
-      .style('color', '#000');
-
     const mouseClick = (el: any) => {
       el
         .attr('stroke-width', 10)
@@ -310,34 +301,117 @@ export class CovidCasesComponent implements OnInit {
 
     d3.select(`g#g-${this.id}-bars`)
       .selectAll('rect')
-      .on('mouseover',(event: any, d: any) => {
-        console.log(event.target.id)
-        d3.select(event.currentTarget)
-          .attr('cursor', 'pointer')
-          .attr('opacity', 0.8)
+        .on('click', (event) =>
+          mouseClick(d3.select(event.currentTarget))
+        )
+        .on('mousemove', (event, d: any) => {
+          const { offsetX, offsetY } = event;
+          const isLeft = offsetX < this.width / 2;
+          const isTop = offsetY < this.height / 2;
+          const tipWidth = document.getElementById('tooltip')!.getBoundingClientRect().width;
+          const tipHeight = document.getElementById('tooltip')!.getBoundingClientRect().height;
 
-        tooltip
-          .style('visibility', 'visible')
+          d3.select(event.currentTarget)
+            .style('cursor', 'pointer')
+            .style('opacity', 0.86);
+
+          d3.select('#tooltip')
+            .style('position', 'absolute')
+            .style('background-color', '#FAFAFA')
+            .style('border', '1px solid #000')
+            .style('border-radius', '5px')
+            .style('padding', '10px')
+            .transition()
+            .duration(200)
+            .style('opacity', 0.91)
+            .style('top', `${isTop ? event.pageY + 20 : event.pageY - tipHeight - 10}px`)
+            .style('left', `${isLeft ? event.pageX + 20 : event.pageX - tipWidth - 20}px`)
+          
+          d3.select('#tooltip-text')
+            .html(`
+              <div>
+                <p>País: ${d.COUNTRY} (${d.ISO3})</p>
+                <p>População totalmente vacinada:
+                  <b>${Number(d.PERSONS_FULLY_VACCINATED).toLocaleString('pt-BR')}
+                  </b>
+                </p>
+              </div>
+                `);
+              })
+        .on('mouseleave', (event) => {
+          d3.select('#tooltip')
+            .transition()
+            .duration(200)
+            .style('opacity', 0)
+            .style('pointer-events', 'none');
+
+          d3.select(event.currentTarget)
+            .style('cursor', 'default')
+            .style('opacity', 1);
+      });
+        
+
+   /*  d3.select(`g#g-${this.id}-bars`)
+      .selectAll('rect')
+      .on('mouseover',(event: any, d: any) => {
+        const {offsetX: x, offsetY: y } = event;
+        const isLeft = x < this.width / 2;
+        const isTop = y < this.height / 2;
+        console.log(isLeft, isTop);
+        const tipWidth = document.getElementById(`tooltip`)!.getBoundingClientRect().width;
+        const tipHeight = document.getElementById(`tooltip`)!.getBoundingClientRect().height;
+        console.log(tipWidth, tipHeight); */
+        
+    /* const Tipwidth = domElement?.getBoundingClientRect().width;
+    const Tipheight = domElement?.getBoundingClientRect().height; */
+   /*  console.log({
+      Tipwidth,
+      Tipheight,
+    }); */
+        
+        
+        /* d3.select(`#tooltip-${this.id}`)
+          .style('border-color', this.colors(d.ISO3)) */
+        
+        /* d3.select(event.currentTarget)
+          .attr('cursor', 'pointer')
+          .style('opacity', 0.8);
+
+        d3.select('#tooltip')
+          .style('position', 'absolute')
+          .style('background-color', '#FAFAFA')
+          .style('opacity', 0.86)
           .style('top', `${event.pageY - 20}px`)
-          .style('left', `${event.pageX + 20}px`)
+          .style('left', isLeft ? `${x + tipWidth * 0.25}` : 'unset')
+          .style('right', isLeft ? 'unset' : `${this.width - x - tipWidth * 0.25}`)
           .text(`${d.COUNTRY} - ${Number(d.PERSONS_FULLY_VACCINATED).toLocaleString('pt-BR')}`);
       })
       .on('mouseout', (event: any) => {
         d3.select(event.currentTarget)
           .attr('cursor', 'default')
-          .attr('opacity', 1);
+          .style('opacity', 1);
 
-        tooltip
-          .style('visibility', 'hidden');
+        d3.select('#tooltip')
+          .style('opacity', 0);
       })
       .on('mousemove', (event: any) => {
-        tooltip
+        const {offsetX: x, offsetY: y } = event;
+        const isLeft = x < this.width / 2;
+        const isTop = y < this.height / 2;
+        console.log(isLeft, isTop);
+        const tipWidth = document.getElementById(`tooltip`)!.getBoundingClientRect().width;
+        const tipHeight = document.getElementById(`tooltip`)!.getBoundingClientRect().height;
+        console.log(tipWidth, tipHeight); */
+
+
+        /* d3.select('#tooltip')
           .style('top', `${event.pageY - 20}px`)
-          .style('left', `${event.pageX + 20}px`);
+          .style('left', isLeft ? `${x + tipWidth * 0.25}` : 'unset')
+          .style('right', isLeft ? 'unset' : `${this.width - x - tipWidth * 0.25}`);
       })
       .on('click', (event: any) => {
         const el = d3.select(event.target);
         mouseClick(el);
-      })
+      }) */
   };
 }

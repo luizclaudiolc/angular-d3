@@ -38,6 +38,14 @@ export class NavBarComponent implements OnInit {
     },
   ];
 
+  itemsMenuPlot: ItensMenu[] = [
+    {
+      label: 'Grafico de Scatter',
+      icon: 'show_chart',
+      link: '/grafico-scatter'
+    },
+  ];
+
   constructor() { }
 
   ngOnInit(): void {

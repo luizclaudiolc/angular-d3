@@ -12,7 +12,7 @@ export class ArcPieGeneratorComponent implements OnInit {
   margin = { top: 20, right: 20, bottom: 30, left: 40 };
   width = 750;
   height = 400;
-  dataset = [90, 10, 70, 30, 50, 4, 6, 8, 10, 120];
+  dataset = [90, 10, 70, 30, 50, 4, 6, 8, 10, 120, 55];
   colors = d3.schemeSpectral[this.dataset.length]; // serve fazer uma escaça de cor no grafico
   arcGen: any;
   pie: any;
@@ -26,7 +26,7 @@ export class ArcPieGeneratorComponent implements OnInit {
     this.updatePie();
     this.initialAnimation();
     this.mouseEvents();
-    this.textWithTotal();
+    this.textStaticWithTotal();
   }
 
   drawSvg(): void {
@@ -42,6 +42,7 @@ export class ArcPieGeneratorComponent implements OnInit {
       .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`);
     d3.select(`svg#pie-arc-${this.id}`).append('g').attr('id', `pie-arc-${this.id}-text`);
     d3.select(`svg#pie-arc-${this.id}`).append('g').attr('id', `pie-arc-text-${this.id}-dinamic`);
+    d3.select(`svg#pie-arc-${this.id}`).append('g').attr('id', `pie-arc-text-${this.id}-static`);
   };
 
   updatePie(): void {
@@ -152,7 +153,7 @@ export class ArcPieGeneratorComponent implements OnInit {
       .attr('x', this.width / 2)
       .attr('y', this.height / 2)
       .attr('font-size', '3.5em')
-      .attr('fill', '#f00f0f')
+      .attr('fill', (d: any, i: any) => percentage[i].percentage <= 10 ? '#f00f0f' : 'royalblue')
       .attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'middle')
       .text((d: any, i: number) => `${percentage.map((d: any) => Math.round(d.percentage))}%`);
@@ -162,8 +163,8 @@ export class ArcPieGeneratorComponent implements OnInit {
       .attr('x', this.margin.left)
       .attr('y', this.margin.top)
       .attr('font-size', '1.5em')
-      .attr('fill', '#f00f0f')
-      .text((d: any, i: number) => `Valor em R$: ${el.data().map((d: any) => d.value)}`);
+      .attr('fill', (d: any, i: number) => percentage[i].value <= 20 ? '#f00f0f' : 'royalblue')
+      .text((d: any, i: number) => `Valor: ${el.data().map((d: any) => d.value)}`);
   };
 
   removeText(el: any): void {
@@ -173,19 +174,19 @@ export class ArcPieGeneratorComponent implements OnInit {
   };
 
   transformeValueInPercentage(data: Array<any>): any {
-    return data.map((d: any) => {
-      return { value: d, percentage: (d * 100) / this.dataset.reduce((a, b) => a + b) };
-    });
+    return data.map((d: any) => 
+    ({ value: d, percentage: (d * 100) / this.dataset.reduce((a, b) => a + b) }));
   }
 
-  textWithTotal(): void {
-    d3.select(`g#pie-arc-text-${this.id}-dinamic`)
+  textStaticWithTotal(): void {
+    d3.select(`g#pie-arc-text-${this.id}-static`)
       .append('text')
-      .attr('x', this.width / 2 + 150)
-      .attr('y', this.margin.top + 30)
-      .attr('font-size', '3.5em')
-      .attr('fill', '#f00f0f')
-      // .text('aqui')
-  };
+      .attr('x', this.width - this.margin.right)
+      .attr('y', this.margin.top)
+      .attr('font-size', '1.5em')
+      .attr('text-anchor', 'end')
+      .attr('fill', 'royalblue')
+      .text(`Valor total: ${this.dataset.reduce((a, b) => a + b)}`);
+  }
 }
 

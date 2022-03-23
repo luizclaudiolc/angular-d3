@@ -4,6 +4,7 @@ import { ArcPieGeneratorComponent } from './pages/arc-pie-generator/arc-pie-gene
 import { CovidCasesComponent } from './pages/covid-cases/covid-cases.component';
 import { LineGeneratorComponent } from './pages/line-generator/line-generator.component';
 import { ScaleOrdinalComponent } from './pages/scale-ordinal/scale-ordinal.component';
+import { ScatterComponent } from './pages/scatter/scatter.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'grafico-linha',
     component: LineGeneratorComponent,
+  },
+  {
+    path: 'grafico-scatter',
+    component: ScatterComponent,
   },
 ];
 
