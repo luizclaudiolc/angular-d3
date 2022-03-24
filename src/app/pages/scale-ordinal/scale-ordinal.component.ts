@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { timer } from 'rxjs';
+import { GenerateUuidService } from 'src/utils/generate-uuid.service';
 
 @Component({
   selector: 'app-scale-ordinal',
@@ -30,8 +31,9 @@ export class ScaleOrdinalComponent implements OnInit {
   scaleY: any;
   rects: any;
   colors = d3.scaleOrdinal(d3.schemeCategory10);
+  id?: string;
 
-  constructor() { }
+  constructor(private makeId: GenerateUuidService) { }
 
   ngOnInit(): void {
     this.drawSvg();
@@ -41,25 +43,27 @@ export class ScaleOrdinalComponent implements OnInit {
   }
 
   drawSvg(): void {
+    this.id = this.makeId.generateUuid();
+
     this.svg = d3.select('#ordinal')
       .append('svg')
       // .style('background-color', '#cecece')
       .attr('width', this.width)
       .attr('height', this.height)
-      .attr('id', 'ordinal-svg');
+      .attr('id', `ordinal-svg-${this.id}`);
 
-    d3.select('svg#ordinal-svg').append('g').attr('id', 'ordinal-g-x-axis');
-    d3.select('svg#ordinal-svg').append('g').attr('id', 'ordinal-g-y-axis');
-    d3.select('svg#ordinal-svg').append('g').attr('id', 'ordinal-g-rects');
+    d3.select(`svg#ordinal-svg-${this.id}`).append('g').attr('id',`ordinal-g-x-axis-${this.id}`);
+    d3.select(`svg#ordinal-svg-${this.id}`).append('g').attr('id', `ordinal-g-y-axis-${this.id}`);
+    d3.select(`svg#ordinal-svg-${this.id}`).append('g').attr('id', `ordinal-g-rects-${this.id}`);
   };
 
   drawUpdate(): void {
     if (!this.data.length) return;
 
     // update chart
-    d3.select('#ordinal-svg')
+    /* d3.select('#ordinal-svg')
       .attr('width', this.width)
-      .attr('height', this.height);
+      .attr('height', this.height); */
 
     // *** scaleX *** //
     const XDomain = [0, d3.max(this.data, (d) => d.value)] as Array<number>;
@@ -84,7 +88,7 @@ export class ScaleOrdinalComponent implements OnInit {
       // .tickPadding(5)
       .tickFormat((d: any) => d === 0 ? '0' : `${d / 1000}M`);
 
-    d3.select('#ordinal-g-x-axis')
+    d3.select(`#ordinal-g-x-axis-${this.id}`)
       .transition()
       .duration(450)
       .call(axisX as any)
@@ -93,7 +97,7 @@ export class ScaleOrdinalComponent implements OnInit {
     // *** axisY *** //
     const axisY = d3.axisLeft(this.scaleY);
       
-    d3.select('#ordinal-g-y-axis')
+    d3.select(`#ordinal-g-y-axis-${this.id}`)
       .transition()
       .ease(d3.easeLinear)
       .duration(550)
@@ -103,16 +107,16 @@ export class ScaleOrdinalComponent implements OnInit {
       .selectAll('line')
       .attr('stroke', 'none');
 
-    d3.select('#ordinal-g-y-axis')
+    d3.select(`#ordinal-g-y-axis-${this.id}`)
       .selectAll('text')
       .attr('id', (d: any, i: any) => `text-${i}`);
 
-    d3.select('#ordinal-g-y-axis')
+    d3.select(`#ordinal-g-y-axis-${this.id}`)
       .selectAll('.domain')
       .attr('stroke', 'none');
 
     // *** rects *** //
-    this.rects = d3.select('#ordinal-g-rects')
+    this.rects = d3.select(`#ordinal-g-rects-${this.id}`)
       .selectAll('rect')
       .data(this.data)
       .join(
@@ -134,19 +138,48 @@ export class ScaleOrdinalComponent implements OnInit {
 
   // *** MouseEvents *** //
   mouseEvents(): void {
-    const mouseEnter = (event: any) => {
-      const target = event.target; // outra forma de recuperar o this
-      d3.select(target)
-        .attr('opacity', 0.5)
-        .attr('stroke', '#000')
-        .attr('cursor', 'pointer');
+    const mouseMove = (event: any, d: any) => {
+        const { offsetX, offsetY } = event;
+        const isLeft = offsetX < this.width / 2;
+        const isTop = offsetY < this.height / 2;
+        const { width: tipWidth, height: tipHeight } =
+          document.querySelector('#tooltip')?.getBoundingClientRect() as DOMRect;
+        const id = event.target.id;
+        const index = id.split('-')[2];
+        const name = this.data[index].name;
+        const value = this.data[index].value;
+
+        d3.select('#tooltip')
+          .style('left', `${isLeft ? event.pageX + 10 : event.pageX - tipWidth - 10}px`)
+          .style('top', `${isTop ? event.pageY + 10 : event.pageY - tipHeight - 10}px`)
+          .transition()
+          .duration(500)
+          .style('opacity', 0.91)
+
+          d3.select('#tootip-text')
+            .html(`
+            <div style="width: 100%; height:12px; margin-right: .25rem; 
+            background: ${this.colors(d.name)};"></div>
+              <hr>
+              Name: <b>${name}</b>
+              <br>
+              Value: <b>${value.toLocaleString('pt-BR')}</b>
+            `);
+
+          d3.select(event.target)
+            .style('opacity', 0.76)
+            .style('cursor', 'pointer');
     };
     const mouseLeave = (event: any) => {
-      const target = event.target;
-      d3.select(target)
-        .attr('opacity', 1)
-        .attr('stroke', 'none')
-        .attr('cursor', 'default');
+      d3.select('#tooltip')
+        .transition()
+        .duration(500)
+        .style('opacity', 0)
+        .style('pointer-events', 'none');
+
+      d3.select(event.target)
+        .style('opacity', 1)
+        .style('cursor', 'default');
     };
 
     const mouseClick = (event: any) => {
@@ -160,10 +193,11 @@ export class ScaleOrdinalComponent implements OnInit {
     this.changeData(name, newValue);
     };
 
-    d3.selectAll('rect')
-      .on('mouseenter', mouseEnter)
-      .on('mouseleave', mouseLeave)
-      .on('click', mouseClick);
+    d3.select(`#ordinal-g-rects-${this.id}`)
+      .selectAll('rect')
+        .on('mousemove', mouseMove)
+        .on('mouseleave', mouseLeave)
+        .on('click', mouseClick);
   };
 
   // *** ChangeData *** //

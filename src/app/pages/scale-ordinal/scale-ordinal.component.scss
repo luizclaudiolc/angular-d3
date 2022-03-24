@@ -11,3 +11,16 @@
     flex-wrap: wrap;
     justify-content: space-around; 
 }
+
+#tooltip {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background-color: #0c0101e3;
+    color: #fff;
+    border: 1px solid #0f0e0e;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    opacity: 0;
+}

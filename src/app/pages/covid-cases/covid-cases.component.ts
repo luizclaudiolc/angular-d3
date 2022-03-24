@@ -172,7 +172,7 @@ export class CovidCasesComponent implements OnInit {
           const isLeft = offsetX < this.width / 2;
           const isTop = offsetY < this.height / 2;
           const { height: tipHeight, width: tipWidth } = 
-            document.querySelector('#tooltip')!.getBoundingClientRect();
+            document.querySelector('#tooltip')?.getBoundingClientRect() as DOMRect;
 
           d3.select(event.currentTarget)
             .style('cursor', 'pointer')
@@ -183,6 +183,7 @@ export class CovidCasesComponent implements OnInit {
             .style('background-color', '#FAFAFA')
             .style('border', '1px solid #000')
             .style('border-radius', '5px')
+            .style('box-shadow', '0 0 5px #000')
             .style('padding', '10px')
             .transition()
             .duration(400)
