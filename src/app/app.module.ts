@@ -46,6 +46,8 @@ import { StreamChartComponent } from './pages/stream-chart/stream-chart.componen
 import { SymbolGeneratorComponent } from './pages/symbol-generator/symbol-generator.component';
 import { TextElementsComponent } from './pages/text-elements/text-elements.component';
 import { TextOnPathComponent } from './pages/text-on-path/text-on-path.component';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -96,7 +98,9 @@ import { TextOnPathComponent } from './pages/text-on-path/text-on-path.component
     FlexLayoutModule,
     MatMenuModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

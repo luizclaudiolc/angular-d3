@@ -20,17 +20,12 @@ export class BubbleCharComponent implements OnInit {
       .attr('width', this.width)
       .attr('height', this.height)
 
-    // add botão para mudança do dataset
-    d3.select('#bubble')
-      .append('div')
-      .append('button')
-      .attr('class', 'btn btn-primary')
-      .text('Init dataset')
-      .on('click', function () {
-        d3.select(this)
-          .text('Dataset changed');
-          changDataset();
-      })
+      d3.select('.btn-change-data')
+        .on('click', function () {
+          d3.select(this)
+            changDataset();
+        })
+
 
     // criação dos grupos para melhor organização do codigo
     this.svg.append('g')

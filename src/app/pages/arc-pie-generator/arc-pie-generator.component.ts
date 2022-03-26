@@ -12,8 +12,8 @@ export class ArcPieGeneratorComponent implements OnInit {
   margin = { top: 20, right: 20, bottom: 30, left: 40 };
   width = 750;
   height = 400;
-  dataset = [90, 10, 70, 30, 50, 4, 6, 8, 10, 120, 55];
-  colors = d3.schemeSpectral[this.dataset.length]; // serve fazer uma escaça de cor no grafico
+  dataset = [10, 70, 30, 50, 4];
+  colors = d3.schemeCategory10;
   arcGen: any;
   pie: any;
   id?: string;
@@ -104,8 +104,50 @@ export class ArcPieGeneratorComponent implements OnInit {
   };
 
   mouseEvents(): void {
-    const mouseEnter = (event: any) => {
+    const mouseMove = (event: any) => {
       const el = d3.select(event.target);
+      const valuePercentage = this.transformeValueInPercentage(el.data().map((d: any) => d.value));
+      const { offsetX, offsetY } = event;
+      const isLeft = offsetX < this.width / 2;
+      const isTop = offsetY < this.height / 2;
+      const { width: tipWidth, height: tipHeight } =
+        document.querySelector('#tooltip')?.getBoundingClientRect() as DOMRect;
+      
+      d3.select('#tooltip')
+        .style('position', 'absolute')
+        .style('display', 'flex')
+        .style('flex-direction', 'column')
+        .style('color', '#cecece')
+        .style('background-color', '#2e2e2e')
+        .style('border', () => `1px solid ${valuePercentage[0].percentage < 10 ? '#ff0000' : 'royalblue'}`)
+        .style('box-shadow', '0px 0px 5px #000')
+        .style('border-radius', '5px')
+        .style('padding', '10px')
+        .style('left', `${isLeft ? event.pageX - 140 : event.pageX - tipWidth + 140}px`)
+        .style('top', `${isTop ? event.pageY - 120 : event.pageY - tipHeight + 120}px`)
+        .transition()
+        .duration(500)
+        .style('opacity', 0.91);
+
+      d3.select('#tooltip-text')
+        .html(`
+        <div style="width: 12px; height:12px; border-radius: 6px; margin-right: 1.25rem; 
+        background: ${ valuePercentage[0].percentage < 10 ? '#ff0000' : 'royalblue' };">
+          </div>
+          Valor: <b>${valuePercentage[0].value.toLocaleString('pt-BR', { 
+            style: 'currency',
+            currency: 'BRL',
+          })}</b>
+          <br>
+          Representatividade: <b>${Math.round(valuePercentage[0].percentage)}</b>%
+          <br>
+          Total: <b>${this.dataset.reduce((a, b) => a + b, 0).toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          })}</b>
+        `);
+        
+      
       this.animationSlice(el);
       this.addText(el);
     };
@@ -114,11 +156,16 @@ export class ArcPieGeneratorComponent implements OnInit {
       const el = d3.select(event.target);
       this.animationSliceBack(el);
       this.removeText(el);
+
+      d3.select('#tooltip')
+        .transition()
+        .duration(500)
+        .style('opacity', 0);
     };
 
     d3.selectAll('path')
-      .on('mouseover', mouseEnter)
-      .on('mouseout', mouseLeave);
+      .on('mousemove', mouseMove)
+      .on('mouseleave', mouseLeave);
   };
 
   animationSlice(el: any): void {
@@ -187,6 +234,13 @@ export class ArcPieGeneratorComponent implements OnInit {
       .attr('text-anchor', 'end')
       .attr('fill', 'royalblue')
       .text(`Valor total: ${this.dataset.reduce((a, b) => a + b)}`);
+  }
+
+  addNumber(): void {
+    const data = document.querySelector('#add-number') as HTMLInputElement;
+    const value = +data.value;
+
+    console.log(value);
   }
 }
 

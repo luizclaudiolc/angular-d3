@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ArcPieGeneratorComponent } from './pages/arc-pie-generator/arc-pie-generator.component';
+import { BubbleCharComponent } from './pages/bubble-char/bubble-char.component';
 import { CovidCasesComponent } from './pages/covid-cases/covid-cases.component';
 import { LineGeneratorComponent } from './pages/line-generator/line-generator.component';
 import { ScaleOrdinalComponent } from './pages/scale-ordinal/scale-ordinal.component';
@@ -32,6 +33,10 @@ const routes: Routes = [
     path: 'grafico-scatter',
     component: ScatterComponent,
   },
+  {
+    path: 'bubble-chart',
+    component: BubbleCharComponent,
+  }
 ];
 
 @NgModule({

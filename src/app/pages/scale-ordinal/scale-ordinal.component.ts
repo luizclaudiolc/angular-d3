@@ -150,7 +150,7 @@ export class ScaleOrdinalComponent implements OnInit {
         const value = this.data[index].value;
 
         d3.select('#tooltip')
-          .style('left', `${isLeft ? event.pageX + 10 : event.pageX - tipWidth - 10}px`)
+          .style('left', `${isLeft ? event.pageX + 20 : event.pageX - tipWidth - 20}px`)
           .style('top', `${isTop ? event.pageY + 10 : event.pageY - tipHeight - 10}px`)
           .transition()
           .duration(500)

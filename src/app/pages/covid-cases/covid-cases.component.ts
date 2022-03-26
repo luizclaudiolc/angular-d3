@@ -181,7 +181,7 @@ export class CovidCasesComponent implements OnInit {
           d3.select('#tooltip')
             .style('position', 'absolute')
             .style('background-color', '#FAFAFA')
-            .style('border', '1px solid #000')
+            .style('border', `1px solid ${this.colors(d.ISO3)}`)
             .style('border-radius', '5px')
             .style('box-shadow', '0 0 5px #000')
             .style('padding', '10px')

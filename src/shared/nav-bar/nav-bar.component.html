@@ -23,6 +23,10 @@
       <mat-icon>scatter_plot</mat-icon>
       <span>Scatter</span>
     </button>
+    <button mat-menu-item [matMenuTriggerFor]="bubble">
+      <mat-icon>radar_chart</mat-icon>
+      <span>Bubble</span>
+    </button>
   </mat-menu>
 
   <mat-menu #pie="matMenu">
@@ -51,6 +55,14 @@
 
   <mat-menu #plot="matMenu">
     <ng-container *ngFor="let item of itemsMenuPlot">
+      <a mat-menu-item [routerLink]="item.link">
+        {{ item.label }}
+      </a>
+    </ng-container>
+  </mat-menu>
+
+  <mat-menu #bubble="matMenu">
+    <ng-container *ngFor="let item of itemsMenuBubble">
       <a mat-menu-item [routerLink]="item.link">
         {{ item.label }}
       </a>

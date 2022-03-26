@@ -46,6 +46,14 @@ export class NavBarComponent implements OnInit {
     },
   ];
 
+  itemsMenuBubble: ItensMenu[] = [
+    {
+      label: 'Grafico de Bubble',
+      icon: 'bubble_chart',
+      link: '/bubble-chart'
+    }
+  ];
+
   constructor() { }
 
   ngOnInit(): void {
