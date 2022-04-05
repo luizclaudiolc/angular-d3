@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
 import * as d3 from 'd3';
-import { timer } from 'rxjs';
+import { BehaviorSubject, tap, timer } from 'rxjs';
 import { GenerateUuidService } from 'src/utils/generate-uuid.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { GenerateUuidService } from 'src/utils/generate-uuid.service';
   templateUrl: './scale-ordinal.component.html',
   styleUrls: ['./scale-ordinal.component.scss']
 })
-export class ScaleOrdinalComponent implements OnInit {
+export class ScaleOrdinalComponent implements OnInit, OnChanges {
   svg: any;
   margin = {top: 20, bottom: 30, left: 65, rigth: 20};
   width = 750;
@@ -32,14 +32,20 @@ export class ScaleOrdinalComponent implements OnInit {
   rects: any;
   colors = d3.scaleOrdinal(d3.schemeCategory10);
   id?: string;
+  // test = new BehaviorSubject(false);
 
   constructor(private makeId: GenerateUuidService) { }
 
   ngOnInit(): void {
     this.drawSvg();
-    this.drawUpdate();
+    this.drawUpdate(this.data);
     this.mouseEvents();
     this.updateData();
+    this.filterSelection();
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
   }
 
   drawSvg(): void {
@@ -57,8 +63,8 @@ export class ScaleOrdinalComponent implements OnInit {
     d3.select(`svg#ordinal-svg-${this.id}`).append('g').attr('id', `ordinal-g-rects-${this.id}`);
   };
 
-  drawUpdate(): void {
-    if (!this.data.length) return;
+  drawUpdate(data: Array<any>): void {
+    if (!data.length) return;
 
     // update chart
     /* d3.select('#ordinal-svg')
@@ -66,13 +72,13 @@ export class ScaleOrdinalComponent implements OnInit {
       .attr('height', this.height); */
 
     // *** scaleX *** //
-    const XDomain = [0, d3.max(this.data, (d) => d.value)] as Array<number>;
+    const XDomain = [0, d3.max(data, (d: any) => d.value)] as Array<number>;
     this.scaleX = d3.scaleLinear()
       .domain(XDomain)
       .range([this.margin.left, this.width - this.margin.rigth]);
 
     // *** scaleY *** //
-    const YDomain = this.data.map((d) => d.name);
+    const YDomain = data.map((d: any) => d.name);
     this.scaleY = d3.scaleBand()
       .domain(YDomain)
       .range([this.height -this.margin.bottom, this.margin.top])
@@ -118,21 +124,21 @@ export class ScaleOrdinalComponent implements OnInit {
     // *** rects *** //
     this.rects = d3.select(`#ordinal-g-rects-${this.id}`)
       .selectAll('rect')
-      .data(this.data)
+      .data(data)
       .join(
         (enter) => enter.append('rect'),
         (update) => update,
         (exit) => exit.remove()
       )
       .attr('x', (d) => this.scaleX(0))
-      .attr('y', (d) => this.scaleY(d.name) - this.scaleY.bandwidth() + this.scaleY.bandwidth())
+      .attr('y', (d: any) => this.scaleY(d.name) - this.scaleY.bandwidth() + this.scaleY.bandwidth())
       .attr('height', this.scaleY.bandwidth())
       .attr('id', (d: any, i: number) => `rects-Ordinal-${i}`)
       .transition()
       .ease(d3.easeLinear)
       .duration(500)
       .delay((d, i) => i * 50)
-      .attr('width', (d) => this.scaleX(d.value) - this.scaleX(this.margin.left))
+      .attr('width', (d: any) => this.scaleX(d.value) - this.scaleX(this.margin.left))
       .attr('fill', (d: any, i: any) => this.colors(d.name))
   };
 
@@ -143,15 +149,14 @@ export class ScaleOrdinalComponent implements OnInit {
         const isLeft = offsetX < this.width / 2;
         const isTop = offsetY < this.height / 2;
         const { width: tipWidth, height: tipHeight } =
-          document.querySelector('#tooltip')?.getBoundingClientRect() as DOMRect;
-        const id = event.target.id;
-        const index = id.split('-')[2];
-        const name = this.data[index].name;
-        const value = this.data[index].value;
+          document.querySelector<any>('#tooltip').getBoundingClientRect();
+        const name = event.target.__data__.name;
+        const value = event.target.__data__.value;
 
         d3.select('#tooltip')
           .style('left', `${isLeft ? event.pageX + 20 : event.pageX - tipWidth - 20}px`)
           .style('top', `${isTop ? event.pageY + 10 : event.pageY - tipHeight - 10}px`)
+          .style('border', `1px solid ${this.colors(name)}`)
           .transition()
           .duration(500)
           .style('opacity', 0.91)
@@ -159,7 +164,7 @@ export class ScaleOrdinalComponent implements OnInit {
           d3.select('#tootip-text')
             .html(`
             <div style="width: 100%; height:12px; margin-right: .25rem; 
-            background: ${this.colors(d.name)};"></div>
+            background: ${this.colors(name)};"></div>
               <hr>
               Name: <b>${name}</b>
               <br>
@@ -188,7 +193,7 @@ export class ScaleOrdinalComponent implements OnInit {
       const index = id.split('-')[2];
       const name = this.data[index].name;
       const value = this.data[index].value;
-      const newValue = this.data[index].value = value + 500;
+      const newValue = this.data[index].value = value + 1500;
 
     this.changeData(name, newValue);
     };
@@ -205,7 +210,7 @@ export class ScaleOrdinalComponent implements OnInit {
     const index = this.data.findIndex((d) => d.name === name);
     this.data[index].value = value;
     this.data.sort((a, b) => a.value - b.value);
-    this.drawUpdate();
+    this.drawUpdate(this.data);
   };
 
   // *** update Data *** //
@@ -218,11 +223,39 @@ export class ScaleOrdinalComponent implements OnInit {
       }
       const name = this.data[i].name;
       const value = this.data[i].value;
-      const newValue = this.data[i % 2 === 0 ? i + 1 : i].value = value + 1000;
+      const newValue = this.data[i].value = value + 1500;
       this.changeData(name, newValue);
       i++;
     }
-    , 500);
+    , 250);
   };
+
+  filterSelection(): void {
+    const selected = d3.select(`#select`)
+      .append('select')
+      .attr('id', `select-${this.id}`)
+      .attr('class', 'select');
+
+      selected.selectAll('option')
+        .data(this.data)
+        .join('option')
+        .attr('value', (d) => d.name)
+        .text((d) => d.name);
+
+      selected.on('change', () => {
+        this.filterData(this.data, selected.property('value'));
+      })
+  }
+
+  filterData(data: any, filter: any): void {
+    const filtered = data.filter((d: any) => d.name === filter);
+    this.drawUpdate(filtered);
+    
+  }
+
+  seeAll(): void {
+    this.drawUpdate(this.data);
+    this.mouseEvents();
+  }
 
 }

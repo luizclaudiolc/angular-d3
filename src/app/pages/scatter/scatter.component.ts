@@ -29,9 +29,11 @@ export class ScatterComponent implements OnInit {
   margin = {top: 40, right: 40, bottom: 30, left: 50};
   width = 750;
   height = 400;
-  colors = d3.scaleOrdinal(d3.schemeSpectral[9]);
+  colors = d3.scaleOrdinal(d3.schemePuRd[9]);
   scaleX: any;
   scaleY: any;
+  axisX: any;
+  axisY: any;
   points: any;
   id?: string;
 
@@ -43,6 +45,7 @@ export class ScatterComponent implements OnInit {
     this.createSvg();
     this.updateChart();
     this.eventosMouse();
+
   }
 
   createSvg(): void {
@@ -81,18 +84,18 @@ export class ScatterComponent implements OnInit {
       .range([this.height - this.margin.bottom, this.margin.top]);
 
     // *** create axis *** //
-    const axisX: any = d3.axisBottom(this.scaleX)
+    this.axisX = d3.axisBottom(this.scaleX)
       .tickFormat((d: any) => d);
 
     d3.select(`g#group-${this.id}-axis-x`)
       .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
-      .call(axisX);
+      .call(this.axisX);
 
-    const axisY: any = d3.axisLeft(this.scaleY)
+    this.axisY = d3.axisLeft(this.scaleY)
       .tickFormat((d: any) => Number(d).toLocaleString('pt-BR'));
     d3.select(`g#group-${this.id}-axis-y`)
       .attr('transform', `translate(${this.margin.left}, 0)`)
-      .call(axisY);
+      .call(this.axisY);
 
     // *** create points *** //
     this.points = d3.select(`g#group-${this.id}-points`)
@@ -126,7 +129,7 @@ export class ScatterComponent implements OnInit {
       .attr('x', d => this.scaleX(+d.Released))
       .attr('y', d => this.scaleY(+d.Stars) - 10)
       .text(d => d.Framework)
-      .attr('fill', '#000')
+      .attr('fill', d => this.colors(d.Framework))
       .attr('text-anchor', 'middle');
 
     // *** create grids *** //
@@ -160,8 +163,49 @@ export class ScatterComponent implements OnInit {
   }
 
   eventosMouse(): void {
+    const self = this;
     d3.selectAll('circle')
-    .on('mouseenter', function(event: any) {
+    .on('mousemove', function(event: any) {
+        const target = d3.select(this);
+        const id = target.attr('id');
+        const index: any = id.split('-')[3];
+        const { offsetX, offsetY } = event;
+        const isLeft = offsetX < self.width / 2;
+        const isTop = offsetY < self.height / 2;
+        const { width: tipWidth, height: tipHeigth } =
+          document.querySelector<any>('.tooltip').getBoundingClientRect();
+        
+        d3.select(`.tooltip`)
+          .style('position', 'absolute')
+          .style('background', '#fff')
+          .style('color', '#000')
+          .style('padding', '10px')
+          .style('border', '1px solid #000')
+          .style('border-radius', '5px')
+          .style('box-shadow', '0 0 5px #000')
+          .style('left', `${isLeft ? event.pageX + 10 : event.pageX - tipWidth - 10}px`)
+          .style('top', `${isTop ? event.pageY + 10 : event.pageY - tipHeigth - 10}px`)
+          .transition()
+          .duration(500)
+          .style('opacity', 0.91);
+        
+        d3.select(`.tooltip-text`)
+          .html(`
+            <div
+              style="
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: ${self.colors(self.data[index].Framework)};
+                margin-right: .25rem;
+              "
+            ></div>
+            Framework: ${self.data[index].Framework}
+            <br>
+            Stars: ${self.data[index].Stars}
+          `);
+        
+
         d3.select(this)
         .transition()
         .duration(150)
@@ -169,13 +213,18 @@ export class ScatterComponent implements OnInit {
         .style('opacity', 0.6)
         .style('cursor', 'pointer');
       })
-      .on('mouseout', function() {
+      .on('mouseleave', function() {
         d3.select(this)
         .transition()
         .duration(150)
         .attr('r', 10)
         .style('opacity', 1)
         .style('cursor', 'default');
+
+        d3.select('.tooltip')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
       });
   }
 }

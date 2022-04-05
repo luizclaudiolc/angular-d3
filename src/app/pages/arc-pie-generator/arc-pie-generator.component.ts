@@ -12,8 +12,8 @@ export class ArcPieGeneratorComponent implements OnInit {
   margin = { top: 20, right: 20, bottom: 30, left: 40 };
   width = 750;
   height = 400;
-  dataset = [10, 70, 30, 50, 4];
-  colors = d3.schemeCategory10;
+  dataset = [10, 70, 30, 50, 4, 5, 89, 101, 11, 78];
+  colors = d3.scaleOrdinal(d3.schemeCategory10);
   arcGen: any;
   pie: any;
   id?: string;
@@ -84,7 +84,7 @@ export class ArcPieGeneratorComponent implements OnInit {
         update => update,
         exit => exit.remove()
       )
-      .attr('fill', (d: any, i: any) => this.colors[i])
+      .attr('fill', (d: any, i: any) => this.colors(d))
       .attr('stroke', '#000')
       .attr('d', this.arcGen);
   };
@@ -95,7 +95,7 @@ export class ArcPieGeneratorComponent implements OnInit {
       .transition()
       .duration(350)
       .attrTween('d', (d: any) => {
-        const interpolate = d3.interpolate(d.endAngle, d.startAngle);
+        const interpolate = d3.interpolate(d?.endAngle, d?.startAngle);
         return (t: any) => {
           d.startAngle = interpolate(t);
           return arcGen(d);
@@ -104,14 +104,14 @@ export class ArcPieGeneratorComponent implements OnInit {
   };
 
   mouseEvents(): void {
-    const mouseMove = (event: any) => {
+    const mouseMove = (event: any, d: any) => {
       const el = d3.select(event.target);
       const valuePercentage = this.transformeValueInPercentage(el.data().map((d: any) => d.value));
       const { offsetX, offsetY } = event;
       const isLeft = offsetX < this.width / 2;
       const isTop = offsetY < this.height / 2;
       const { width: tipWidth, height: tipHeight } =
-        document.querySelector('#tooltip')?.getBoundingClientRect() as DOMRect;
+        document.querySelector<any>('#tooltip').getBoundingClientRect();
       
       d3.select('#tooltip')
         .style('position', 'absolute')
@@ -132,7 +132,7 @@ export class ArcPieGeneratorComponent implements OnInit {
       d3.select('#tooltip-text')
         .html(`
         <div style="width: 12px; height:12px; border-radius: 6px; margin-right: 1.25rem; 
-        background: ${ valuePercentage[0].percentage < 10 ? '#ff0000' : 'royalblue' };">
+        background: ${ this.colors(d) };">
           </div>
           Valor: <b>${valuePercentage[0].value.toLocaleString('pt-BR', { 
             style: 'currency',
@@ -171,8 +171,8 @@ export class ArcPieGeneratorComponent implements OnInit {
   animationSlice(el: any): void {
     const { arcGen } = this;
     arcGen
-      .innerRadius(120)
-      .outerRadius(180)
+      .innerRadius(110)
+      .outerRadius(170)
 
     el
       .transition()

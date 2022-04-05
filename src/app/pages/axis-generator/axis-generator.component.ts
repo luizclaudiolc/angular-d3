@@ -77,7 +77,7 @@ export class AxisGeneratorComponent implements OnInit {
   chartUpdate(): void {
     if (!this.data.monthAndPercentage.length) return;
 
-    // update svg dimensions
+    // update svg dimensions 
     d3.select('svg#line-chart')
       .attr('width', this.width)
       .attr('height', this.height);
@@ -182,8 +182,50 @@ export class AxisGeneratorComponent implements OnInit {
   // ****** mouseEvents ****** //
   mouseEvents(): void {
     const { color } = this;
-    const mouseEnter = (event: any) => {
+    const mouseMove = (event: any, d: any) => {
       const target = event.target;
+      const id = target.id;
+      const index = id.split('-')[1];
+      const data = this.data.monthAndPercentage[index];
+      const { offsetX, offsetY } = event;
+      const isLeft = offsetX < this.width / 2;
+      const isTop = offsetY < this.height / 2;
+      const { width: tipWidth, height: tipHeight } =
+        document.querySelector<any>('#tooltip').getBoundingClientRect();
+      
+      d3.select('#tooltip')
+        .style('position', 'absolute')
+        .style('background-color', 'rgba(221, 203, 203, 0.685)')
+        .style('color', '#000')
+        .style('border', `1px solid ${color(d)}`)
+        .style('border-radius', '5px')
+        .style('padding', '10px')
+        .style('box-shadow', '0px 0px 10px rgba(0, 0, 0, 0.5)')
+        .style('font-weight', 'bold')
+        .style('pointer-events', 'none')
+        .style('left', `${isLeft ? event.pageX + 10 : event.pageX - tipWidth - 10}px`)
+        .style('top', `${isTop ? event.pageY + 10 : event.pageY - tipHeight - 10}px`)
+        .transition()
+        .duration(400)
+        .style('opacity', 0.91);
+
+      d3.select('#tooltip-text')
+        .html(`
+          <div
+          style="
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: ${color(d)};
+            margin-right: .25rem;
+          "
+          ></div>
+          <span>Mês referência: ${this.parseMonth(data.month)}/${data.year}</span>
+          <br>
+          <span>Taxa de sucesso: ${data.percentage}%</span>
+        `)
+        
+
       d3.select(target)
           .attr('r', 7.5)
           .attr('stroke', (d: any) => `${color(d)}`)
@@ -197,6 +239,12 @@ export class AxisGeneratorComponent implements OnInit {
           .attr('r', 5)
           .attr('stroke-width', 1)
           .attr('stroke', (d: any) => `${color(d)}`);
+
+      d3.select('#tooltip')
+        .transition()
+        .duration(400)
+        .style('opacity', 0)
+        .style('pointer-events', 'none');
     };
 
     const mouseClick = (event: any) => {
@@ -209,9 +257,29 @@ export class AxisGeneratorComponent implements OnInit {
     };
     
     d3.selectAll('.dot')
-      .on('mouseenter', mouseEnter)
+      .on('mousemove', mouseMove)
       .on('mouseleave', mouseLeave)
       .on('click', mouseClick);
   };
+
+  // ****** ParseMonth ****** //
+  parseMonth(month: string): string {
+    const months = {
+      Jan: 'Janeiro',
+      Fev: 'Fevereiro',
+      Mar: 'Março',
+      Abr: 'Abril',
+      Mai: 'Maio',
+      Jun: 'Junho',
+      Jul: 'Julho',
+      Aug: 'Agosto',
+      Set: 'Setembro',
+      Out: 'Outubro',
+      Nov: 'Novembro',
+      Dez: 'Dezembro'
+    }[month] || month;
+
+    return months;
+  }
   
 }

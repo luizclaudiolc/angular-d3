@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ArcPieGeneratorComponent } from './pages/arc-pie-generator/arc-pie-generator.component';
+import { AxisGeneratorComponent } from './pages/axis-generator/axis-generator.component';
 import { BubbleCharComponent } from './pages/bubble-char/bubble-char.component';
 import { CovidCasesComponent } from './pages/covid-cases/covid-cases.component';
 import { LineGeneratorComponent } from './pages/line-generator/line-generator.component';
@@ -27,7 +28,7 @@ const routes: Routes = [
   },
   {
     path: 'grafico-linha',
-    component: LineGeneratorComponent,
+    component: AxisGeneratorComponent,
   },
   {
     path: 'grafico-scatter',

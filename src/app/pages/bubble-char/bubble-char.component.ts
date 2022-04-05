@@ -26,7 +26,6 @@ export class BubbleCharComponent implements OnInit {
             changDataset();
         })
 
-
     // criação dos grupos para melhor organização do codigo
     this.svg.append('g')
       .attr('transform', `translate(${0}, ${this.height - (this.margin.bottom + this.margin.top)})`)
@@ -235,6 +234,9 @@ export class BubbleCharComponent implements OnInit {
       }
   
       function mousemove (this: any, event: any, d: any) {
+        const { offsetX, offsetY } = event;
+        const isLeft = offsetX < this.width / 2;
+        const isTop = offsetY < this.height / 2;
         tooltip
           .style('left', `${event.pageX + 30}px`)
           .style('top', `${event.pageY - 30}px`)

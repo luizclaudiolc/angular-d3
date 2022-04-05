@@ -11,3 +11,19 @@
     flex-wrap: wrap;
     justify-content: space-around; 
 }
+
+#select {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+b {
+    margin-right: 10px;
+}
+
+button {
+    margin-left: 10px;
+}

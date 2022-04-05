@@ -48,6 +48,7 @@ import { TextElementsComponent } from './pages/text-elements/text-elements.compo
 import { TextOnPathComponent } from './pages/text-on-path/text-on-path.component';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { ZoomComponent } from './pages/zoom/zoom.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     StreamChartComponent,
     NavBarComponent,
     HeaderComponent,
+    ZoomComponent,
   ],
   imports: [
     BrowserModule,
