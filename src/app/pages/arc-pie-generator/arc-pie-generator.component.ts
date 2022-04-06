@@ -90,17 +90,22 @@ export class ArcPieGeneratorComponent implements OnInit {
   };
 
   initialAnimation(): void {
-    const { arcGen } = this;
-    d3.selectAll('path')
-      .transition()
-      .duration(350)
-      .attrTween('d', (d: any) => {
-        const interpolate = d3.interpolate(d?.endAngle, d?.startAngle);
-        return (t: any) => {
-          d.startAngle = interpolate(t);
-          return arcGen(d);
-        };
-      });
+    try {
+      const { arcGen } = this;
+        d3.selectAll('path')
+          .transition()
+          .duration(350)
+          .attrTween('d', (d: any) => {
+            const interpolate = d3.interpolate(d?.endAngle, d?.startAngle);
+            return (t: any) => {
+              d.startAngle = interpolate(t);
+              return arcGen(d);
+            };
+        });
+    }
+    catch (e) {
+      e;
+    }
   };
 
   mouseEvents(): void {

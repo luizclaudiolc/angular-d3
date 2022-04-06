@@ -56,9 +56,9 @@ export class CovidCasesComponent implements OnInit, OnChanges {
 
       this.responsive.observe(this.breakpoints)
         .pipe(
-          tap((result) => {
-            const breakpoints = result.breakpoints;
-            console.log(breakpoints);
+          tap(({ breakpoints }) => {
+            const bp = breakpoints;
+            console.log(bp);
           })
         )
         .subscribe();
@@ -126,7 +126,10 @@ export class CovidCasesComponent implements OnInit, OnChanges {
 
     this.axisX = (g: any) => g
       .attr('transform', `translate(0,${this.height - this.margin.bottom})`)
-      .call(d3.axisBottom(this.scaleX).tickSizeOuter(0))
+      .call(
+          d3.axisBottom(this.scaleX)
+          .tickSizeOuter(0)
+        );
       // .call((g: any) => g.select('.domain').remove());
 
     /* this.responsive
@@ -194,9 +197,6 @@ export class CovidCasesComponent implements OnInit, OnChanges {
         .attr('y', (d) => this.scaleY(+d.PERSONS_FULLY_VACCINATED))
         .attr('height', (d) => 
           this.height - this.margin.bottom - this.scaleY(+d.PERSONS_FULLY_VACCINATED))
-        /* .transition()
-        .delay((d: any, i: any) => i * 50)
-        .duration(200) */
 
     this.svg.call(this.zoom);
   };
@@ -205,11 +205,11 @@ export class CovidCasesComponent implements OnInit, OnChanges {
     const mouseClick = (el: any) => {
       el
         .attr('stroke-width', 10)
-        .attr('y', (d: any, i: any) => this.scaleY(+d.PERSONS_FULLY_VACCINATED) - 5)
+        .attr('y', ({ PERSONS_FULLY_VACCINATED }: any) => this.scaleY(+PERSONS_FULLY_VACCINATED) - 5)
         .attr('stroke', (d: any, i: any) => this.colors(d.ISO3))
         .transition()
         .duration(200)
-        .attr('y', (d: any, i: any) => this.scaleY(+d.PERSONS_FULLY_VACCINATED))
+        .attr('y', ({ PERSONS_FULLY_VACCINATED }: any) => this.scaleY(+PERSONS_FULLY_VACCINATED))
         .attr('stroke-width', 0);
     };
 
@@ -219,7 +219,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
           const target = d3.select(event.target);
           mouseClick(target);
         })
-        .on('mousemove', (event, d: any) => {
+        .on('mousemove', (event, { ISO3, COUNTRY, PERSONS_FULLY_VACCINATED }: any) => {
           const { offsetX, offsetY } = event;
           const isLeft = offsetX < this.width / 2;
           const isTop = offsetY < this.height / 2;
@@ -234,7 +234,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
             .style('position', 'absolute')
             .style('background-color', '#0c0101e3')
             .style('color', '#ccc')
-            .style('border', `1px solid ${this.colors(d.ISO3)}`)
+            .style('border', `1px solid ${this.colors(ISO3)}`)
             .style('border-radius', '5px')
             .style('box-shadow', '0 0 5px #000')
             .style('padding', '10px')
@@ -247,12 +247,12 @@ export class CovidCasesComponent implements OnInit, OnChanges {
           d3.select('#tooltip-text')
             .html(`
             <div style="width: 12px; height:12px; margin-right: .25rem; 
-            background: ${this.colors(d.ISO3)};"></div> 
-              País: ${d.COUNTRY} (<b>${d.ISO3}</b>)
+            background: ${this.colors(ISO3)};"></div> 
+              País: ${COUNTRY} (<b>${ISO3}</b>)
               <p>
                   População totalmente vacinada:
                 <b>
-                  ${Number(d.PERSONS_FULLY_VACCINATED).toLocaleString('pt-BR')}
+                  ${Number(PERSONS_FULLY_VACCINATED).toLocaleString('pt-BR')}
                 </b>
               </p>
           `)
@@ -286,7 +286,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
         
       svg.select(`g#g-${this.id}-bars`)
         .selectAll(`.bars-${this.id}`)
-        .attr('x', (d: any) => this.scaleX(d.ISO3))
+        .attr('x', ({ ISO3 }: any) => this.scaleX(ISO3))
         .attr('width', this.scaleX.bandwidth());
 
       svg.select(`g#g-${this.id}-axis-x`)
@@ -303,6 +303,8 @@ export class CovidCasesComponent implements OnInit, OnChanges {
 
   // *** create function filter data *** //
   filterData = (data: any, filter: string): void => {
+    if (filter === 'SEE ALL') this.updateChart(data);
+
     const filtered = data.filter((d: any) => d.WHO_REGION === filter
       && d.PERSONS_FULLY_VACCINATED > 0);
 
@@ -326,22 +328,18 @@ export class CovidCasesComponent implements OnInit, OnChanges {
       .attr('id', `select-${this.id}`)
       .attr('class', 'select');
 
-    const uniqueValue = [...new Set(data.map((d: any) => d.WHO_REGION))];
+    const uniqueValue = ['SEE ALL', ...new Set(data.map(({ WHO_REGION }) => WHO_REGION))];
 
     selected.selectAll('option')
       .data(uniqueValue)
       .join('option')
-      .attr('value', (d: any) => {
-        return d.length ? d : 'Todos';
-      })
-      .text((d: any) => d);
+      .attr('value', d => d)
+      .text(d => d);
 
     selected.on('change', () => {
-      
-      this.filterData(data, selected.property('value'));
       // console.log(selected.property('value'));
+      this.filterData(data, selected.property('value'));
     })
-    
   }
 
   // *** create legend in axis Y *** //
@@ -358,10 +356,5 @@ export class CovidCasesComponent implements OnInit, OnChanges {
       .attr('text-anchor', 'middle')
       .attr('transform', `translate(${this.margin.left + 25}, ${this.margin.top - 15}) rotate(90)`)
       .text('Em milhões');
-  }
-
-  seeAll(): void {
-    this.updateChart(this.data);
-    this.interativeEvents();
   }
 }

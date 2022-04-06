@@ -72,13 +72,13 @@ export class ScaleOrdinalComponent implements OnInit, OnChanges {
       .attr('height', this.height); */
 
     // *** scaleX *** //
-    const XDomain = [0, d3.max(data, (d: any) => d.value)] as Array<number>;
+    const XDomain = [0, d3.max(data, ({ value }) => value)] as Array<number>;
     this.scaleX = d3.scaleLinear()
       .domain(XDomain)
       .range([this.margin.left, this.width - this.margin.rigth]);
 
     // *** scaleY *** //
-    const YDomain = data.map((d: any) => d.name);
+    const YDomain = data.map(({ name }) => name);
     this.scaleY = d3.scaleBand()
       .domain(YDomain)
       .range([this.height -this.margin.bottom, this.margin.top])
@@ -88,7 +88,7 @@ export class ScaleOrdinalComponent implements OnInit, OnChanges {
 
     // *** axisX *** //
     const axisX = d3.axisBottom(this.scaleX)
-      .ticks(5)
+      .ticks(10)
       .tickSizeOuter(5)
       .tickSizeInner(-this.height + this.margin.top + this.margin.bottom)
       .tickPadding(10)
@@ -188,21 +188,21 @@ export class ScaleOrdinalComponent implements OnInit, OnChanges {
             .style('opacity', 0.76)
             .style('cursor', 'pointer');
     };
-    const mouseLeave = (event: any) => {
+    const mouseLeave = ({ target }: any) => {
       d3.select('#tooltip')
         .transition()
         .duration(500)
         .style('opacity', 0)
         .style('pointer-events', 'none');
 
-      d3.select(event.target)
+      d3.select(target)
         .style('opacity', 1)
         .style('cursor', 'default');
     };
 
-    const mouseClick = (event: any) => {
-      const target = event.target;
-      const id = target.id;
+    const mouseClick = ({ target }: any) => {
+      const targett = target;
+      const id = targett.id;
       const index = id.split('-')[2];
       const name = this.data[index].name;
       const value = this.data[index].value;
@@ -249,26 +249,27 @@ export class ScaleOrdinalComponent implements OnInit, OnChanges {
       .attr('id', `select-${this.id}`)
       .attr('class', 'select');
 
+      const uniqueSelect = ['Todos', ...new Set(this.data.map(({ name }) => name))];
+
       selected.selectAll('option')
-        .data(this.data)
+        .data(uniqueSelect)
         .join('option')
-        .attr('value', (d) => d.name)
-        .text((d) => d.name);
+        .attr('value', d => d)
+        .text(d => d);
 
       selected.on('change', () => {
         this.filterData(this.data, selected.property('value'));
       })
   }
 
-  filterData(data: any, filter: any): void {
-    const filtered = data.filter((d: any) => d.name === filter);
+  filterData(data: any, filter: string): void {
+    if (filter === 'Todos') { 
+      this.drawUpdate(data)
+      this.mouseEvents();
+      return;
+    }
+
+    const filtered = data.filter(({ name }: any) => name === filter);
     this.drawUpdate(filtered);
-    
   }
-
-  seeAll(): void {
-    this.drawUpdate(this.data);
-    this.mouseEvents();
-  }
-
 }
