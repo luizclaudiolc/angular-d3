@@ -76,14 +76,12 @@ export class CovidCasesComponent implements OnInit, OnChanges {
   }
 
   main(data: any): void {
-    const americas = data.filter((d: any) => d.WHO_REGION === 'AMRO'
-        && d.PERSONS_FULLY_VACCINATED > 1000000);
-      console.log(data);
+    console.log(data);
     
-      this.updateChart(data);
-      // this.selectFilter(data);
-      // this.interativeEvents();
-      this.legendY();
+    this.updateChart(data);
+    // this.selectFilter(data);
+    this.interativeEvents();
+    this.legendY();
   };
 
   drawSvg(): void {
@@ -131,6 +129,26 @@ export class CovidCasesComponent implements OnInit, OnChanges {
       .call(d3.axisBottom(this.scaleX).tickSizeOuter(0))
       // .call((g: any) => g.select('.domain').remove());
 
+    /* this.responsive
+      .observe(Breakpoints.Tablet)
+      .pipe(
+        tap((result) => {
+          console.log(result.matches);
+          if (result.matches) {
+          this.axisY = (g: any) => g
+            .attr('transform', `translate(${this.margin.left},0)`)
+            .call(d3.axisLeft(this.scaleY)
+            .ticks(12)
+            .tickSizeInner(-this.width + this.margin.left + this.margin.rigtht)
+            .tickSizeOuter(0)
+            );
+
+            this.updateChart(data);
+          }
+          
+        })
+      ).subscribe(); */
+
     this.axisY = (g: any) => g
       .attr('transform', `translate(${this.margin.left},0)`)
       .call(d3.axisLeft(this.scaleY)
@@ -151,7 +169,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
     d3.select(`g#g-${this.id}-axis-x`)
       .transition()
       .duration(500)
-      .call(this.axisX)
+      .call(this.axisX);
 
     d3.select(`g#g-${this.id}-axis-y`)
       .transition()
@@ -214,7 +232,8 @@ export class CovidCasesComponent implements OnInit, OnChanges {
 
           d3.select('#tooltip')
             .style('position', 'absolute')
-            .style('background-color', '#FAFAFA')
+            .style('background-color', '#0c0101e3')
+            .style('color', '#ccc')
             .style('border', `1px solid ${this.colors(d.ISO3)}`)
             .style('border-radius', '5px')
             .style('box-shadow', '0 0 5px #000')
@@ -284,9 +303,11 @@ export class CovidCasesComponent implements OnInit, OnChanges {
 
   // *** create function filter data *** //
   filterData = (data: any, filter: string): void => {
-    const filtered = data.filter((d: any) => d.WHO_REGION === filter);
-    const arrayLength = filtered.length > 15
-      ? // filtrar apenas os 15 com maior vicinação
+    const filtered = data.filter((d: any) => d.WHO_REGION === filter
+      && d.PERSONS_FULLY_VACCINATED > 0);
+
+    const arrayLength = filtered.length > 30
+      ? // filtra apenas os 30 com maior vicinação
         filtered
           .sort((a: any, b: any) => b.PERSONS_FULLY_VACCINATED - a.PERSONS_FULLY_VACCINATED)
           .slice(0, 30)
@@ -310,7 +331,9 @@ export class CovidCasesComponent implements OnInit, OnChanges {
     selected.selectAll('option')
       .data(uniqueValue)
       .join('option')
-      .attr('value', (d: any) => d)
+      .attr('value', (d: any) => {
+        return d.length ? d : 'Todos';
+      })
       .text((d: any) => d);
 
     selected.on('change', () => {
@@ -330,9 +353,10 @@ export class CovidCasesComponent implements OnInit, OnChanges {
       .attr('x', this.margin.left)
       .attr('y', this.margin.top)
       .attr('fill', '#000')
-      .attr('mouse-events', 'none')
+      .style('opacity', 0.7)
+      .attr('pointer-events', 'none')
       .attr('text-anchor', 'middle')
-      .attr('transform', `translate(${this.margin.left + 25}, ${this.margin.top}) rotate(90)`)
+      .attr('transform', `translate(${this.margin.left + 25}, ${this.margin.top - 15}) rotate(90)`)
       .text('Em milhões');
   }
 

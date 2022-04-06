@@ -39,9 +39,9 @@ export class ScaleOrdinalComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.drawSvg();
     this.drawUpdate(this.data);
-    this.mouseEvents();
     this.updateData();
     this.filterSelection();
+    this.mouseEvents();
   }
   
   ngOnChanges(changes: SimpleChanges): void {
@@ -89,10 +89,16 @@ export class ScaleOrdinalComponent implements OnInit, OnChanges {
     // *** axisX *** //
     const axisX = d3.axisBottom(this.scaleX)
       .ticks(5)
-      .tickSizeOuter(0)
-      // .tickSizeInner(0)
-      // .tickPadding(5)
-      .tickFormat((d: any) => d === 0 ? '0' : `${d / 1000}M`);
+      .tickSizeOuter(5)
+      .tickSizeInner(-this.height + this.margin.top + this.margin.bottom)
+      .tickPadding(10)
+      .tickFormat((value: any) => {
+        return value >= 1000000
+          ? `${(value / 1000000)} M`
+          : value >= 1000
+          ? `${(value / 1000)} mil`
+          : value;
+      });
 
     d3.select(`#ordinal-g-x-axis-${this.id}`)
       .transition()
@@ -120,6 +126,13 @@ export class ScaleOrdinalComponent implements OnInit, OnChanges {
     d3.select(`#ordinal-g-y-axis-${this.id}`)
       .selectAll('.domain')
       .attr('stroke', 'none');
+
+    d3.select(`#ordinal-g-x-axis-${this.id}`)
+      .selectAll('line')
+      .attr('stroke', (d: any, i: any) => i === 0 ? 'none' : '#ccc')
+      .attr('stroke-width', 1)
+      .attr('stroke-opacity', 0.8)
+      .attr('stroke-dasharray', '2,2');
 
     // *** rects *** //
     this.rects = d3.select(`#ordinal-g-rects-${this.id}`)
