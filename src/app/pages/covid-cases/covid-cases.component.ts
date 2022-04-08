@@ -107,7 +107,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
       .attr('height', this.height);
 
     // *** update axis *** //
-    const xDomain = data.map((d) => d.ISO3);
+    const xDomain = data.map(({ ISO3 }) => ISO3);
     const xRange = [this.margin.left, this.width - this.margin.rigtht];
     this.scaleX = d3.scaleBand()
       .domain(xDomain)
@@ -117,7 +117,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
       .paddingOuter(0.2);
 
     // *** update axis *** //
-    const yDomain = [0, d3.max(data, (d) => Number(d.PERSONS_FULLY_VACCINATED))] as Array<number>;
+    const yDomain = [0, d3.max(data, ({ PERSONS_FULLY_VACCINATED }) => +PERSONS_FULLY_VACCINATED)] as Array<number>;
     const yRange = [this.height - this.margin.bottom, this.margin.top];
     this.scaleY = d3.scaleLinear()
       .domain(yDomain)
@@ -191,12 +191,12 @@ export class CovidCasesComponent implements OnInit, OnChanges {
         .join('rect')
         .attr('class', `bars-${this.id}`)
         .attr('id', (d, i) => `bar-${this.id}-${i}`)
-        .attr('fill', (d: any, i: any) => this.colors(d.ISO3))
-        .attr('x', (d) => this.scaleX(d.ISO3))
+        .attr('fill', ({ ISO3 }, i: number) => this.colors(ISO3))
+        .attr('x', ({ ISO3 }) => this.scaleX(ISO3))
         .attr('width', this.scaleX.bandwidth())
-        .attr('y', (d) => this.scaleY(+d.PERSONS_FULLY_VACCINATED))
-        .attr('height', (d) => 
-          this.height - this.margin.bottom - this.scaleY(+d.PERSONS_FULLY_VACCINATED))
+        .attr('y', ({ PERSONS_FULLY_VACCINATED }) => this.scaleY(+PERSONS_FULLY_VACCINATED))
+        .attr('height', ({ PERSONS_FULLY_VACCINATED }) => 
+          this.height - this.margin.bottom - this.scaleY(+PERSONS_FULLY_VACCINATED))
 
     this.svg.call(this.zoom);
   };
@@ -206,7 +206,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
       el
         .attr('stroke-width', 10)
         .attr('y', ({ PERSONS_FULLY_VACCINATED }: any) => this.scaleY(+PERSONS_FULLY_VACCINATED) - 5)
-        .attr('stroke', (d: any, i: any) => this.colors(d.ISO3))
+        .attr('stroke', ({ ISO3 }: any) => this.colors(ISO3))
         .transition()
         .duration(200)
         .attr('y', ({ PERSONS_FULLY_VACCINATED }: any) => this.scaleY(+PERSONS_FULLY_VACCINATED))
@@ -219,14 +219,15 @@ export class CovidCasesComponent implements OnInit, OnChanges {
           const target = d3.select(event.target);
           mouseClick(target);
         })
-        .on('mousemove', (event, { ISO3, COUNTRY, PERSONS_FULLY_VACCINATED }: any) => {
-          const { offsetX, offsetY } = event;
+        .on('mousemove', ({ target, pageX, pageY, offsetX, offsetY },
+          { ISO3, COUNTRY, PERSONS_FULLY_VACCINATED }: any) => {
+          // const { offsetX, offsetY } = event;
           const isLeft = offsetX < this.width / 2;
           const isTop = offsetY < this.height / 2;
           const { height: tipHeight, width: tipWidth } = 
             document.querySelector<any>('#tooltip').getBoundingClientRect();
 
-          d3.select(event.target)
+          d3.select(target)
             .style('cursor', 'pointer')
             .style('opacity', 0.86);
 
@@ -238,15 +239,15 @@ export class CovidCasesComponent implements OnInit, OnChanges {
             .style('border-radius', '5px')
             .style('box-shadow', '0 0 5px #000')
             .style('padding', '10px')
-            .style('top', `${isTop ? event.pageY + 20 : event.pageY - tipHeight - 10}px`)
-            .style('left', `${isLeft ? event.pageX + 20 : event.pageX - tipWidth - 20}px`)
+            .style('top', `${isTop ? pageY + 20 : pageY - tipHeight - 10}px`)
+            .style('left', `${isLeft ? pageX + 20 : pageX - tipWidth - 20}px`)
             .transition()
             .duration(400)
             .style('opacity', 0.91);
 
           d3.select('#tooltip-text')
             .html(`
-            <div style="width: 12px; height:12px; margin-right: .25rem; 
+            <div style="width: 12px; height:12px; border-radius: 50%; margin-right: .25rem; 
             background: ${this.colors(ISO3)};"></div> 
               País: ${COUNTRY} (<b>${ISO3}</b>)
               <p>
@@ -257,14 +258,14 @@ export class CovidCasesComponent implements OnInit, OnChanges {
               </p>
           `)
         })
-        .on('mouseleave', (event) => {
+        .on('mouseleave', ({ target }) => {
           d3.select('#tooltip')
             .transition()
             .duration(400)
             .style('opacity', 0)
             .style('pointer-events', 'none');
 
-          d3.select(event.currentTarget)
+          d3.select(target)
             .style('cursor', 'default')
             .style('opacity', 1);
       });
@@ -273,17 +274,17 @@ export class CovidCasesComponent implements OnInit, OnChanges {
   // *** create function zoom *** //
   zoom = (svg: any) => {
     console.log('zoom', svg);
-    
+
     const extent = [
       [this.margin.left, this.margin.top],
       [this.width - this.margin.rigtht, this.height - this.margin.top],
     ] as any;
 
-    const zoomed = (event: any) => {
-      const { transform } = event;
+    const zoomed = ({ transform }: any) => {
+      // const { transform } = event;
       this.scaleX.range([this.margin.left, this.width - this.margin.rigtht]
         .map((d) => transform.applyX(d)));
-        
+
       svg.select(`g#g-${this.id}-bars`)
         .selectAll(`.bars-${this.id}`)
         .attr('x', ({ ISO3 }: any) => this.scaleX(ISO3))
@@ -305,18 +306,20 @@ export class CovidCasesComponent implements OnInit, OnChanges {
   filterData = (data: any, filter: string): void => {
     if (filter === 'SEE ALL') this.updateChart(data);
 
-    const filtered = data.filter((d: any) => d.WHO_REGION === filter
-      && d.PERSONS_FULLY_VACCINATED > 0);
+    const filtered = data.filter(({ WHO_REGION, PERSONS_FULLY_VACCINATED }: any) => 
+      WHO_REGION === filter
+      && PERSONS_FULLY_VACCINATED > 0);
 
-    const arrayLength = filtered.length > 30
-      ? // filtra apenas os 30 com maior vicinação
-        filtered
+    const verifyLength = (data: any[]) => {
+      if (data.length >= 30) {
+        return data
           .sort((a: any, b: any) => b.PERSONS_FULLY_VACCINATED - a.PERSONS_FULLY_VACCINATED)
-          .slice(0, 30)
-      : // filtrar todos
-        filtered;
+          .slice(0, 30);
+      }
+      return data;
+    };
     
-    this.updateChart(arrayLength);
+    this.updateChart(verifyLength(filtered));
     this.interativeEvents();
   }
 

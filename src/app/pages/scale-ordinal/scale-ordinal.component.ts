@@ -144,31 +144,31 @@ export class ScaleOrdinalComponent implements OnInit, OnChanges {
         (exit) => exit.remove()
       )
       .attr('x', (d) => this.scaleX(0))
-      .attr('y', (d: any) => this.scaleY(d.name) - this.scaleY.bandwidth() + this.scaleY.bandwidth())
+      .attr('y', ({ name }) => this.scaleY(name) - this.scaleY.bandwidth() + this.scaleY.bandwidth())
       .attr('height', this.scaleY.bandwidth())
       .attr('id', (d: any, i: number) => `rects-Ordinal-${i}`)
       .transition()
       .ease(d3.easeLinear)
       .duration(500)
       .delay((d, i) => i * 50)
-      .attr('width', (d: any) => this.scaleX(d.value) - this.scaleX(this.margin.left))
-      .attr('fill', (d: any, i: any) => this.colors(d.name))
+      .attr('width', ({ value }) => this.scaleX(value) - this.scaleX(this.margin.left))
+      .attr('fill', ({ name }, i: any) => this.colors(name))
   };
 
   // *** MouseEvents *** //
   mouseEvents(): void {
-    const mouseMove = (event: any, d: any) => {
-        const { offsetX, offsetY } = event;
+    const mouseMove = ({ offsetX, offsetY, target, pageX, pageY }: any, d: any) => {
+        // const { offsetX, offsetY } = event;
         const isLeft = offsetX < this.width / 2;
         const isTop = offsetY < this.height / 2;
         const { width: tipWidth, height: tipHeight } =
           document.querySelector<any>('#tooltip').getBoundingClientRect();
-        const name = event.target.__data__.name;
-        const value = event.target.__data__.value;
+        const name = target.__data__.name;
+        const value = target.__data__.value;
 
         d3.select('#tooltip')
-          .style('left', `${isLeft ? event.pageX + 20 : event.pageX - tipWidth - 20}px`)
-          .style('top', `${isTop ? event.pageY + 10 : event.pageY - tipHeight - 10}px`)
+          .style('left', `${isLeft ? pageX + 20 : pageX - tipWidth - 20}px`)
+          .style('top', `${isTop ? pageY + 10 : pageY - tipHeight - 10}px`)
           .style('border', `1px solid ${this.colors(name)}`)
           .transition()
           .duration(500)
@@ -184,7 +184,7 @@ export class ScaleOrdinalComponent implements OnInit, OnChanges {
               Value: <b>${value.toLocaleString('pt-BR')}</b>
             `);
 
-          d3.select(event.target)
+          d3.select(target)
             .style('opacity', 0.76)
             .style('cursor', 'pointer');
     };
