@@ -9,5 +9,9 @@
     <div id="tooltip-text"></div>
 </div>
 
-<input type="number" id="add-number" min="0"/>
-<button id="clear-button" (click)="addNumber()">Add</button>
+<ng-container>
+    <div class="input-number">
+        <input type="number" id="add-number" min="0"/>
+        <button mat-button id="clear-button" (click)="addNumber($event)" color="primary">Add Value</button>
+    </div>
+</ng-container>

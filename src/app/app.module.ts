@@ -49,6 +49,10 @@ import { TextOnPathComponent } from './pages/text-on-path/text-on-path.component
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { ZoomComponent } from './pages/zoom/zoom.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { GridsterModule } from 'angular-gridster2';
+import {MatCardModule} from '@angular/material/card';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -103,6 +107,10 @@ import { ZoomComponent } from './pages/zoom/zoom.component';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatGridListModule,
+    GridsterModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -41,6 +41,9 @@ export class CovidCasesComponent implements OnInit, OnChanges {
     Breakpoints.Handset,
     Breakpoints.Tablet,
   ];
+
+  isLoading = true;
+
   constructor(private makeId: GenerateUuidService,
     private responsive: BreakpointObserver,
     private navegador: Platform) {}
@@ -159,12 +162,14 @@ export class CovidCasesComponent implements OnInit, OnChanges {
         .tickSizeInner(-this.width + this.margin.left + this.margin.rigtht)
         .tickPadding(10)
         .tickFormat((value: any) => {
-          return value >= 1000000
-          ? (value / 1000000 + ' M').toString().replace('.', ',')
-          : value >= 1000
-          ? (value / 1000 + ' mil').toString().replace('.', ',')
-          : value.toString().replace('.', ',');
-        } )
+          const valor = value >= 1000000
+            ? `${value / 1000000} M`
+            : value >= 1000
+            ? `${value / 1000} Mil`
+            : value;
+
+          return valor.toString().replace('.', ',');
+        })
       )
       .call((g: any) => g.select('.domain').attr('stroke', 'none'));
 

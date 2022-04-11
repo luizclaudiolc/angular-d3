@@ -93,11 +93,13 @@ export class ScaleOrdinalComponent implements OnInit, OnChanges {
       .tickSizeInner(-this.height + this.margin.top + this.margin.bottom)
       .tickPadding(10)
       .tickFormat((value: any) => {
-        return value >= 1000000
-          ? `${(value / 1000000)} M`
-          : value >= 1000
-          ? `${(value / 1000)} mil`
-          : value;
+        const valor = value >= 1000000
+        ? `${value / 1000000} M`
+        : value >= 1000
+        ? `${value / 1000} mil`
+        : value;
+
+        return valor.toString().replace('.', ',');
       });
 
     d3.select(`#ordinal-g-x-axis-${this.id}`)

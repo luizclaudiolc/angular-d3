@@ -17,6 +17,7 @@ export class ArcPieGeneratorComponent implements OnInit {
   arcGen: any;
   pie: any;
   id?: string;
+  text = 'Digite um Valor';
 
   constructor(private makeId: GenerateUuidService) {}
 
@@ -241,11 +242,25 @@ export class ArcPieGeneratorComponent implements OnInit {
       .text(`Valor total: ${this.dataset.reduce((a, b) => a + b)}`);
   }
 
-  addNumber(): void {
+  addNumber(event: any): void {
     const data = document.querySelector('#add-number') as HTMLInputElement;
-    const value = +data.value;
+    const value = data.value;
 
-    console.log(value);
+    if (value === '' || value === '0') {
+      alert('Digite um valor válido!');
+      data.focus();
+      return;
+    };
+
+    this.dataset.push(+value);
+    this.updatePie();
+    this.mouseEvents();
+    this.initialAnimation();
+    d3.select(`g#pie-arc-text-${this.id}-static`)
+      .selectAll('text')
+      .remove();
+    this.textStaticWithTotal();
+    data.value = '';
   }
 }
 
