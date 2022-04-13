@@ -29,15 +29,13 @@ export class ScatterComponent implements OnInit {
   margin = {top: 40, right: 40, bottom: 30, left: 50};
   width = 750;
   height = 400;
-  colors = d3.scaleOrdinal(d3.schemePuRd[9]);
+  colors = d3.scaleOrdinal(d3.schemePaired);
   scaleX: any;
   scaleY: any;
   axisX: any;
   axisY: any;
   points: any;
   id?: string;
-
-  
 
   constructor(private makeId: GenerateUuidService) { }
 
@@ -50,7 +48,7 @@ export class ScatterComponent implements OnInit {
 
   createSvg(): void {
     this.id = `scatter-${this.makeId.generateUuid()}`;
-    
+
     this.svg = d3.select('#scatter')
       .append('svg')
       .attr('width', this.width)
@@ -63,7 +61,6 @@ export class ScatterComponent implements OnInit {
     d3.select(`svg#svg-${this.id}`).append('g').attr('id', `group-${this.id}-axis-y`);
     d3.select(`svg#svg-${this.id}`).append('g').attr('id', `group-${this.id}-grid-x`);
     d3.select(`svg#svg-${this.id}`).append('g').attr('id', `group-${this.id}-grid-y`);
-    
   }
 
   updateChart(): void {
@@ -76,11 +73,11 @@ export class ScatterComponent implements OnInit {
 
     // *** create scales *** //
     this.scaleX = d3.scaleLinear()
-      .domain([2008, d3.max(this.data, d => +d.Released + 1)] as Array<number>)
+      .domain([2008, d3.max(this.data, ({ Released }) => +Released + 1)] as Array<number>)
       .range([this.margin.left, this.width - this.margin.right]);
 
     this.scaleY = d3.scaleLinear()
-      .domain(d3.extent(this.data, d => +d.Stars) as Array<number>)
+      .domain(d3.extent(this.data, ({ Stars }) => +Stars) as Array<number>)
       .range([this.height - this.margin.bottom, this.margin.top]);
 
     // *** create axis *** //
@@ -89,12 +86,17 @@ export class ScatterComponent implements OnInit {
 
     d3.select(`g#group-${this.id}-axis-x`)
       .attr('transform', `translate(0, ${this.height - this.margin.bottom})`)
+      .transition()
+      .duration(1000)
       .call(this.axisX);
 
     this.axisY = d3.axisLeft(this.scaleY)
       .tickFormat((d: any) => Number(d).toLocaleString('pt-BR'));
+
     d3.select(`g#group-${this.id}-axis-y`)
       .attr('transform', `translate(${this.margin.left}, 0)`)
+      .transition()
+      .duration(1000)
       .call(this.axisY);
 
     // *** create points *** //
@@ -106,13 +108,13 @@ export class ScatterComponent implements OnInit {
         update => update,
         exit => exit.remove()
       )
-      .attr('cx', d => this.scaleX(+d.Released))
-      .attr('cy', d => this.scaleY(+d.Stars))
+      .attr('cx', ({ Released }) => this.scaleX(+Released))
+      .attr('cy', ({ Stars }) => this.scaleY(+Stars))
       .transition()
       .delay((d, i) => i * 100)
       .duration(1000)
       .attr('r', 10)
-      .attr('stroke', d => this.colors(d.Framework))
+      .attr('stroke', ({ Framework }) => this.colors(Framework))
       .attr('stroke-width', 1.5)
       .attr('fill', '#fff')
       .attr('id', (d, i) => `point-${this.id}-${i}`);
@@ -126,10 +128,10 @@ export class ScatterComponent implements OnInit {
         update => update,
         exit => exit.remove()
       )
-      .attr('x', d => this.scaleX(+d.Released))
-      .attr('y', d => this.scaleY(+d.Stars) - 10)
-      .text(d => d.Framework)
-      .attr('fill', d => this.colors(d.Framework))
+      .attr('x', ({ Released }) => this.scaleX(+Released))
+      .attr('y', ({ Stars }) => this.scaleY(+Stars) - 10)
+      .text(({ Framework }) => Framework)
+      .attr('fill', ({ Framework }) => this.colors(Framework))
       .attr('text-anchor', 'middle');
 
     // *** create grids *** //
@@ -200,9 +202,9 @@ export class ScatterComponent implements OnInit {
                 margin-right: .25rem;
               "
             ></div>
-            Framework: ${self.data[index].Framework}
+            Framework: <b>${self.data[index].Framework}</b>
             <br>
-            Stars: ${self.data[index].Stars}
+            Stars: <b>${self.data[index].Stars}</b>
           `);
         
 

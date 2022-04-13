@@ -22,7 +22,6 @@ export class CovidCasesComponent implements OnInit, OnChanges {
   scaleY: any;
   axisX: any;
   axisY: any;
-  // criar um array de cores
   colors = d3.scaleOrdinal(d3.schemeSpectral[9]);
   id?: string;
   breakpoints: Array<any> = [
@@ -50,7 +49,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.id = this.makeId.generateUuid();
-    console.log(this.id);
+    // console.log(this.id);
     Promise.all([this.dataset]).then((data) => {
       this.data = data[0];
       this.main(this.data);
@@ -61,7 +60,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
         .pipe(
           tap(({ breakpoints }) => {
             const bp = breakpoints;
-            console.log(bp);
+            // console.log(bp);
           })
         )
         .subscribe();
@@ -73,13 +72,13 @@ export class CovidCasesComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.width || changes.height) {
-      console.log('ngOnChanges');
+      // console.log('ngOnChanges');
       
     }
   }
 
   main(data: any): void {
-    console.log(data);
+    // console.log(data);
     
     this.updateChart(data);
     // this.selectFilter(data);
@@ -133,27 +132,6 @@ export class CovidCasesComponent implements OnInit, OnChanges {
           d3.axisBottom(this.scaleX)
           .tickSizeOuter(0)
         );
-      // .call((g: any) => g.select('.domain').remove());
-
-    /* this.responsive
-      .observe(Breakpoints.Tablet)
-      .pipe(
-        tap((result) => {
-          console.log(result.matches);
-          if (result.matches) {
-          this.axisY = (g: any) => g
-            .attr('transform', `translate(${this.margin.left},0)`)
-            .call(d3.axisLeft(this.scaleY)
-            .ticks(12)
-            .tickSizeInner(-this.width + this.margin.left + this.margin.rigtht)
-            .tickSizeOuter(0)
-            );
-
-            this.updateChart(data);
-          }
-          
-        })
-      ).subscribe(); */
 
     this.axisY = (g: any) => g
       .attr('transform', `translate(${this.margin.left},0)`)
@@ -165,7 +143,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
           const valor = value >= 1000000
             ? `${value / 1000000} M`
             : value >= 1000
-            ? `${value / 1000} Mil`
+            ? `${value / 1000} mil`
             : value;
 
           return valor.toString().replace('.', ',');
@@ -278,7 +256,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
 
   // *** create function zoom *** //
   zoom = (svg: any) => {
-    console.log('zoom', svg);
+    // console.log('zoom', svg);
 
     const extent = [
       [this.margin.left, this.margin.top],
@@ -329,7 +307,7 @@ export class CovidCasesComponent implements OnInit, OnChanges {
   }
 
   selectFilter(data: any[]): void {
-    console.log('selectFilter', data);
+    // console.log('selectFilter', data);
     
     const selected = d3.select(`#select-option`)
       .append('select')
